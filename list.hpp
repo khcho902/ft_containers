@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/06 20:06:12 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/06 22:40:39 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIST_HPP
 
 # include <memory>
+# include <iterator>
 
 namespace ft
 {
@@ -30,6 +31,140 @@ namespace ft
         _list_node(T data) : data(data) {}
     };
 
+    // ############## list iterator ############################################################
+    template<typename T>
+    struct _list_iterator
+    {
+        typedef _list_iterator<T>                   _Self;
+        typedef _list_node<T>                       _Node;
+        
+        typedef ptrdiff_t                           difference_type;
+        typedef std::bidirectional_iterator_tag     iterator_category;
+        typedef T                                   value_type;
+        typedef T*                                  pointer;
+        typedef T&                                  reference;
+
+        _list_node_base* node_ptr;
+
+        _list_iterator() : node_ptr() {}
+        _list_iterator(_list_node_base* _x) : node_ptr(_x) {}
+        
+        reference operator*() const
+        {
+            return static_cast<_Node*>(node_ptr)->data;
+        }
+        
+        // TODO : __addressof 사용하는거 확인해봐야함 
+        pointer operator->() const
+        {
+            return std::addressof(static_cast<_Node*>(node_ptr)->data);
+        }
+        
+        _Self& operator++()
+        {
+            node_ptr = node_ptr->next;
+            return *this;
+        }
+
+        _Self operator++(int)
+        {
+            _Self _tmp = *this;
+            node_ptr = node_ptr->next;
+            return _tmp;
+        }
+        
+        _Self& operator--()
+        {
+            node_ptr = node_ptr->prev;
+            return *this;
+        }
+        
+        _Self operator--(int)
+        {
+            _Self _tmp = *this;
+            node_ptr = node_ptr->prev;
+            return _tmp;
+        }
+        
+        bool operator==(const _Self& _x) const
+        {
+            return node_ptr == _x.node_ptr;
+        }
+        
+        bool operator!=(const _Self& _x) const
+        {
+            return node_ptr != _x.node_ptr;
+        }
+    };
+
+    // ############## list const iterator #######################################################
+    template<typename T>
+    struct _list_const_iterator
+    {
+        typedef _list_const_iterator<T>             _Self;
+        typedef const _list_node<T>                 _Node;
+        typedef _list_iterator<T>                   iterator;
+        
+        typedef ptrdiff_t                           difference_type;
+        typedef std::bidirectional_iterator_tag     iterator_category;
+        typedef T                                   value_type;
+        typedef const T*                            pointer;
+        typedef const T&                            reference;
+
+        const _list_node_base* node_ptr;
+
+        _list_const_iterator() : node_ptr() {}
+        explicit _list_const_iterator(_list_node_base* _x) : node_ptr(_x) {}  // TODO : 왜 explicit 붙이는거지 ??
+        _list_const_iterator(const iterator& _x) : node_ptr(_x.node_ptr) {}
+        
+        reference operator*() const
+        {
+            return static_cast<_Node*>(node_ptr)->data;
+        }
+        
+        // TODO : __addressof 사용하는거 확인해봐야함 
+        pointer operator->() const
+        {
+            return std::addressof(static_cast<_Node*>(node_ptr)->data);
+        }
+        
+        _Self& operator++()
+        {
+            node_ptr = node_ptr->next;
+            return *this;
+        }
+
+        _Self operator++(int)
+        {
+            _Self _tmp = *this;
+            node_ptr = node_ptr->next;
+            return _tmp;
+        }
+        
+        _Self& operator--()
+        {
+            node_ptr = node_ptr->prev;
+            return *this;
+        }
+        
+        _Self operator--(int)
+        {
+            _Self _tmp = *this;
+            node_ptr = node_ptr->prev;
+            return _tmp;
+        }
+        
+        bool operator==(const _Self& _x) const
+        {
+            return node_ptr == _x.node_ptr;
+        }
+        
+        bool operator!=(const _Self& _x) const
+        {
+            return node_ptr != _x.node_ptr;
+        }
+    };
+
 
     // ############## list class ###############################################################
     template <class T, class Alloc = std::allocator<T> >
@@ -44,9 +179,10 @@ namespace ft
         typedef typename allocator_type::pointer            pointer;
         typedef typename allocator_type::const_pointer      const_pointer;
         
+        
+        typedef _list_iterator<T>                           iterator;
+        typedef _list_const_iterator<T>                     const_iterator;
         /* 주석 시작(1)
-        typedef implementation-defined                      iterator;
-        typedef implementation-defined                      const_iterator;
         typedef reverse_iterator<iterator>                  reverse_iterator;
         typedef reverse_iterator<const_iterator>            const_reverse_iterator;
         주석 끝(1) */
@@ -57,7 +193,7 @@ namespace ft
         typedef size_t                                      size_type;
     
 
-    //protected:   // TODO : 주석지워줘야함 
+    protected:
         typedef typename Alloc::template rebind<_list_node<T> >::other    _node_alloc_type;
 
         _node_alloc_type    node_allocator;
@@ -65,7 +201,7 @@ namespace ft
 
         typedef _list_node<T>   _Node;
 
-        // 제대로 된건지 테스트필요 
+        // TODO : 제대로 된건지 테스트필요 
         _Node* _create_node(const value_type& val)
         {
             _Node* _p = node_allocator.allocate(1);
@@ -101,11 +237,11 @@ namespace ft
 
 
     // ########## Iterators: ##########
-    /* 주석 시작(4)
         iterator begin();
         const_iterator begin() const;
         iterator end();
         const_iterator end() const;
+    /* 주석 시작(4)
         reverse_iterator rbegin();
         const_reverse_iterator rbegin() const;
         reverse_iterator rend();
@@ -208,6 +344,7 @@ namespace ft
         this->sentry_node.prev = &(this->sentry_node);
     }
 
+    // TODO : 개선 필요
     // template<class T, class Alloc>
     // list<T, Alloc>::list(size_type n, const value_type& val, const allocator_type& alloc) :
     //     node_allocator(alloc),
@@ -217,9 +354,32 @@ namespace ft
     //         push_back(val);
     // }
 
+    template <class T, class Alloc>
+    typename list<T, Alloc>::iterator list<T, Alloc>::begin()
+    {
+        return iterator(this->sentry_node.next);
+    }
 
     template <class T, class Alloc>
-    void list<T, Alloc>::push_back (const value_type& val)
+    typename list<T, Alloc>::const_iterator list<T, Alloc>::begin() const
+    {
+        return const_iterator(this->sentry_node.next);
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::iterator list<T, Alloc>::end()
+    {
+        return iterator(&(this->sentry_node));
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::const_iterator list<T, Alloc>::end() const
+    {
+        return const_iterator(&(this->sentry_node));
+    }
+
+    template <class T, class Alloc>
+    void list<T, Alloc>::push_back (const value_type& val)  // TODO : 개선 필요
     {
         _Node* _tmp = _create_node(val);
 
@@ -231,7 +391,6 @@ namespace ft
         _tmp->next = &(this->sentry_node);
         this->sentry_node.prev = _tmp;
     }
-
 
 /* 주석시작
 // ########## Non-member function overloads ##########

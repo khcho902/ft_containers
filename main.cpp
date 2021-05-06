@@ -7,17 +7,19 @@ int main(void)
 	ft::list<int> lst;
 
 	lst.push_back(10);
-	lst.push_back(10000);
-	lst.push_back(10);
-	lst.push_back(10);
-	lst.push_back(10);
+	lst.push_back(20000);
+	lst.push_back(30);
+	lst.push_back(40);
+	lst.push_back(50);
 
-	ft::list<int>::_Node* tmp = static_cast<ft::list<int>::_Node*>(lst.sentry_node.next);
-
-	while (tmp != &lst.sentry_node)
+	for(ft::list<int>::iterator it = lst.begin(); it != lst.end(); it++)
 	{
-		std::cout << tmp->data << std::endl;
-		tmp = static_cast<ft::list<int>::_Node*>(tmp->next);
+		std::cout << (*it)++ << std::endl;
+	}
+
+	for(ft::list<int>::const_iterator it = lst.begin(); it != lst.end(); it++)
+	{
+		std::cout << (*it) << std::endl;
 	}
 
 	return (0);
