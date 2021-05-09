@@ -1,26 +1,21 @@
-
 #include <iostream>
+//#include <list>
 #include "list.hpp"
 
-int main(void)
+int main ()
 {
-	ft::list<int> lst;
+  ft::list<int> mylist;
+  
+  for (int i=1; i<=5; ++i)
+  	mylist.push_back(i);
 
-	lst.push_back(10);
-	lst.push_back(20000);
-	lst.push_back(30);
-	lst.push_back(40);
-	lst.push_back(50);
+  std::cout << "mylist backwards:";
+  for (ft::list<int>::reverse_iterator rit = mylist.rbegin(); rit!=mylist.rend(); ++rit)
+  {
+    std::cout << ' ' << *rit;
+  }
 
-	for(ft::list<int>::iterator it = lst.begin(); it != lst.end(); it++)
-	{
-		std::cout << (*it)++ << std::endl;
-	}
+  std::cout << '\n';
 
-	for(ft::list<int>::const_iterator it = lst.begin(); it != lst.end(); it++)
-	{
-		std::cout << (*it) << std::endl;
-	}
-
-	return (0);
+  return 0;
 }

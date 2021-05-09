@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/06 22:40:39 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/10 02:50:48 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <memory>
 # include <iterator>
+# include "iterator.hpp"
 
 namespace ft
 {
@@ -182,10 +183,8 @@ namespace ft
         
         typedef _list_iterator<T>                           iterator;
         typedef _list_const_iterator<T>                     const_iterator;
-        /* 주석 시작(1)
-        typedef reverse_iterator<iterator>                  reverse_iterator;
-        typedef reverse_iterator<const_iterator>            const_reverse_iterator;
-        주석 끝(1) */
+        typedef ft::reverse_iterator<iterator>                  reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator>            const_reverse_iterator;
 
         // iterator_traits<iterator>::difference_type
         typedef ptrdiff_t                                   difference_type;
@@ -241,12 +240,10 @@ namespace ft
         const_iterator begin() const;
         iterator end();
         const_iterator end() const;
-    /* 주석 시작(4)
         reverse_iterator rbegin();
         const_reverse_iterator rbegin() const;
         reverse_iterator rend();
-        const_reverse_iterator rend() const;
-    주석 끝(4)*/
+        const_reverse_iterator rend() const;    
 
 
     // ########## Capacity: ##########
@@ -354,6 +351,7 @@ namespace ft
     //         push_back(val);
     // }
 
+    // ########## Iterators: ##########
     template <class T, class Alloc>
     typename list<T, Alloc>::iterator list<T, Alloc>::begin()
     {
@@ -377,6 +375,32 @@ namespace ft
     {
         return const_iterator(&(this->sentry_node));
     }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::reverse_iterator list<T, Alloc>::rbegin()
+    {
+        return reverse_iterator(end());
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::const_reverse_iterator list<T, Alloc>::rbegin() const
+    {
+        return const_reverse_iterator(end());
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::reverse_iterator list<T, Alloc>::rend()
+    {
+        return reverse_iterator(begin());
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::const_reverse_iterator list<T, Alloc>::rend() const
+    {
+        return const_reverse_iterator(begin());
+    }
+
+
 
     template <class T, class Alloc>
     void list<T, Alloc>::push_back (const value_type& val)  // TODO : 개선 필요
