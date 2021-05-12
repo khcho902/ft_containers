@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/10 02:50:48 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/13 03:08:37 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ namespace ft
         const _list_node_base* node_ptr;
 
         _list_const_iterator() : node_ptr() {}
-        explicit _list_const_iterator(_list_node_base* _x) : node_ptr(_x) {}  // TODO : 왜 explicit 붙이는거지 ??
+        explicit _list_const_iterator(const _list_node_base* _x) : node_ptr(_x) {}  // TODO : 왜 explicit 붙이는거지 ??
         _list_const_iterator(const iterator& _x) : node_ptr(_x.node_ptr) {}
         
         reference operator*() const
@@ -183,8 +183,8 @@ namespace ft
         
         typedef _list_iterator<T>                           iterator;
         typedef _list_const_iterator<T>                     const_iterator;
-        typedef ft::reverse_iterator<iterator>                  reverse_iterator;
-        typedef ft::reverse_iterator<const_iterator>            const_reverse_iterator;
+        typedef ft::reverse_iterator<iterator>              reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
 
         // iterator_traits<iterator>::difference_type
         typedef ptrdiff_t                                   difference_type;
