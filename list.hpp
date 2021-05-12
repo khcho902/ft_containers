@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/13 03:08:37 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/13 03:20:54 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,7 +332,10 @@ namespace ft
     주석 끝(8)*/
     };
 
-    template<class T, class Alloc>
+    // ########## (constructor) ##########
+    //default (1)	
+    //explicit list (const allocator_type& alloc = allocator_type());
+    template <class T, class Alloc>
     list<T, Alloc>::list(const allocator_type& alloc) :
         node_allocator(alloc),
         sentry_node()
@@ -341,15 +344,40 @@ namespace ft
         this->sentry_node.prev = &(this->sentry_node);
     }
 
-    // TODO : 개선 필요
-    // template<class T, class Alloc>
-    // list<T, Alloc>::list(size_type n, const value_type& val, const allocator_type& alloc) :
-    //     node_allocator(alloc),
-    //     sentry_node()
-    // {
-    //     for (; n; --n)
-    //         push_back(val);
-    // }
+    //fill (2)	
+    //explicit list (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+    template <class T, class Alloc>
+    list<T, Alloc>::list(size_type n, const value_type& val, const allocator_type& alloc) :
+        node_allocator(alloc),
+        sentry_node()
+    {
+        for (; n; --n)
+            push_back(val);
+    }
+
+    //range (3)	
+    //template <class InputIterator>
+    //list (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+    template <class T, class Alloc>
+    template <class InputIterator>
+    list<T, Alloc>::list::list(InputIterator first, InputIterator last, const allocator_type& alloc) :
+        node_allocator(alloc),
+        sentry_node()
+    {
+        for (; first != last; ++first)
+            push_back(*first);
+    }
+    
+    //copy (4)	
+    //list (const list& x);
+    template <class T, class Alloc>
+    list<T, Alloc>::list::list (const list& x) :
+        node_allocator(x.node_allocator),
+        sentry_node()
+    {
+        for (iterator it = x.begin(); it != x.end(); it++)
+            push_back(*it);
+    }
 
     // ########## Iterators: ##########
     template <class T, class Alloc>
