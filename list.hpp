@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/13 14:32:53 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/13 14:37:26 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,19 @@ namespace ft
             return _p;
         }
 
+        void _clear()
+        {
+            _Node* _cur = static_cast<_Node*>(this->sentry_node.next);
+            
+            while (_cur != &(this->sentry_node))
+            {
+                _Node* _tmp = _cur;
+                _cur = static_cast<_Node*>(_cur->next);
+
+                node_allocator.destroy(_tmp);
+                node_allocator.deallocate(_tmp, 1);
+            }
+        }
 
     public:
     // ########## (constructor) ##########
@@ -224,9 +237,7 @@ namespace ft
 
 
     // ########## (destructor) ##########
-    /* 주석 시작(2)
         ~list();
-    주석 끝(2) */
 
 
     // ########## operator= ##########
@@ -371,6 +382,13 @@ namespace ft
     {
         for (iterator it = x.begin(); it != x.end(); it++)
             push_back(*it);
+    }
+
+    // ########## (destructor) ##########
+    template <class T, class Alloc>
+    list<T, Alloc>::list::~list()
+    {
+        _clear();
     }
 
     // ########## Iterators: ##########
