@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/13 03:20:54 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/13 14:32:53 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,21 +247,15 @@ namespace ft
 
 
     // ########## Capacity: ##########
-    /* 주석 시작(5)
         bool empty() const;
         size_type size() const;
         size_type max_size() const;
-    주석 끝(5)*/
-
 
     // ########## Element access: ##########
-    /* 주석 시작(6)
         reference front();
         const_reference front() const;
         reference back();
         const_reference back() const;
-    주석 끝(6)*/
-
 
     // ########## Modifiers: ##########
     /* 주석 시작(7)
@@ -426,6 +420,64 @@ namespace ft
     typename list<T, Alloc>::const_reverse_iterator list<T, Alloc>::rend() const
     {
         return const_reverse_iterator(begin());
+    }
+
+    // ########## Capacity: ##########
+    template <class T, class Alloc>
+    bool list<T, Alloc>::empty() const
+    {
+        return this->sentry_node.next == &(this->sentry_node);
+    }
+    
+    // TODO : distance를 사용하는 방법으로 개선
+    template <class T, class Alloc>
+    typename list<T, Alloc>::size_type list<T, Alloc>::size() const
+    {
+        typename list<T, Alloc>::size_type size = 0;
+        typename list<T, Alloc>::const_iterator begin_it = this->begin();
+        typename list<T, Alloc>::const_iterator end_it = this->end();
+        
+        while(begin_it != end_it)
+        {
+            size++;
+            begin_it++;
+        }
+        return size;
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::size_type list<T, Alloc>::max_size() const
+    {
+        return this->node_allocator.max_size();
+    }
+
+    // ########## Element access: ##########
+    template <class T, class Alloc>
+    typename list<T, Alloc>::reference list<T, Alloc>::front()
+    {
+        return *begin();
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::const_reference list<T, Alloc>::front() const
+    {
+        return *begin();
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::reference list<T, Alloc>::back()
+    {
+        iterator tmp = end();
+        --tmp;
+        return *tmp;
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::const_reference list<T, Alloc>::back() const
+    {
+        const_iterator tmp = end();
+        --tmp;
+        return *tmp;
     }
 
 
