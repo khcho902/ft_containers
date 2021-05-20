@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/13 14:37:26 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/20 20:58:24 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,22 @@ namespace ft
     {
         _list_node_base* next;
         _list_node_base* prev;
+
+        void _hook(_list_node_base* const position)
+        {
+            this->next = position;
+            this->prev = position->prev;
+            position->prev->next = this;
+            position->prev = this;
+        }
+
+        void _unhook()
+        {
+            _list_node_base* const _next_node = this->next;
+            _list_node_base* const _prev_node = this->prev;
+            _prev_node->next = _next_node;
+            _next_node->prev = _prev_node;
+        }
     };
 
     template <typename T>
@@ -223,17 +239,25 @@ namespace ft
             }
         }
 
+        void _erase(iterator _position)
+        {
+            _position.node_ptr->_unhook();
+            _Node* _n = static_cast<_Node*>(_position.node_ptr);
+            node_allocator.destroy(_n);
+            node_allocator.deallocate(_n, 1);
+        }
+
     public:
     // ########## (constructor) ##########
         //default (1)	
-        explicit list (const allocator_type& alloc = allocator_type());
+        explicit list(const allocator_type& alloc = allocator_type());
         //fill (2)	
-        explicit list (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+        explicit list(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
         //range (3)	
         template <class InputIterator>
-        list (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+        list(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
         //copy (4)	
-        list (const list& x);
+        list(const list& x);
 
 
     // ########## (destructor) ##########
@@ -279,24 +303,28 @@ namespace ft
         void push_front (const value_type& val);
         void pop_front();
     주석 끝(7)*/
-        void push_back (const value_type& val);
+        void push_back(const value_type& val);
     /* 주석 시작(7-2)
         void pop_back();
-
+    주석 끝(7-2)*/
+    
         //single element (1)	
-        iterator insert (iterator position, const value_type& val);
+        iterator insert(iterator position, const value_type& val);
+    /* 주석 시작(7-3)
         //fill (2)	
-        void insert (iterator position, size_type n, const value_type& val);
+        void insert(iterator position, size_type n, const value_type& val);
         //range (3)	
         template <class InputIterator>
-        void insert (iterator position, InputIterator first, InputIterator last);
-    
-        iterator erase (iterator position);
-        iterator erase (iterator first, iterator last);
+        void insert(iterator position, InputIterator first, InputIterator last);
+    주석 끝(7-3)*/
+        
+        iterator erase(iterator position);
+        iterator erase(iterator first, iterator last);
+    /* 주석 시작(7-4)
         void swap (list& x);
         void resize (size_type n, value_type val = value_type());
         void clear();
-    주석 끝(7-2)*/
+    주석 끝(7-4)*/
     
 
 
@@ -376,7 +404,7 @@ namespace ft
     //copy (4)	
     //list (const list& x);
     template <class T, class Alloc>
-    list<T, Alloc>::list::list (const list& x) :
+    list<T, Alloc>::list::list(const list& x) :
         node_allocator(x.node_allocator),
         sentry_node()
     {
@@ -499,9 +527,9 @@ namespace ft
     }
 
 
-
+    // ########## Modifiers: ##########
     template <class T, class Alloc>
-    void list<T, Alloc>::push_back (const value_type& val)  // TODO : 개선 필요
+    void list<T, Alloc>::push_back(const value_type& val)  // TODO : 개선 필요
     {
         _Node* _tmp = _create_node(val);
 
@@ -512,6 +540,49 @@ namespace ft
         
         _tmp->next = &(this->sentry_node);
         this->sentry_node.prev = _tmp;
+    }
+
+    //single element (1)
+    template <class T, class Alloc>
+    typename list<T, Alloc>::iterator list<T, Alloc>::insert(iterator position, const value_type& val)
+    {
+        _Node * tmp = _create_node(val);
+        tmp->_hook(position.node_ptr);
+        return iterator(tmp);
+    }
+    /*
+    //fill (2)
+    template <class T, class Alloc>
+    void list<T, Alloc>::insert(iterator position, size_type n, const value_type& val)
+    {
+
+    }
+    //range (3)
+    template <class T, class Alloc>
+    template <class InputIterator>
+    void list<T, Alloc>::insert(iterator position, InputIterator first, InputIterator last)
+    {
+        
+    }
+    */
+
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::iterator list<T, Alloc>::erase(iterator position)
+    {
+        iterator _ret = iterator(position.node_ptr->next);
+        _erase(position);
+        return _ret;
+    }
+
+    template <class T, class Alloc>
+    typename list<T, Alloc>::iterator list<T, Alloc>::erase(iterator first, iterator last)
+    {
+        while (first != last)
+        {
+            first = erase(first);       
+        }
+        return last;
     }
 
 /* 주석시작
