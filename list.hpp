@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/20 20:58:24 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/21 02:18:21 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,25 @@ namespace ft
     {
         _list_node_base* next;
         _list_node_base* prev;
+
+        void _transfer(_list_node_base* const first, _list_node_base* const last)
+        {
+            if (this != last)
+            {
+                _list_node_base* const first_prev = first->prev;
+                _list_node_base* const last_prev = last->prev;
+                _list_node_base* const this_prev = this->prev;
+
+                first_prev->next = last;
+                last->prev = first_prev;
+
+                this_prev->next = first;
+                first->prev= this_prev;
+
+                last_prev->next = this;
+                this->prev = last_prev;
+            }
+        }
 
         void _hook(_list_node_base* const position)
         {
@@ -329,14 +348,13 @@ namespace ft
 
 
     // ########## Operations: ##########
-    /* 주석 시작(8)
         //entire list (1)	
-        void splice (iterator position, list& x);
+        void splice(iterator position, list& x);
         //single element (2)	
-        void splice (iterator position, list& x, iterator i);
+        void splice(iterator position, list& x, iterator i);
         //element range (3)	
-        void splice (iterator position, list& x, iterator first, iterator last);
-
+        void splice(iterator position, list& x, iterator first, iterator last);
+    /* 주석 시작(8)
         void remove (const value_type& val);
         template <class Predicate>
         void remove_if (Predicate pred);
@@ -585,6 +603,34 @@ namespace ft
         return last;
     }
 
+    // ########## Operations: ##########
+    //entire list (1)
+    template <class T, class Alloc>
+    void list<T, Alloc>::splice(iterator position, list& x)
+    {
+        if (x.empty())
+            return;
+        position.node_ptr->_transfer(x.begin().node_ptr, x.end().node_ptr);
+    }
+    //single element (2)
+    template <class T, class Alloc>
+    void list<T, Alloc>::splice(iterator position, list& x, iterator i)
+    {
+        iterator j = i;
+        ++j;
+        if (position == i || position == j)
+            return;
+        position.node_ptr->_transfer(i.node_ptr, j.node_ptr);
+    }
+    //element range (3)
+    template <class T, class Alloc>
+    void list<T, Alloc>::splice(iterator position, list& x, iterator first, iterator last)
+    {
+        if (first == last)
+            return;
+        position.node_ptr->_transfer(first.node_ptr, last.node_ptr);
+    }
+
 /* 주석시작
 // ########## Non-member function overloads ##########
     //(1)
@@ -610,7 +656,7 @@ namespace ft
     void swap (list<T,Alloc>& x, list<T,Alloc>& y);
 주석 끝*/ 
 
-}
+} // end namespace ft 
 
 
 #endif
