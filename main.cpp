@@ -1,44 +1,24 @@
+// constructing lists
 #include <iostream>
 #include "list.hpp"
 
-int main()
+int main ()
 {
-	ft::list<int> mylist1, mylist2;
-	ft::list<int>::iterator it;
+  // constructors used in the same order as described above:
+  ft::list<int> first;                                // empty list of ints
+  ft::list<int> second (4,100);                       // four ints with value 100
+  ft::list<int> third (second.begin(),second.end());  // iterating through second
+  ft::list<int> fourth (third);                       // a copy of third
 
-	// set some initial values:
-	for (int i = 1; i <= 4; ++i)
-		mylist1.push_back(i); // mylist1: 1 2 3 4
+  // the iterator constructor can also be used to construct from arrays:
+  int myints[] = {16,2,77,29};
+  ft::list<int> fifth (myints, myints + sizeof(myints) / sizeof(int) );
 
-	for (int i = 1; i <= 3; ++i)
-		mylist2.push_back(i * 10); // mylist2: 10 20 30
+  std::cout << "The contents of fifth are: ";
+  for (ft::list<int>::iterator it = fifth.begin(); it != fifth.end(); it++)
+    std::cout << *it << ' ';
 
-	it = mylist1.begin();
-	++it; // points to 2
+  std::cout << '\n';
 
-	mylist1.splice(it, mylist2); // mylist1: 1 10 20 30 2 3 4
-								 // mylist2 (empty)
-								 // "it" still points to 2 (the 5th element)
-
-	mylist2.splice(mylist2.begin(), mylist1, it);
-	// mylist1: 1 10 20 30 3 4
-	// mylist2: 2
-	// "it" is now invalid.
-	it = mylist1.begin();
-	std::advance(it, 3); // "it" points now to 30
-
-	mylist1.splice(mylist1.begin(), mylist1, it, mylist1.end());
-	// mylist1: 30 3 4 1 10 20
-
-	std::cout << "mylist1 contains:";
-	for (it = mylist1.begin(); it != mylist1.end(); ++it)
-		std::cout << ' ' << *it;
-	std::cout << '\n';
-
-	std::cout << "mylist2 contains:";
-	for (it = mylist2.begin(); it != mylist2.end(); ++it)
-		std::cout << ' ' << *it;
-	std::cout << '\n';
-
-	return 0;
+  return 0;
 }

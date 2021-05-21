@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/21 02:18:21 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/22 03:15:12 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <memory>
 # include <iterator>
 # include "iterator.hpp"
+# include "utils.hpp"
 
 namespace ft
 {
@@ -244,6 +245,12 @@ namespace ft
             return _p;
         }
 
+        void _init()
+        {
+            this->sentry_node.next = &(this->sentry_node);
+            this->sentry_node.prev = &(this->sentry_node);
+        }
+
         void _clear()
         {
             _Node* _cur = static_cast<_Node*>(this->sentry_node.next);
@@ -265,6 +272,30 @@ namespace ft
             node_allocator.destroy(_n);
             node_allocator.deallocate(_n, 1);
         }
+
+        void _fill_initialize(size_type n, const value_type& val)
+        {
+            for (; n; --n)
+            {
+                push_back(val);
+            }
+        }
+
+        template<typename Integer>
+        void _initialize_dispatch(Integer n, Integer val, ft::true_type)
+        {
+            _fill_initialize(static_cast<size_type>(n), val);
+        }
+
+        template<typename InputIterator>
+        void _initialize_dispatch(InputIterator first, InputIterator last, ft::false_type)
+        {
+            for (; first != last; ++first)
+            {
+                push_back(*first);
+            }
+        }
+
 
     public:
     // ########## (constructor) ##########
@@ -384,50 +415,42 @@ namespace ft
     };
 
     // ########## (constructor) ##########
-    //default (1)	
-    //explicit list (const allocator_type& alloc = allocator_type());
+    //default (1)
     template <class T, class Alloc>
     list<T, Alloc>::list(const allocator_type& alloc) :
         node_allocator(alloc),
         sentry_node()
     {
-        this->sentry_node.next = &(this->sentry_node);
-        this->sentry_node.prev = &(this->sentry_node);
+        _init();
     }
-
-    //fill (2)	
-    //explicit list (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+    //fill (2)
     template <class T, class Alloc>
     list<T, Alloc>::list(size_type n, const value_type& val, const allocator_type& alloc) :
         node_allocator(alloc),
         sentry_node()
     {
-        for (; n; --n)
-            push_back(val);
+        _init();
+        _fill_initialize(n, val);
     }
-
-    //range (3)	
-    //template <class InputIterator>
-    //list (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+    //range (3)
     template <class T, class Alloc>
     template <class InputIterator>
     list<T, Alloc>::list::list(InputIterator first, InputIterator last, const allocator_type& alloc) :
         node_allocator(alloc),
         sentry_node()
     {
-        for (; first != last; ++first)
-            push_back(*first);
+        _init();
+        typedef typename ft::is_integer<InputIterator>::type is_integer_type;
+        _initialize_dispatch(first, last, is_integer_type());
     }
-    
-    //copy (4)	
-    //list (const list& x);
+    //copy (4)
     template <class T, class Alloc>
     list<T, Alloc>::list::list(const list& x) :
         node_allocator(x.node_allocator),
         sentry_node()
     {
-        for (iterator it = x.begin(); it != x.end(); it++)
-            push_back(*it);
+        _init();
+        _initialize_dispatch(x.begin(), x.end(), ft::false_type());
     }
 
     // ########## (destructor) ##########
@@ -616,6 +639,8 @@ namespace ft
     template <class T, class Alloc>
     void list<T, Alloc>::splice(iterator position, list& x, iterator i)
     {
+        if ((void *)&x == NULL) // TODO : x 사용안해서 일단 넣음 
+            return ;
         iterator j = i;
         ++j;
         if (position == i || position == j)
@@ -626,6 +651,8 @@ namespace ft
     template <class T, class Alloc>
     void list<T, Alloc>::splice(iterator position, list& x, iterator first, iterator last)
     {
+        if ((void *)&x == NULL) // TODO : x 사용안해서 일단 넣음 
+            return ;
         if (first == last)
             return;
         position.node_ptr->_transfer(first.node_ptr, last.node_ptr);
