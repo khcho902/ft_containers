@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/22 03:15:12 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/22 03:26:51 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -360,21 +360,19 @@ namespace ft
     
         //single element (1)	
         iterator insert(iterator position, const value_type& val);
-    /* 주석 시작(7-3)
         //fill (2)	
         void insert(iterator position, size_type n, const value_type& val);
         //range (3)	
         template <class InputIterator>
         void insert(iterator position, InputIterator first, InputIterator last);
-    주석 끝(7-3)*/
         
         iterator erase(iterator position);
         iterator erase(iterator first, iterator last);
-    /* 주석 시작(7-4)
+    /* 주석 시작(7-3)
         void swap (list& x);
         void resize (size_type n, value_type val = value_type());
         void clear();
-    주석 끝(7-4)*/
+    주석 끝(7-3)*/
     
 
 
@@ -591,22 +589,21 @@ namespace ft
         tmp->_hook(position.node_ptr);
         return iterator(tmp);
     }
-    /*
     //fill (2)
     template <class T, class Alloc>
     void list<T, Alloc>::insert(iterator position, size_type n, const value_type& val)
     {
-
+        list tmp(n, val);
+        splice(position, tmp);
     }
     //range (3)
     template <class T, class Alloc>
     template <class InputIterator>
     void list<T, Alloc>::insert(iterator position, InputIterator first, InputIterator last)
     {
-        
+        list tmp(first, last);
+        splice(position, tmp);
     }
-    */
-
 
     template <class T, class Alloc>
     typename list<T, Alloc>::iterator list<T, Alloc>::erase(iterator position)
