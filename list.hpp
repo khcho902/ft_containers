@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/22 03:26:51 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:09:59 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,6 +296,41 @@ namespace ft
             }
         }
 
+        void _fill_assign(size_type n, const value_type& val)
+        {
+            iterator i = begin();
+            const iterator end_i = end();
+
+            for (; i != end_i && n > 0; ++i, --n)
+                *i = val;
+
+            if (n > 0)
+                insert(end_i, n, val);
+            else
+                erase(i, end_i);
+        }
+
+        template<typename Integer>
+        void _assign_dispatch(Integer n, Integer val, ft::true_type)
+        {
+            _fill_assign(n, val);
+        }
+
+        template<typename InputIterator>
+        void _assign_dispatch(InputIterator first, InputIterator last, ft::false_type)
+        {
+            iterator i = begin();
+            const iterator end_i = end();
+
+            for (; i != end_i && first != last; ++i, ++first)
+                *i = *first;
+            
+            if (first == last)
+                erase(i, end_i);
+            else
+                insert(end_i, first, last);
+        }
+
 
     public:
     // ########## (constructor) ##########
@@ -343,13 +378,12 @@ namespace ft
         const_reference back() const;
 
     // ########## Modifiers: ##########
-    /* 주석 시작(7)
         //range (1)	
         template <class InputIterator>
-        void assign (InputIterator first, InputIterator last);
+        void assign(InputIterator first, InputIterator last);
         //fill (2)	
-        void assign (size_type n, const value_type& val);
-        
+        void assign(size_type n, const value_type& val);
+    /* 주석 시작(7)
         void push_front (const value_type& val);
         void pop_front();
     주석 끝(7)*/
@@ -567,6 +601,22 @@ namespace ft
 
 
     // ########## Modifiers: ##########
+    //range (1)
+    template <class T, class Alloc>
+    template <class InputIterator>
+    void list<T, Alloc>::assign(InputIterator first, InputIterator last)
+    {
+        typedef typename ft::is_integer<InputIterator>::type is_integer_type;
+        _assign_dispatch(first, last, is_integer_type());
+    }
+
+    //fill (2)
+    template <class T, class Alloc>
+    void list<T, Alloc>::assign(size_type n, const value_type& val)
+    {
+        _fill_assign(n, val);
+    }
+
     template <class T, class Alloc>
     void list<T, Alloc>::push_back(const value_type& val)  // TODO : 개선 필요
     {

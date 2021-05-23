@@ -1,35 +1,47 @@
-// inserting into a list
+// list::assign
 #include <iostream>
 #include "list.hpp"
-#include <vector>
 
 int main ()
 {
-  ft::list<int> mylist;
-  ft::list<int>::iterator it;
+	typedef ft::list<int>::iterator iterator;
 
-  // set some initial values:
-  for (int i=1; i<=5; ++i)
-  	mylist.push_back(i); // 1 2 3 4 5
+  ft::list<int> first;
+  ft::list<int> second;
 
-  it = mylist.begin();
-  ++it;       // it points now to number 2           ^
+  first.assign(7,100);                      // 7 ints with value 100
 
-  mylist.insert (it,10);                        // 1 10 2 3 4 5
+  std::cout << "first list : " ;
+  for (iterator it = first.begin(); it != first.end(); it++)
+  {
+	  std::cout << *it << " ";
+  }
+  std::cout << std::endl;
 
-  // "it" still points to number 2                      ^
-  mylist.insert (it,2,20);                      // 1 10 20 20 2 3 4 5
 
-  --it;       // it points now to the second 20            ^
+  second.assign(first.begin(),first.end()); // a copy of first
 
-  std::vector<int> myvector (2,30);
-  mylist.insert (it,myvector.begin(),myvector.end());
-                                                // 1 10 20 30 30 20 2 3 4 5
-                                                //               ^
-  std::cout << "mylist contains:";
-  for (it=mylist.begin(); it!=mylist.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
 
+  std::cout << "second list : " ;
+  for (iterator it = second.begin(); it != second.end(); it++)
+  {
+	  std::cout << *it << " ";
+  }
+  std::cout << std::endl;
+
+  int myints[]={1776,7,4};
+  first.assign(myints,myints+3);            // assigning from array
+
+  std::cout << "first list : " ;
+  for (iterator it = first.begin(); it != first.end(); it++)
+  {
+	  std::cout << *it << " ";
+  }
+  std::cout << std::endl;
+
+
+
+  std::cout << "Size of first: " << int (first.size()) << '\n';
+  std::cout << "Size of second: " << int (second.size()) << '\n';
   return 0;
 }
