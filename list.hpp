@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/23 15:09:59 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/23 16:04:41 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,7 +365,6 @@ namespace ft
         reverse_iterator rend();
         const_reverse_iterator rend() const;    
 
-
     // ########## Capacity: ##########
         bool empty() const;
         size_type size() const;
@@ -383,15 +382,10 @@ namespace ft
         void assign(InputIterator first, InputIterator last);
         //fill (2)	
         void assign(size_type n, const value_type& val);
-    /* 주석 시작(7)
-        void push_front (const value_type& val);
+        void push_front(const value_type& val);
         void pop_front();
-    주석 끝(7)*/
         void push_back(const value_type& val);
-    /* 주석 시작(7-2)
         void pop_back();
-    주석 끝(7-2)*/
-    
         //single element (1)	
         iterator insert(iterator position, const value_type& val);
         //fill (2)	
@@ -399,7 +393,6 @@ namespace ft
         //range (3)	
         template <class InputIterator>
         void insert(iterator position, InputIterator first, InputIterator last);
-        
         iterator erase(iterator position);
         iterator erase(iterator first, iterator last);
     /* 주석 시작(7-3)
@@ -618,17 +611,31 @@ namespace ft
     }
 
     template <class T, class Alloc>
-    void list<T, Alloc>::push_back(const value_type& val)  // TODO : 개선 필요
+    void list<T, Alloc>::push_front(const value_type& val)
     {
-        _Node* _tmp = _create_node(val);
+       _Node* tmp = _create_node(val);
+       tmp->_hook(begin().node_ptr);
+    }
 
-        _list_node_base* last_node = this->sentry_node.prev;
-        
-        last_node->next = _tmp;
-        _tmp->prev = last_node;
-        
-        _tmp->next = &(this->sentry_node);
-        this->sentry_node.prev = _tmp;
+    template <class T, class Alloc>
+    void list<T, Alloc>::pop_front()
+    {
+       _erase(begin());
+    }
+
+    template <class T, class Alloc>
+    void list<T, Alloc>::push_back(const value_type& val)
+    {
+        _Node* tmp = _create_node(val);
+        tmp->_hook(end().node_ptr);
+    }
+    
+    template <class T, class Alloc>
+    void list<T, Alloc>::pop_back()
+    {
+        iterator i = end();
+        i--;
+        _erase(i);
     }
 
     //single element (1)
