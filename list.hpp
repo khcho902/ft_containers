@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/23 16:04:41 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/24 02:56:03 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,45 @@ namespace ft
     {
         _list_node_base* next;
         _list_node_base* prev;
+
+        static void swap(_list_node_base& x, _list_node_base& y)
+        {
+            if (x.next != &x)
+            {
+                if (y.next != &y)
+                {
+                    // Both x and y are not empty.
+                    // swap(x.next, y.next);
+                    _list_node_base* tmp = x.next;
+                    x.next = y.next;
+                    y.next = tmp;
+                    
+                    // swap(x.prev, y.prev);
+                    tmp = x.prev;
+                    x.prev = y.prev;
+                    y.prev = tmp;
+                    
+                    x.next->prev = x.prev->next = &x;
+                    y.next->prev = y.prev->next = &y;
+                }
+                else
+                {
+                    // x is not empty, y is empty.
+                    y.next = x.next;
+                    y.prev = x.prev;
+                    y.next->prev = y.prev->next = &y;
+                    x.next = x.prev = &x;
+                }
+            }
+            else if (y.next != &y)
+            {
+                // x is empty, y is not empty.
+                x.next = y.next;
+                x.prev = y.prev;
+                x.next->prev = x.prev->next = &x;
+                y.next = y.prev = &y;
+            }
+        }
 
         void _transfer(_list_node_base* const first, _list_node_base* const last)
         {
@@ -395,14 +434,10 @@ namespace ft
         void insert(iterator position, InputIterator first, InputIterator last);
         iterator erase(iterator position);
         iterator erase(iterator first, iterator last);
-    /* 주석 시작(7-3)
-        void swap (list& x);
-        void resize (size_type n, value_type val = value_type());
+        void swap(list& x);
+        void resize(size_type n, value_type val = value_type());
         void clear();
-    주석 끝(7-3)*/
     
-
-
     // ########## Operations: ##########
         //entire list (1)	
         void splice(iterator position, list& x);
@@ -678,6 +713,42 @@ namespace ft
             first = erase(first);       
         }
         return last;
+    }
+
+    template <class T, class Alloc>
+    void list<T, Alloc>::swap(list& x)
+    {
+        _list_node_base::swap(sentry_node, x.sentry_node);
+        
+        _node_alloc_type tmp = this->node_allocator;
+        this->node_allocator = x.node_allocator;
+        x.node_allocator = tmp;
+    }
+
+    template <class T, class Alloc>
+    void list<T, Alloc>::resize(size_type n, value_type val)
+    {
+       size_type list_size = size();
+
+       if (list_size == n)
+           return;
+       
+       if (list_size < n)
+           insert(end(), n - list_size, val);
+       else
+       {
+           iterator i = begin();
+           while (n-- > 0)
+               i++;
+           erase(i, end());
+       }
+    }
+
+    template <class T, class Alloc>
+    void list<T, Alloc>::clear()
+    {
+        _clear();
+        _init();
     }
 
     // ########## Operations: ##########

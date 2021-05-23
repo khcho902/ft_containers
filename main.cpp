@@ -1,22 +1,23 @@
-// list::pop_back
+// swap lists
 #include <iostream>
 #include "list.hpp"
 
 int main ()
 {
-  ft::list<int> mylist;
-  int sum (0);
-  mylist.push_back (100);
-  mylist.push_back (200);
-  mylist.push_back (300);
+  ft::list<int> first (3,100);   // three ints with a value of 100
+  ft::list<int> second (5,200);  // five ints with a value of 200
 
-  while (!mylist.empty())
-  {
-    sum+=mylist.back();
-    mylist.pop_back();
-  }
+  first.swap(second);
 
-  std::cout << "The elements of mylist summed " << sum << '\n';
+  std::cout << "first contains:";
+  for (ft::list<int>::iterator it=first.begin(); it!=first.end(); it++)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
+
+  std::cout << "second contains:";
+  for (ft::list<int>::iterator it=second.begin(); it!=second.end(); it++)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
 
   return 0;
 }
