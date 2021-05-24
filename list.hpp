@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/24 02:56:03 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/24 11:06:27 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -445,11 +445,10 @@ namespace ft
         void splice(iterator position, list& x, iterator i);
         //element range (3)	
         void splice(iterator position, list& x, iterator first, iterator last);
-    /* 주석 시작(8)
-        void remove (const value_type& val);
+        void remove(const value_type& val);
         template <class Predicate>
-        void remove_if (Predicate pred);
-
+        void remove_if(Predicate pred);
+/* 주석 시작(8)
         //(1)	
         void unique();
         //(2)	
@@ -783,6 +782,47 @@ namespace ft
         position.node_ptr->_transfer(first.node_ptr, last.node_ptr);
     }
 
+    template <class T, class Alloc>
+    void list<T, Alloc>::remove(const value_type& val)
+    {
+        iterator first = begin();
+        iterator last = end();
+        iterator extra = last;
+
+        while (first != last)
+        {
+            iterator next = first;
+            ++next;
+            
+            if (*first == val)
+            {
+                if (std::addressof(*first) != std::addressof(val))
+                    _erase(first);
+                else
+                    extra = first;
+            }
+            first = next;
+        }
+        if (extra != last)
+            _erase(extra);
+    }
+
+    template <class T, class Alloc>
+    template <class Predicate>
+    void list<T, Alloc>::remove_if(Predicate pred)
+    {
+        iterator first = begin();
+        iterator last = end();
+        while (first != last)
+        {
+            iterator next = first;
+            ++next;
+            if (pred(*first))
+                _erase(first);
+            first = next;
+        }
+    }
+
 /* 주석시작
 // ########## Non-member function overloads ##########
     //(1)
@@ -809,6 +849,5 @@ namespace ft
 주석 끝*/ 
 
 } // end namespace ft 
-
 
 #endif
