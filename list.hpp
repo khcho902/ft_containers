@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/24 11:06:27 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/24 11:37:38 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -448,13 +448,12 @@ namespace ft
         void remove(const value_type& val);
         template <class Predicate>
         void remove_if(Predicate pred);
-/* 주석 시작(8)
         //(1)	
         void unique();
         //(2)	
         template <class BinaryPredicate>
-        void unique (BinaryPredicate binary_pred);
-
+        void unique(BinaryPredicate binary_pred);
+/* 주석 시작(8)
         //(1)	
         void merge (list& x);
         //(2)	
@@ -820,6 +819,54 @@ namespace ft
             if (pred(*first))
                 _erase(first);
             first = next;
+        }
+    }
+
+    //(1)
+    template <class T, class Alloc>
+    void list<T, Alloc>::unique()
+    {
+        iterator first = begin();
+        const iterator last = end();
+
+        if (first == last)
+            return;
+        
+        iterator next = first;
+        next++;
+        while(next != last)
+        {
+            if (*first == *next)
+                _erase(next);
+            else
+                first = next;
+            
+            next = first;
+            next++;
+        }
+    }
+    //(2)
+    template <class T, class Alloc>
+    template <class BinaryPredicate>
+    void list<T, Alloc>::unique(BinaryPredicate binary_pred)
+    {
+        iterator first = begin();
+        const iterator last = end();
+
+        if (first == last)
+            return;
+        
+        iterator next = first;
+        next++;
+        while(next != last)
+        {
+            if (binary_pred(*first, *next))
+                _erase(next);
+            else
+                first = next;
+            
+            next = first;
+            next++;
         }
     }
 
