@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/24 11:37:38 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/27 16:09:56 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,11 @@ namespace ft
         typedef _list_iterator<T>                   _Self;
         typedef _list_node<T>                       _Node;
         
-        typedef ptrdiff_t                           difference_type;
-        typedef std::bidirectional_iterator_tag     iterator_category;
         typedef T                                   value_type;
+        typedef ptrdiff_t                           difference_type;
         typedef T*                                  pointer;
         typedef T&                                  reference;
+        typedef std::bidirectional_iterator_tag     iterator_category;
 
         _list_node_base* node_ptr;
 
@@ -181,11 +181,11 @@ namespace ft
         typedef const _list_node<T>                 _Node;
         typedef _list_iterator<T>                   iterator;
         
-        typedef ptrdiff_t                           difference_type;
-        typedef std::bidirectional_iterator_tag     iterator_category;
         typedef T                                   value_type;
+        typedef ptrdiff_t                           difference_type;
         typedef const T*                            pointer;
         typedef const T&                            reference;
+        typedef std::bidirectional_iterator_tag     iterator_category;
 
         const _list_node_base* node_ptr;
 
