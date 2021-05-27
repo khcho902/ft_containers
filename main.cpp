@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "list.hpp"
+#include "rb_tree.hpp"
 
 // a binary predicate implemented as a function:
 bool same_integral_part(double first, double second)

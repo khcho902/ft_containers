@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/27 16:09:56 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/27 20:04:36 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,6 @@ namespace ft
         typedef typename allocator_type::pointer            pointer;
         typedef typename allocator_type::const_pointer      const_pointer;
         
-        
         typedef _list_iterator<T>                           iterator;
         typedef _list_const_iterator<T>                     const_iterator;
         typedef ft::reverse_iterator<iterator>              reverse_iterator;
@@ -268,12 +267,12 @@ namespace ft
     
 
     protected:
-        typedef typename Alloc::template rebind<_list_node<T> >::other    _node_alloc_type;
+        typedef _list_node<T>                                           _Node;
+        typedef typename Alloc::template rebind<_list_node<T> >::other  _node_alloc_type;
+        
 
         _node_alloc_type    node_allocator;
         _list_node_base     sentry_node;
-
-        typedef _list_node<T>   _Node;
 
         // TODO : 제대로 된건지 테스트필요 
         _Node* _create_node(const value_type& val)
