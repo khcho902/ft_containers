@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/28 02:48:44 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/28 03:02:20 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,48 +324,47 @@ namespace ft
         return this->keycompare;
     }
 
+    iterator begin()
+    {
+        return iterator(static_cast<_Node *>(this->header.left));
+    }
+    
+    const_iterator begin() const
+    {
+        return const_iterator(static_cast<const _Node *>(this->header.left));
+    }
+
+    iterator end()
+    {
+        return iterator(static_cast<_Node *>(&(this->header)));
+    }
+
+    const_iterator end() const
+    {
+        return const_iterator(static_cast<const _Node *>(&(this->header)));
+    }
+
+    reverse_iterator rbegin()
+    {
+        return reverse_iterator(end());
+    }
+
+    const_reverse_iterator rbegin() const
+    {
+        return const_reverse_iterator(end());
+    }
+
+    reverse_iterator rend()
+    {
+        return reverse_iterator(begin());
+    }
+
+    const_reverse_iterator rend() const
+    {
+        return const_reverse_iterator(begin());
+    }
+    
     /*
-      iterator
-      begin()  // 필요(map) 필요(set)
-      { 
-    return iterator(static_cast<_Link_type>
-            (this->_M_impl._M_header._M_left));
-      }
-
-      const_iterator
-      begin() const  // 필요(map)
-      { 
-    return const_iterator(static_cast<_Const_Link_type>
-                  (this->_M_impl._M_header._M_left));
-      }
-
-      iterator
-      end()      // 필요(map) 필요(set)
-      { return iterator(static_cast<_Link_type>(&this->_M_impl._M_header)); }
-
-      const_iterator
-      end() const  // 필요(map)
-      { 
-    return const_iterator(static_cast<_Const_Link_type>
-                  (&this->_M_impl._M_header));
-      }
-
-      reverse_iterator
-      rbegin()   // 필요(map) 필요(set)
-      { return reverse_iterator(end()); }
-
-      const_reverse_iterator
-      rbegin() const    // 필요(map)
-      { return const_reverse_iterator(end()); }
-
-      reverse_iterator
-      rend()             // 필요(map) 필요(set)
-      { return reverse_iterator(begin()); }
-
-      const_reverse_iterator
-      rend() const       // 필요(map)
-      { return const_reverse_iterator(begin()); }
-
       bool
       empty() const      // 필요(map) 필요(set)
       { return _M_impl._M_node_count == 0; }
