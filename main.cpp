@@ -1,35 +1,9 @@
-// swap lists
 #include <iostream>
-#include "list.hpp"
+#include "utils.hpp"
 #include "rb_tree.hpp"
 
 int main()
 {
-	/*
-	ft::list<int> first(3, 100);  // three ints with a value of 100
-	ft::list<int> second(5, 200); // five ints with a value of 200
-
-	first.swap(second);
-
-	std::cout << "first contains:";
-	for (ft::list<int>::iterator it = first.begin(); it != first.end(); it++)
-		std::cout << ' ' << *it;
-	std::cout << '\n';
-
-	std::cout << "second contains:";
-	for (ft::list<int>::iterator it = second.begin(); it != second.end(); it++)
-		std::cout << ' ' << *it;
-	std::cout << '\n';
-	*/
-
-	/*
-	std::map<char, int> mymap;
-
-	// first insert function version (single parameter):
-	mymap.insert(std::pair<char, int>('a', 100));
-	mymap.insert(std::pair<char, int>('z', 200));
-	*/
-
 	typedef char					key_type;
 	typedef std::pair<char, int>	value_type;
 	typedef std::less<char>			key_compare;
@@ -40,20 +14,38 @@ int main()
 
 	Rb_tree tree;
 
-	tree.insert_unique(std::pair<char, int>('b', 200));
-	tree.insert_unique(std::pair<char, int>('d', 400));
+	// first insert function version (single parameter):
 	tree.insert_unique(std::pair<char, int>('a', 100));
-	tree.insert_unique(std::pair<char, int>('c', 300));
+	tree.insert_unique(std::pair<char, int>('z', 200));
 
-	Rb_tree::iterator it = tree.begin();
-
-	while (it != tree.end())
+	std::pair<Rb_tree::iterator, bool> ret;
+	ret = tree.insert_unique(std::pair<char, int>('z', 500));
+	if (ret.second == false)
 	{
-		std::cout << (*it).first << std::endl;
-		std::cout << (*it).second << std::endl;
-		it++;
-
+		std::cout << "element 'z' already existed";
+		std::cout << " with a value of " << ret.first->second << '\n';
 	}
+
+	// second insert function version (with hint position):
+	Rb_tree::iterator it = tree.begin();
+	tree.insert_unique_(it, std::pair<char, int>('b', 300)); // max efficiency inserting
+	tree.insert_unique_(it, std::pair<char, int>('c', 400)); // no max efficiency inserting
+
+	// third insert function version (range insertion):
+	Rb_tree::iterator it2 = tree.begin();
+	it2++;
+	it2++;
+	Rb_tree anothertree;
+	anothertree.insert_unique(tree.begin(), it2);
+
+	// showing contents:
+	std::cout << "tree contains:\n";
+	for (it = tree.begin(); it != tree.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+
+	std::cout << "anothermap contains:\n";
+	for (it = anothertree.begin(); it != anothertree.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
 
 	return 0;
 }

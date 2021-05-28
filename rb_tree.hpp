@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/28 23:15:53 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/29 01:37:52 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -640,17 +640,66 @@ namespace ft
         
         return std::pair<iterator, bool>(j, false);
     }
- 
+
+    iterator insert_unique_(const_iterator position, const value_type &v)
+    {
+        // end()
+        if (position.node_ptr == _end())
+        {
+            if (size() > 0 && key_compare(_s_key(_rightmost()), KeyOfValue()(v)))
+                return _insert_(0, _rightmost(), v);
+            else
+                return insert_unique(v).first;
+        }
+        else if (key_compare(KeyOfValue()(v), _s_key(position.node_ptr)))
+        {
+            // First, try before...
+            const_iterator before = position;
+
+            if (position.node_ptr == _leftmost()) // begin()
+                return _insert_(_leftmost(), _leftmost(), v);
+            else if (key_compare(_s_key((--before).node_ptr), KeyOfValue()(v)))
+            {
+                if (_s_right(before.node_ptr) == 0)
+                    return _insert_(0, before.node_ptr,  v);
+                else
+                    return _insert_(position.node_ptr, position.node_ptr, v);
+            }
+            else
+                return insert_unique(v).first;
+        }
+        else if (key_compare(_s_key(position.node_ptr), KeyOfValue()(v)))
+        {
+            // ... then try after.
+            const_iterator after = position;
+
+            if (position.node_ptr == _rightmost())
+                return _insert_(0, _rightmost(), v);
+            else if (key_compare(KeyOfValue()(v), _s_key((++after).node_ptr)))
+            {
+                if (_s_right(position.node_ptr) == 0)
+                    return _insert_(0, position.node_ptr, v);
+                else
+                    return _insert_(after.node_ptr, after.node_ptr, v);
+            }
+            else
+                return insert_unique(v).first;
+        }
+        else
+            //Equivalent keys.
+            return position._const_cast();
+    }
+
+    template <typename InputIterator>
+    void insert_unique(InputIterator first, InputIterator last)
+    {
+        for (; first != last; first++)
+        {
+            insert_unique_(end(), *first);
+        }
+    }
+
     /*
-      iterator
-      _M_insert_unique_(const_iterator __position, const value_type& __x);  // 필요(map) 필요(set)
-
-      template<typename _InputIterator>
-        void
-        _M_insert_unique(_InputIterator __first, _InputIterator __last);  // 필요(map) 필요(set)
-
-
-
       iterator
       _M_insert_equal(const value_type& __x);
 
