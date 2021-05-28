@@ -1,43 +1,22 @@
-// list::unique
+// swap lists
 #include <iostream>
-#include <cmath>
 #include "list.hpp"
 #include "rb_tree.hpp"
 
-// a binary predicate implemented as a function:
-bool same_integral_part(double first, double second)
-{
-	return (int(first) == int(second));
-}
-
-// a binary predicate implemented as a class:
-struct is_near
-{
-	bool operator()(double first, double second)
-	{
-		return (fabs(first - second) < 5.0);
-	}
-};
-
 int main()
 {
-	double mydoubles[] = { 2.72,  3.14, 12.15, 12.77, 12.77,
-						  15.3,  72.25, 72.25, 73.0,  73.35};
-	ft::list<double> mylist(mydoubles, mydoubles + 10);
+	ft::list<int> first(3, 100);  // three ints with a value of 100
+	ft::list<int> second(5, 200); // five ints with a value of 200
 
-	//mylist.sort(); //  2.72,  3.14, 12.15, 12.77, 12.77,
-				   // 15.3,  72.25, 72.25, 73.0,  73.35
+	first.swap(second);
 
-	mylist.unique(); //  2.72,  3.14, 12.15, 12.77
-					 // 15.3,  72.25, 73.0,  73.35
+	std::cout << "first contains:";
+	for (ft::list<int>::iterator it = first.begin(); it != first.end(); it++)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
 
-	mylist.unique(same_integral_part); //  2.72,  3.14, 12.15
-									   // 15.3,  72.25, 73.0
-
-	mylist.unique(is_near()); //  2.72, 12.15, 72.25
-
-	std::cout << "mylist contains:";
-	for (ft::list<double>::iterator it = mylist.begin(); it != mylist.end(); ++it)
+	std::cout << "second contains:";
+	for (ft::list<int>::iterator it = second.begin(); it != second.end(); it++)
 		std::cout << ' ' << *it;
 	std::cout << '\n';
 

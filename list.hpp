@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/27 20:04:36 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/28 11:40:21 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,8 @@ namespace ft
                 if (y.next != &y)
                 {
                     // Both x and y are not empty.
-                    // swap(x.next, y.next);
-                    _list_node_base* tmp = x.next;
-                    x.next = y.next;
-                    y.next = tmp;
-                    
-                    // swap(x.prev, y.prev);
-                    tmp = x.prev;
-                    x.prev = y.prev;
-                    y.prev = tmp;
-                    
+                    ft::swap(x.next, y.next);
+                    ft::swap(x.prev, y.prev);
                     x.next->prev = x.prev->next = &x;
                     y.next->prev = y.prev->next = &y;
                 }

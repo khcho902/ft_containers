@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 02:42:03 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/22 02:57:08 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/28 11:41:17 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,14 @@ namespace ft
 	{
 		typedef true_type type;
 	};
+
+	template <typename T>
+	void swap(T& x, T& y)
+	{
+		T tmp = x;
+		x = y;
+		y = tmp;
+	}
 
 } // end namespace ft 
 
