@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 02:42:03 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/28 11:41:17 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/28 22:50:36 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,24 @@ namespace ft
 		x = y;
 		y = tmp;
 	}
+
+	// TODO : 별로 필요없어보임 지울지 고려해야함.
+	template <typename Arg, typename Result>
+	struct unary_function
+	{
+		typedef Arg argument_type;
+		typedef Result result_type;
+	};
+
+	template <typename Pair>
+	struct Select1st : public unary_function<Pair, typename Pair::first_type>
+	{
+		typename Pair::first_type& operator()(Pair& x) const
+		{ return x.first; }
+		
+		const typename Pair::first_type& operator()(const Pair& x) const
+		{ return x.first; }
+	};
 
 } // end namespace ft 
 

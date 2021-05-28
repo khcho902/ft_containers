@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/28 10:59:31 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/28 23:15:53 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define RB_TREE_HPP
 
 # include <memory>
+# include <utility>
 # include <iterator>
 # include "iterator.hpp"
 
@@ -39,7 +40,21 @@ namespace ft
             return x;
         }
 
+        static const _rb_tree_node_base* _minimum(const _rb_tree_node_base* x)
+        {
+            while (x->left != 0)
+                x = x->left;
+            return x;
+        }
+
         static _rb_tree_node_base* _maxinum(_rb_tree_node_base* x)
+        {
+            while (x->right != 0)
+                x = x->right;
+            return x;
+        }
+
+        static const _rb_tree_node_base* _maxinum(const _rb_tree_node_base* x)
         {
             while (x->right != 0)
                 x = x->right;
@@ -247,7 +262,135 @@ namespace ft
             return node_ptr != x.node_ptr;
         }
     };
-    
+
+    static void _rb_tree_rotate_left(
+        _rb_tree_node_base *const x, _rb_tree_node_base *& root)
+    {
+        _rb_tree_node_base *const y = x->right;
+
+        x->right = y->left;
+        if (y->left != 0)
+            y->left->parent = x;
+        y->parent = x->parent;
+
+        if (x == root)
+            root = y;
+        else if (x == x->parent->left)
+            x->parent->left = y;
+        else
+            x->parent->right = y;
+        y->left = x;
+        x->parent = y;
+    }
+
+    static void _rb_tree_rotate_right(
+        _rb_tree_node_base *const x, _rb_tree_node_base *&root)
+    {
+        _rb_tree_node_base *const y = x->left;
+
+        x->left = y->right;
+        if (y->right != 0)
+            y->right->parent = x;
+        y->parent = x->parent;
+
+        if (x == root)
+            root = y;
+        else if (x == x->parent->right)
+            x->parent->right = y;
+        else
+            x->parent->left = y;
+        y->right = x;
+        x->parent = y;
+    }
+
+    void _rb_tree_insert_and_rebalance( const bool is_insert_left,
+            _rb_tree_node_base* x, _rb_tree_node_base* p, _rb_tree_node_base& header)
+    {
+        _rb_tree_node_base *& root = header.parent;
+
+        // Initialize fields in new node to insert.
+        x->parent = p;
+        x->left = 0;
+        x->right = 0;
+        x->color = red;
+
+        // Insert.
+        // Make new node child of parent and maintain root, leftmost and rightmost nodes.
+        // N.B. First node is always inserted left.
+        if (is_insert_left)
+        {
+            p->left = x; // also makes leftmost = x when p == &header
+
+            if (p == &header)
+            {
+                header.parent = x;
+                header.right = x;
+            }
+            else if (p == header.left)
+                header.left = x; // maintain leftmost pointing to min node
+        }
+        else
+        {
+            p->right = x;
+            
+            if (p == header.right)
+                header.right = x; // maintain rightmost pointing to max node 
+        }
+
+        // Rebalance.
+        while (x != root && x->parent->color == red)
+        {
+            _rb_tree_node_base *const xpp = x->parent->parent;
+
+            if (x->parent == xpp->left)
+            {
+                _rb_tree_node_base *const y = xpp->right;
+                if (y && y->color == red)
+                {
+                    x->parent->color = black;
+                    y->color = black;
+                    xpp->color = red;
+                    x = xpp;
+                }
+                else
+                {
+                    if (x == x->parent->right)
+                    {
+                        x = x->parent;
+                        _rb_tree_rotate_left(x, root);
+                    }
+                    x->parent->color = black;
+                    xpp->color = red;
+                    _rb_tree_rotate_right(xpp, root);
+                }
+            }
+            else
+            {
+                _rb_tree_node_base *const y = xpp->left;
+                if (y && y->color == red)
+                {
+                    x->parent->color = black;
+                    y->color = black;
+                    xpp->color = red;
+                    x = xpp;
+                }
+                else
+                {
+                    if (x == x->parent->left)
+                    {
+                        x = x->parent;
+                        _rb_tree_rotate_right(x, root);
+                    }
+                    x->parent->color = black;
+                    xpp->color = red;
+                    _rb_tree_rotate_left(xpp, root);
+                }
+            }
+        }
+        root->color = black;
+    }
+
+    // ############## rb_tree class #############################################################
     template<typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc = std::allocator<Val> >
     class rb_tree
     {
@@ -284,6 +427,92 @@ namespace ft
             this->header.parent = 0;
             this->header.left = &(this->header);
             this->header.right = &(this->header);
+        }
+
+        _Node* _create_node(const value_type& x)
+        {
+            _Node* tmp = node_allocator.allocate(1);
+            allocator_type(node_allocator).construct(std::addressof(tmp->value),x);
+            return tmp;
+        }
+
+        _rb_tree_node_base*& _root()
+        { return this->header.parent; }
+
+        const _rb_tree_node_base* _root() const
+        { return this->header.parent; }
+
+        _rb_tree_node_base*& _leftmost()
+        { return this->header.left; }
+
+        const _rb_tree_node_base* _leftmost() const
+        { return this->header.left; }
+
+        _rb_tree_node_base*& _rightmost()
+        { return this->header.right; }
+
+        const _rb_tree_node_base* _rightmost() const
+        { return this->header.right; }
+
+        _Node* _begin()
+        { return static_cast<_Node*>(this->header.parent); }
+
+        const _Node* _begin() const
+        { return static_cast<const _Node*>(this->header.parent); }
+
+        _Node* _end()
+        { return static_cast<_Node*>(&this->header); }
+
+        const _Node* _end() const
+        { return static_cast<const _Node*>(&this->header); }
+
+        static const_reference _s_value(const _Node* x)
+        { return x->value; }
+
+        static const_reference _s_value(const _rb_tree_node_base* x)
+        { return static_cast<const _Node *>(x)->value; }
+
+        static const Key& _s_key(const _Node* x)
+        { return KeyOfValue()(_s_value(x)); }
+
+        static const Key& _s_key(const _rb_tree_node_base* x)
+        { return KeyOfValue()(_s_value(x)); }
+
+        static _Node* _s_left(_rb_tree_node_base* x)
+        { return static_cast<_Node*>(x->left); }
+
+        static const _Node* _s_left(const _rb_tree_node_base* x)
+        { return static_cast<const _Node*>(x->left); }
+
+        static _Node* _s_right(_rb_tree_node_base* x)
+        { return static_cast<_Node*>(x->right); }
+
+        static const _Node* _s_right(const _rb_tree_node_base* x)
+        { return static_cast<const _Node*>(x->right); }
+
+        static _rb_tree_node_base* _s_minimum(_rb_tree_node_base* x)
+        { return _rb_tree_node_base::_minimum(x); }
+
+        static const _rb_tree_node_base* _s_minimum(const _rb_tree_node_base* x)
+        { return _rb_tree_node_base::_minimum(x); }
+
+        static _rb_tree_node_base* _s_maximum(_rb_tree_node_base* x)
+        { return _rb_tree_node_base::_maxinum(x); }
+
+        static const _rb_tree_node_base* _s_maximum(const _rb_tree_node_base* x)
+        { return _rb_tree_node_base::_maxinum(x); }
+
+    private:
+        iterator _insert_(const _rb_tree_node_base* x, const _rb_tree_node_base* p, const value_type& v)
+        {
+            bool is_insert_left = (x != 0 || p == _end() || key_compare(KeyOfValue()(v), _s_key(p)));
+
+            _Node* z = _create_node(v);
+
+            _rb_tree_insert_and_rebalance(is_insert_left, z, const_cast<_rb_tree_node_base*>(p), this->header);
+
+            this->node_count++;
+            return iterator(z);
         }
 
     public:
@@ -381,26 +610,60 @@ namespace ft
 
     /*
       void swap(_Rb_tree& __t);   // 필요(map) 필요(set)
+    */
 
-      pair<iterator, bool>
-      _M_insert_unique(const value_type& __x);  // 필요(map) 필요(set)
+    std::pair<iterator, bool> insert_unique(const value_type& v)
+    {
+        _Node* x = _begin();
+        _Node* y = _end();
+
+        bool comp = true;
+        while (x != 0)
+        {
+            y = x;
+            comp = this->key_compare(KeyOfValue()(v), _s_key(x));
+            x = comp ? _s_left(x) : _s_right(x);
+        }
+
+        iterator j = iterator(y);
+
+        if (comp)
+        {
+            if (j == begin())
+                return std::pair<iterator, bool>(_insert_(x, y, v), true);
+            else
+                j--;
+        }
+
+        if (this->key_compare(_s_key(j.node_ptr), KeyOfValue()(v)))
+            return std::pair<iterator, bool>(_insert_(x, y, v), true);
+        
+        return std::pair<iterator, bool>(j, false);
+    }
+ 
+    /*
+      iterator
+      _M_insert_unique_(const_iterator __position, const value_type& __x);  // 필요(map) 필요(set)
+
+      template<typename _InputIterator>
+        void
+        _M_insert_unique(_InputIterator __first, _InputIterator __last);  // 필요(map) 필요(set)
+
+
 
       iterator
       _M_insert_equal(const value_type& __x);
-
-      iterator
-      _M_insert_unique_(const_iterator __position, const value_type& __x);  // 필요(map) 필요(set)
 
       iterator
       _M_insert_equal_(const_iterator __position, const value_type& __x);
 
       template<typename _InputIterator>
         void
-        _M_insert_unique(_InputIterator __first, _InputIterator __last);  // 필요(map) 필요(set)
-
-      template<typename _InputIterator>
-        void
         _M_insert_equal(_InputIterator __first, _InputIterator __last);
+
+
+
+
 
         void
       erase(iterator __position)     // 필요(map) 필요(set)
