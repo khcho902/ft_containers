@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/28 03:02:20 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/28 10:59:31 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,21 +364,23 @@ namespace ft
         return const_reverse_iterator(begin());
     }
     
+    bool empty() const
+    {
+        return this->node_count == 0;
+    }
+
+    size_type size() const
+    {
+        return this->node_count;
+    }
+
+    size_type max_size() const
+    {
+        return this->node_allocator.max_size();
+    }
+
     /*
-      bool
-      empty() const      // 필요(map) 필요(set)
-      { return _M_impl._M_node_count == 0; }
-
-      size_type
-      size() const      // 필요(map) 필요(set)
-      { return _M_impl._M_node_count; }
-
-      size_type
-      max_size() const   // 필요(map) 필요(set)
-      { return _M_get_Node_allocator().max_size(); }
-
-      void
-      swap(_Rb_tree& __t);   // 필요(map) 필요(set)
+      void swap(_Rb_tree& __t);   // 필요(map) 필요(set)
 
       pair<iterator, bool>
       _M_insert_unique(const value_type& __x);  // 필요(map) 필요(set)
