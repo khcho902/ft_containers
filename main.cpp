@@ -32,11 +32,8 @@ int main()
 	tree.insert_unique_(it, std::pair<char, int>('c', 400)); // no max efficiency inserting
 
 	// third insert function version (range insertion):
-	Rb_tree::iterator it2 = tree.begin();
-	it2++;
-	it2++;
 	Rb_tree anothertree;
-	anothertree.insert_unique(tree.begin(), it2);
+	anothertree.insert_unique(tree.begin(), tree.find('c'));
 
 	// showing contents:
 	std::cout << "tree contains:\n";

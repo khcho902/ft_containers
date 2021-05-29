@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/29 01:37:52 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/30 01:11:44 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -515,6 +515,36 @@ namespace ft
             return iterator(z);
         }
 
+        iterator _lower_bound(_Node * x, _Node* y, const Key& k)
+        {
+            while (x != 0)
+            {
+                if (!key_compare(_s_key(x), k))
+                {
+                    y = x;
+                    x = _s_left(x);
+                }
+                else
+                    x = _s_right(x);
+            }
+            return iterator(y);
+        }
+
+        const_iterator _lower_bound(const _Node * x, const _Node* y, const Key& k) const
+        {
+            while (x != 0)
+            {
+                if (!key_compare(_s_key(x), k))
+                {
+                    y =  x;
+                    x = _s_left(x);
+                }
+                else
+                    x = _s_right(x);
+            }
+            return const_iterator(y);
+        }
+
     public:
     // ########## (constructor) ##########
     rb_tree()
@@ -700,84 +730,100 @@ namespace ft
     }
 
     /*
-      iterator
-      _M_insert_equal(const value_type& __x);
+    iterator
+    _M_insert_equal(const value_type& __x);
 
-      iterator
-      _M_insert_equal_(const_iterator __position, const value_type& __x);
+    iterator
+    _M_insert_equal_(const_iterator __position, const value_type& __x);
 
-      template<typename _InputIterator>
-        void
-        _M_insert_equal(_InputIterator __first, _InputIterator __last);
-
-
-
+    template<typename _InputIterator>
+    void
+    _M_insert_equal(_InputIterator __first, _InputIterator __last);
+    */
 
 
-        void
-      erase(iterator __position)     // 필요(map) 필요(set)
-      { _M_erase_aux(__position); }
+    /*
+    void
+    erase(iterator __position)     // 필요(map) 필요(set)
+    { _M_erase_aux(__position); }
 
-      void
-      erase(const_iterator __position)
-      { _M_erase_aux(__position); }
+    void
+    erase(const_iterator __position)
+    { _M_erase_aux(__position); }
 
-      size_type
-      erase(const key_type& __x);  // 필요(map) 필요(set)
+    size_type
+    erase(const key_type& __x);  // 필요(map) 필요(set)
 
-      void
-      erase(iterator __first, iterator __last)  // 필요(map) 필요(set)
-      { _M_erase_aux(__first, __last); }
+    void
+    erase(iterator __first, iterator __last)  // 필요(map) 필요(set)
+    { _M_erase_aux(__first, __last); }
 
-      void
-      erase(const_iterator __first, const_iterator __last)
-      { _M_erase_aux(__first, __last); }
+    void
+    erase(const_iterator __first, const_iterator __last)
+    { _M_erase_aux(__first, __last); }
 
-      void
-      erase(const key_type* __first, const key_type* __last);
+    void
+    erase(const key_type* __first, const key_type* __last);
+    */
 
-      void
-      clear()  // 필요(map) 필요(set)
-      {
-        _M_erase(_M_begin());
-        _M_leftmost() = _M_end();
-        _M_root() = 0;
-        _M_rightmost() = _M_end();
-        _M_impl._M_node_count = 0;
-      }
 
-      // Set operations.
-      iterator
-      find(const key_type& __k);  // 필요(map) 필요(set)
+    /*
+    void
+    clear()  // 필요(map) 필요(set)
+    {
+    _M_erase(_M_begin());
+    _M_leftmost() = _M_end();
+    _M_root() = 0;
+    _M_rightmost() = _M_end();
+    _M_impl._M_node_count = 0;
+    }
+    */
 
-      const_iterator
-      find(const key_type& __k) const;  // 필요(map) 필요(set)
+    // Set operations.
+    iterator find(const key_type& k)
+    {
+        iterator j = _lower_bound(_begin(), _end(), k);
+        return (j == end() || key_compare(k, _s_key(j.node_ptr))) ? end() : j;
+    }
 
-      size_type
-      count(const key_type& __k) const;
+    const_iterator find(const key_type& k) const
+    {
+        const_iterator j = _lower_bound(_begin(), _end(), k);
+        return (j == end() || key_compare(k, _s_key(j.node_ptr))) ? end() : j;
+    }
 
-      iterator
-      lower_bound(const key_type& __k)  // 필요(map) 필요(set)
-      { return _M_lower_bound(_M_begin(), _M_end(), __k); }
+    /*
+    size_type
+    count(const key_type& __k) const;  // 필요(multimap)
+    */
 
-      const_iterator
-      lower_bound(const key_type& __k) const  // 필요(map) 필요(set)
-      { return _M_lower_bound(_M_begin(), _M_end(), __k); }
+    /*
+    iterator
+    lower_bound(const key_type& __k)  // 필요(map) 필요(set)
+    { return _M_lower_bound(_M_begin(), _M_end(), __k); }
 
-      iterator
-      upper_bound(const key_type& __k)  // 필요(map) 필요(set)
-      { return _M_upper_bound(_M_begin(), _M_end(), __k); }
+    const_iterator
+    lower_bound(const key_type& __k) const  // 필요(map) 필요(set)
+    { return _M_lower_bound(_M_begin(), _M_end(), __k); }
+    */
 
-      const_iterator
-      upper_bound(const key_type& __k) const  // 필요(map) 필요(set)
-      { return _M_upper_bound(_M_begin(), _M_end(), __k); }
+    /*
+    iterator
+    upper_bound(const key_type& __k)  // 필요(map) 필요(set)
+    { return _M_upper_bound(_M_begin(), _M_end(), __k); }
 
-      pair<iterator, iterator>
-      equal_range(const key_type& __k);  // 필요(map) 필요(set)
+    const_iterator
+    upper_bound(const key_type& __k) const  // 필요(map) 필요(set)
+    { return _M_upper_bound(_M_begin(), _M_end(), __k); }
+    */
 
-      pair<const_iterator, const_iterator>
-      equal_range(const key_type& __k) const;  // 필요(map) 필요(set)
-      */
+    /*
+    pair<iterator, iterator>
+    equal_range(const key_type& __k);  // 필요(map) 필요(set)
+
+    pair<const_iterator, const_iterator>
+    equal_range(const key_type& __k) const;  // 필요(map) 필요(set)
+    */
 
     };
 
