@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/30 13:45:32 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 01:47:03 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,7 +459,8 @@ namespace ft
 
         void reverse();
 
-        // allocator_type get_allocator() const;
+    // ########## Allocator: ##########
+        allocator_type get_allocator() const;
     주석 끝(8)*/
     };
 

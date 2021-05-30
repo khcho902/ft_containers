@@ -1,6 +1,7 @@
 #include <iostream>
 #include "utils.hpp"
 #include "rb_tree.hpp"
+#include "map.hpp"
 
 int main()
 {
