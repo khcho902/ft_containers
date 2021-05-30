@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:24:39 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 02:06:17 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 03:00:40 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 namespace ft
 {
     // ############## map class ################################################
-	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > > 
+	template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > > 
 	class map
     {
 	public:
@@ -66,41 +66,55 @@ namespace ft
 
 	// ########## (constructor) ##########
 		//empty (1)
-		explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+		explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+			: tree(comp, alloc)
+		{}
 		//range (2)	
 		template <class InputIterator>
-		map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+		map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+			: tree(comp, alloc)
+		{ tree.insert_unique(first, last); }
 		//copy (3)	
-		map(const map& x);
+		map(const map& x)
+			: tree(x.tree)
+		{}
 
 	// ########## (destructor) ##########
-		~map();
+		~map() {}
 
 	// ########## operator= ##########
 		//copy (1)	
-		map& operator=(const map& x);
+		map& operator=(const map& x)
+		{
+			tree = x.tree;
+			return *this;
+		}
 
 	// ########## Iterators: ##########
-		iterator begin();
-		const_iterator begin() const;
-		iterator end();
-		const_iterator end() const;
-		reverse_iterator rbegin();
-		const_reverse_iterator rbegin() const;
-		reverse_iterator rend();
-		const_reverse_iterator rend() const;
+		iterator begin() { return tree.begin(); }
+		const_iterator begin() const { return tree.begin(); }
+		iterator end() { return tree.end(); }
+		const_iterator end() const { return tree.end(); }
+		reverse_iterator rbegin() { return tree.rbegin(); }
+		const_reverse_iterator rbegin() const { return tree.rbegin(); }
+		reverse_iterator rend() { return tree.rend(); }
+		const_reverse_iterator rend() const { return tree.rend(); }
 
 	// ########## Capacity: ##########
-		bool empty() const;
-		size_type size() const;
-		size_type max_size() const;
+		bool empty() const { return tree.empty(); }
+		size_type size() const { return tree.size(); }
+		size_type max_size() const { return tree.max_size(); }
 
 	// ########## Element access: ##########
+	/*
 		mapped_type& operator[](const key_type& k);
+	*/
 
 	// ########## Modifiers: ##########
 		//single element (1)
-		std::pair<iterator,bool> insert(const value_type& val);
+		std::pair<iterator,bool> insert(const value_type& val)
+		{ return tree.insert_unique(val); }
+		/*
 		//with hint (2)
 		iterator insert(iterator position, const value_type& val);
 		//range (3)
@@ -114,12 +128,16 @@ namespace ft
 		void erase(iterator first, iterator last);
 		void swap(map& x);
 		void clear();
+		*/
 
 	// ########## Observers: ##########
+		/*
 		key_compare key_comp() const;
 		value_compare value_comp() const;
+		*/
 
 	// ########## Operations: ##########
+		/*
 		iterator find(const key_type& k);
 		const_iterator find(const key_type& k) const;
 		size_type count(const key_type& k) const;
@@ -129,13 +147,17 @@ namespace ft
 		const_iterator upper_bound(const key_type& k) const;
 		std::pair<const_iterator,const_iterator> equal_range(const key_type& k) const;
 		std::pair<iterator,iterator> equal_range(const key_type& k);
+		*/
 
 	// ########## Allocator: ##########
+		/*
 		allocator_type get_allocator() const;
+		*/
 	
 	};
 
 // ########## Non-member function overloads ##########
+	/*
 	//(1)
 	template <class Key, class T, class Compare, class Alloc>
 	bool operator==(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs);
@@ -157,6 +179,45 @@ namespace ft
 
 	template <class Key, class T, class Compare, class Alloc>
   	void swap(map<Key, T, Compare, Alloc>& x, map<Key, T, Compare, Alloc>& y);
+	*/
+
+
+
+
+/*
+// ########## (constructor) ##########
+	//empty (1)
+	template <class Key, class T, class Compare, class Alloc>
+	map<Key, T, Compare, Alloc>::map(const key_compare& comp, const allocator_type& alloc)
+		: tree(comp, alloc)
+	{}
+	//range (2)
+	template <class Key, class T, class Compare, class Alloc>
+	template <class InputIterator>
+	map<Key, T, Compare, Alloc>::map(InputIterator first, InputIterator last, const key_compare& comp, const allocator_type& alloc)
+		: tree(comp, alloc)
+	{ tree.insert_unique(first, last); }
+	//copy (3)
+	template <class Key, class T, class Compare, class Alloc>
+	map<Key, T, Compare, Alloc>::map(const map& x)
+		: tree(x.tree)
+	{}
+
+// ########## (destructor) ##########
+	template <class Key, class T, class Compare, class Alloc>
+	map<Key, T, Compare, Alloc>::~map() {}
+
+// ########## operator= ##########
+	//copy (1)
+	template <class Key, class T, class Compare, class Alloc>
+	map<Key, T, Compare, Alloc>& map<Key, T, Compare, Alloc>::operator=(const map& x)
+	{
+		tree = x.tree;
+		return *this;
+	}
+*/
+
+
 
 
 } // end namespace ft 

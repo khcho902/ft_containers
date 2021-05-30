@@ -1,49 +1,55 @@
+// constructing maps
 #include <iostream>
-#include "utils.hpp"
-#include "rb_tree.hpp"
+#include <utility>
 #include "map.hpp"
+
+bool fncomp(char lhs, char rhs) { return lhs < rhs; }
+
+struct classcomp
+{
+	bool operator()(const char &lhs, const char &rhs) const
+	{
+		return lhs < rhs;
+	}
+};
+
+void print(ft::map<char, int> &map)
+{
+	for (ft::map<char, int>::iterator it = map.begin(); it != map.end(); it++){
+		std::cout << (*it).first << " " << (*it).second << std::endl;
+	}
+	std::cout << "--------------------------" << std::endl;
+}
 
 int main()
 {
-	typedef char					key_type;
-	typedef std::pair<char, int>	value_type;
-	typedef std::less<char>			key_compare;
-	
-	typedef std::allocator<std::pair<const char, int> >::rebind<value_type>::other  _Pair_alloc_type;
+	ft::map<char, int> first;
 
-	typedef ft::rb_tree<key_type, value_type, ft::Select1st<value_type>, key_compare, _Pair_alloc_type>  Rb_tree;
+	/*
+  	first['a']=10;
+  	first['b']=30;
+  	first['c']=50;
+  	first['d']=70;
+  	*/
+	first.insert(std::pair<char, int>('a', 10));
+	first.insert(std::pair<char, int>('b', 30));
+	first.insert(std::pair<char, int>('c', 50));
+	first.insert(std::pair<char, int>('d', 70));
 
-	Rb_tree tree;
+	print(first);
 
-	// first insert function version (single parameter):
-	tree.insert_unique(std::pair<char, int>('a', 100));
-	tree.insert_unique(std::pair<char, int>('z', 200));
+	ft::map<char, int> second(first.begin(), first.end());
 
-	std::pair<Rb_tree::iterator, bool> ret;
-	ret = tree.insert_unique(std::pair<char, int>('z', 500));
-	if (ret.second == false)
-	{
-		std::cout << "element 'z' already existed";
-		std::cout << " with a value of " << ret.first->second << '\n';
-	}
+	print(second);
 
-	// second insert function version (with hint position):
-	Rb_tree::iterator it = tree.begin();
-	tree.insert_unique_(it, std::pair<char, int>('b', 300)); // max efficiency inserting
-	tree.insert_unique_(it, std::pair<char, int>('c', 400)); // no max efficiency inserting
+	ft::map<char, int> third(second);
 
-	// third insert function version (range insertion):
-	Rb_tree anothertree;
-	anothertree.insert_unique(tree.begin(), tree.find('c'));
+	print(third);
 
-	// showing contents:
-	std::cout << "tree contains:\n";
-	for (it = tree.begin(); it != tree.end(); ++it)
-		std::cout << it->first << " => " << it->second << '\n';
+	ft::map<char, int, classcomp> fourth; // class as Compare
 
-	std::cout << "anothermap contains:\n";
-	for (it = anothertree.begin(); it != anothertree.end(); ++it)
-		std::cout << it->first << " => " << it->second << '\n';
+	bool (*fn_pt)(char, char) = fncomp;
+	ft::map<char, int, bool (*)(char, char)> fifth(fn_pt); // function pointer as Compare
 
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/30 16:33:11 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 03:09:24 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <utility>
 # include <iterator>
 # include "iterator.hpp"
+# include "utils.hpp"
 
 namespace ft
 {
@@ -822,7 +823,7 @@ namespace ft
         {
             if (x._root() != 0)
             {
-                _root() = _copy(x._begin(), x._end());
+                _root() = _copy(x._begin(), _end());
                 _leftmost() = _s_minimum(_root());
                 _rightmost() = _s_maximum(_root());
                 node_count = x.node_count;
