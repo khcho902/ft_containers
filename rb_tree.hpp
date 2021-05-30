@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/30 15:22:35 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/30 16:07:40 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,7 @@
 
 namespace ft
 {
-    enum _rb_tree_color
-    {
-        red = false,
-        black = true
-    };
+    enum _rb_tree_color { red = false, black = true };
 
 	struct _rb_tree_node_base
 	{
@@ -600,6 +596,16 @@ namespace ft
             node_allocator.deallocate(p, 1);
         }
 
+        _Node* _clone_node(const _Node* x)
+        {
+            _Node* tmp = _create_node(x->value);
+            tmp->color = x->color;
+            tmp->left = 0;
+            tmp->right = 0;
+            
+            return tmp;
+        }
+
         _rb_tree_node_base*& _root()
         { return this->header.parent; }
 
@@ -679,6 +685,31 @@ namespace ft
             return iterator(z);
         }
 
+        _Node* _copy(const _Node* x, _Node* p)
+        {
+            // Structural copy.  __x and __p must be non-null.
+            _Node* top = _clone_node(x);
+            top->parent = p;
+
+            if (x->right)
+                top->right = _copy(_s_right(x), top);
+            p = top;
+            x = _s_left(x);
+
+            while (x != 0)
+            {
+                _Node* y = _clone_node(x);
+                p->left = y;
+                y->parent = p;
+                if (x->right)
+                    y->right = _copy(_s_right(x), y);
+                p = y;
+                x = _s_left(x);
+            }            
+            return top;
+        }
+
+        // TODO : 확인필요
         void _erase(_Node* x)
         {
             // Erase without rebalancing.
@@ -786,23 +817,40 @@ namespace ft
             _initialize();
         }
 
-        /*
         rb_tree(const rb_tree& x)
             : header(), node_count(0), node_allocator(x.node_allocator), key_compare(x.key_compare)
         {
-            _initialize();
+            if (x._root() != 0)
+            {
+                _root() = _copy(x._begin(), x._end());
+                _leftmost() = _s_minimum(_root());
+                _rightmost() = _s_maximum(_root());
+                node_count = x.node_count;
+            }
         }
-        */
 
         // ########## (destructor) ##########
-        /*
-        ~_Rb_tree()
-        */
+        ~rb_tree()
+        { _erase(_begin()); }
 
         // ########## operator= ##########
-        /*
-        _Rb_tree& operator=(const _Rb_tree& __x);
-        */
+        rb_tree& operator=(const rb_tree& x)
+        {
+            if (this != &x)
+            {
+                // Note that _Key may be a constant type.
+                clear();
+                key_compare = x.key_compare;
+                if (x._root() != 0)
+                {
+                    _root() = _copy(x._begin(), _end());
+                    _leftmost() = _s_minimum(_root());
+                    _rightmost() = _s_maximum(_root());
+                    node_count = x.node_count;
+                }
+            }
+            return *this;
+        }
 
         // ########## functions: ##########
         Compare key_comp() const
@@ -1001,16 +1049,13 @@ namespace ft
             }
         }
 
-        /*
-        iterator
-        _M_insert_equal(const value_type& __x);
+        /* TODO : 해야함 
+        iterator _M_insert_equal(const value_type& __x);
 
-        iterator
-        _M_insert_equal_(const_iterator __position, const value_type& __x);
+        iterator _M_insert_equal_(const_iterator __position, const value_type& __x);
 
         template<typename _InputIterator>
-        void
-        _M_insert_equal(_InputIterator __first, _InputIterator __last);
+        void _M_insert_equal(_InputIterator __first, _InputIterator __last);
         */
         
         void erase(iterator position)     // 필요(map) 필요(set)
@@ -1065,7 +1110,7 @@ namespace ft
             return (j == end() || key_compare(k, _s_key(j.node_ptr))) ? end() : j;
         }
 
-        /*
+        /*  TODO : 구현해야함
         size_type
         count(const key_type& __k) const;  // 필요(multimap)
         */
