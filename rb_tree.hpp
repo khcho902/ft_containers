@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/30 16:07:40 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/30 16:33:11 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -545,7 +545,7 @@ namespace ft
     }
 
     // ############## rb_tree class #############################################################
-    template<typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc = std::allocator<Val> >
+    template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc = std::allocator<Val> >
     class rb_tree
     {
     public:
@@ -1183,6 +1183,50 @@ namespace ft
         }
 
     };
+
+    template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+    inline bool operator==(const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &x, const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &y)
+    {
+        // TODO : std::equal ?? 
+        return x.size() == y.size() && std::equal(x.begin(), x.end(), y.begin());
+    }
+
+    template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+    inline bool operator<(const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &x, const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &y)
+    {
+        // TODO : std::lexicographical_compare ?? 
+        return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+    }
+
+    template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+    inline bool operator!=(const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &x, const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &y)
+    {
+        return !(x == y);
+    }
+
+    template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+    inline bool operator>(const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &x, const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &y)
+    {
+        return y < x;
+    }
+
+    template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+    inline bool operator<=(const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &x, const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &y)
+    {
+        return !(y < x);
+    }
+
+    template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+    inline bool operator>=(const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &x, const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &y)
+    {
+        return !(x < y);
+    }
+
+    template <typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc>
+    inline void swap(const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &x, const rb_tree<Key, Val, KeyOfValue, Compare, Alloc> &y)
+    {
+        x.swap(y);
+    }
 
 } // end namespace ft 
 
