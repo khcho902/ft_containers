@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/30 01:11:44 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/30 13:01:21 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -515,7 +515,7 @@ namespace ft
             return iterator(z);
         }
 
-        iterator _lower_bound(_Node * x, _Node* y, const Key& k)
+        iterator _lower_bound(_Node* x, _Node* y, const key_type& k)
         {
             while (x != 0)
             {
@@ -530,7 +530,7 @@ namespace ft
             return iterator(y);
         }
 
-        const_iterator _lower_bound(const _Node * x, const _Node* y, const Key& k) const
+        const_iterator _lower_bound(const _Node* x, const _Node* y, const key_type& k) const
         {
             while (x != 0)
             {
@@ -545,285 +545,354 @@ namespace ft
             return const_iterator(y);
         }
 
+        iterator _upper_bound(_Node* x, _Node* y, const key_type& k)
+        {
+            while (x != 0)
+            {
+                if (key_compare(k, _s_key(x)))
+                {
+                    y = x;
+                    x = _s_left(x);
+                }
+                else
+                    x = _s_right(x);
+            }
+            return iterator(y);
+        }
+
+        const_iterator _upper_bound(const _Node* x, const _Node* y, const key_type& k)
+        {
+            while (x != 0)
+            {
+                if (key_compare(k, _s_key(x)))
+                {
+                    y = x;
+                    x = _s_left(x);
+                }
+                else
+                    x = _s_right(x);
+            }
+            return const_iterator(y);
+        }
+
     public:
-    // ########## (constructor) ##########
-    rb_tree()
-        : header(), node_count(0), node_allocator(), key_compare()
-    {
-        _initialize();
-    }
-
-    rb_tree(const Compare& comp, const allocator_type& a = allocator_type())
-        : header(), node_count(0), node_allocator(a), key_compare(comp)
-    {
-        _initialize();
-    }
-
-    /*
-    rb_tree(const rb_tree& x)
-        : header(), node_count(0), node_allocator(x.node_allocator), key_compare(x.key_compare)
-    {
-        _initialize();
-    }
-    */
-
-    // ########## (destructor) ##########
-    /*
-    ~_Rb_tree()
-    */
-
-    // ########## operator= ##########
-    /*
-    _Rb_tree& operator=(const _Rb_tree& __x);
-    */
-
-    // ########## functions: ##########
-    Compare key_comp() const
-    {
-        return this->keycompare;
-    }
-
-    iterator begin()
-    {
-        return iterator(static_cast<_Node *>(this->header.left));
-    }
-    
-    const_iterator begin() const
-    {
-        return const_iterator(static_cast<const _Node *>(this->header.left));
-    }
-
-    iterator end()
-    {
-        return iterator(static_cast<_Node *>(&(this->header)));
-    }
-
-    const_iterator end() const
-    {
-        return const_iterator(static_cast<const _Node *>(&(this->header)));
-    }
-
-    reverse_iterator rbegin()
-    {
-        return reverse_iterator(end());
-    }
-
-    const_reverse_iterator rbegin() const
-    {
-        return const_reverse_iterator(end());
-    }
-
-    reverse_iterator rend()
-    {
-        return reverse_iterator(begin());
-    }
-
-    const_reverse_iterator rend() const
-    {
-        return const_reverse_iterator(begin());
-    }
-    
-    bool empty() const
-    {
-        return this->node_count == 0;
-    }
-
-    size_type size() const
-    {
-        return this->node_count;
-    }
-
-    size_type max_size() const
-    {
-        return this->node_allocator.max_size();
-    }
-
-    /*
-      void swap(_Rb_tree& __t);   // 필요(map) 필요(set)
-    */
-
-    std::pair<iterator, bool> insert_unique(const value_type& v)
-    {
-        _Node* x = _begin();
-        _Node* y = _end();
-
-        bool comp = true;
-        while (x != 0)
+        // ########## (constructor) ##########
+        rb_tree()
+            : header(), node_count(0), node_allocator(), key_compare()
         {
-            y = x;
-            comp = this->key_compare(KeyOfValue()(v), _s_key(x));
-            x = comp ? _s_left(x) : _s_right(x);
+            _initialize();
         }
 
-        iterator j = iterator(y);
-
-        if (comp)
+        rb_tree(const Compare& comp, const allocator_type& a = allocator_type())
+            : header(), node_count(0), node_allocator(a), key_compare(comp)
         {
-            if (j == begin())
-                return std::pair<iterator, bool>(_insert_(x, y, v), true);
-            else
-                j--;
+            _initialize();
         }
 
-        if (this->key_compare(_s_key(j.node_ptr), KeyOfValue()(v)))
-            return std::pair<iterator, bool>(_insert_(x, y, v), true);
+        /*
+        rb_tree(const rb_tree& x)
+            : header(), node_count(0), node_allocator(x.node_allocator), key_compare(x.key_compare)
+        {
+            _initialize();
+        }
+        */
+
+        // ########## (destructor) ##########
+        /*
+        ~_Rb_tree()
+        */
+
+        // ########## operator= ##########
+        /*
+        _Rb_tree& operator=(const _Rb_tree& __x);
+        */
+
+        // ########## functions: ##########
+        Compare key_comp() const
+        {
+            return this->keycompare;
+        }
+
+        iterator begin()
+        {
+            return iterator(static_cast<_Node *>(this->header.left));
+        }
         
-        return std::pair<iterator, bool>(j, false);
-    }
-
-    iterator insert_unique_(const_iterator position, const value_type &v)
-    {
-        // end()
-        if (position.node_ptr == _end())
+        const_iterator begin() const
         {
-            if (size() > 0 && key_compare(_s_key(_rightmost()), KeyOfValue()(v)))
-                return _insert_(0, _rightmost(), v);
-            else
-                return insert_unique(v).first;
+            return const_iterator(static_cast<const _Node *>(this->header.left));
         }
-        else if (key_compare(KeyOfValue()(v), _s_key(position.node_ptr)))
-        {
-            // First, try before...
-            const_iterator before = position;
 
-            if (position.node_ptr == _leftmost()) // begin()
-                return _insert_(_leftmost(), _leftmost(), v);
-            else if (key_compare(_s_key((--before).node_ptr), KeyOfValue()(v)))
+        iterator end()
+        {
+            return iterator(static_cast<_Node *>(&(this->header)));
+        }
+
+        const_iterator end() const
+        {
+            return const_iterator(static_cast<const _Node *>(&(this->header)));
+        }
+
+        reverse_iterator rbegin()
+        {
+            return reverse_iterator(end());
+        }
+
+        const_reverse_iterator rbegin() const
+        {
+            return const_reverse_iterator(end());
+        }
+
+        reverse_iterator rend()
+        {
+            return reverse_iterator(begin());
+        }
+
+        const_reverse_iterator rend() const
+        {
+            return const_reverse_iterator(begin());
+        }
+        
+        bool empty() const
+        {
+            return this->node_count == 0;
+        }
+
+        size_type size() const
+        {
+            return this->node_count;
+        }
+
+        size_type max_size() const
+        {
+            return this->node_allocator.max_size();
+        }
+
+        /*
+        void swap(_Rb_tree& __t);   // 필요(map) 필요(set)
+        */
+
+        std::pair<iterator, bool> insert_unique(const value_type& v)
+        {
+            _Node* x = _begin();
+            _Node* y = _end();
+
+            bool comp = true;
+            while (x != 0)
             {
-                if (_s_right(before.node_ptr) == 0)
-                    return _insert_(0, before.node_ptr,  v);
+                y = x;
+                comp = this->key_compare(KeyOfValue()(v), _s_key(x));
+                x = comp ? _s_left(x) : _s_right(x);
+            }
+
+            iterator j = iterator(y);
+
+            if (comp)
+            {
+                if (j == begin())
+                    return std::pair<iterator, bool>(_insert_(x, y, v), true);
                 else
-                    return _insert_(position.node_ptr, position.node_ptr, v);
+                    j--;
+            }
+
+            if (this->key_compare(_s_key(j.node_ptr), KeyOfValue()(v)))
+                return std::pair<iterator, bool>(_insert_(x, y, v), true);
+            
+            return std::pair<iterator, bool>(j, false);
+        }
+
+        iterator insert_unique_(const_iterator position, const value_type &v)
+        {
+            // end()
+            if (position.node_ptr == _end())
+            {
+                if (size() > 0 && key_compare(_s_key(_rightmost()), KeyOfValue()(v)))
+                    return _insert_(0, _rightmost(), v);
+                else
+                    return insert_unique(v).first;
+            }
+            else if (key_compare(KeyOfValue()(v), _s_key(position.node_ptr)))
+            {
+                // First, try before...
+                const_iterator before = position;
+
+                if (position.node_ptr == _leftmost()) // begin()
+                    return _insert_(_leftmost(), _leftmost(), v);
+                else if (key_compare(_s_key((--before).node_ptr), KeyOfValue()(v)))
+                {
+                    if (_s_right(before.node_ptr) == 0)
+                        return _insert_(0, before.node_ptr,  v);
+                    else
+                        return _insert_(position.node_ptr, position.node_ptr, v);
+                }
+                else
+                    return insert_unique(v).first;
+            }
+            else if (key_compare(_s_key(position.node_ptr), KeyOfValue()(v)))
+            {
+                // ... then try after.
+                const_iterator after = position;
+
+                if (position.node_ptr == _rightmost())
+                    return _insert_(0, _rightmost(), v);
+                else if (key_compare(KeyOfValue()(v), _s_key((++after).node_ptr)))
+                {
+                    if (_s_right(position.node_ptr) == 0)
+                        return _insert_(0, position.node_ptr, v);
+                    else
+                        return _insert_(after.node_ptr, after.node_ptr, v);
+                }
+                else
+                    return insert_unique(v).first;
             }
             else
-                return insert_unique(v).first;
+                //Equivalent keys.
+                return position._const_cast();
         }
-        else if (key_compare(_s_key(position.node_ptr), KeyOfValue()(v)))
-        {
-            // ... then try after.
-            const_iterator after = position;
 
-            if (position.node_ptr == _rightmost())
-                return _insert_(0, _rightmost(), v);
-            else if (key_compare(KeyOfValue()(v), _s_key((++after).node_ptr)))
+        template <typename InputIterator>
+        void insert_unique(InputIterator first, InputIterator last)
+        {
+            for (; first != last; first++)
             {
-                if (_s_right(position.node_ptr) == 0)
-                    return _insert_(0, position.node_ptr, v);
-                else
-                    return _insert_(after.node_ptr, after.node_ptr, v);
+                insert_unique_(end(), *first);
             }
-            else
-                return insert_unique(v).first;
         }
-        else
-            //Equivalent keys.
-            return position._const_cast();
-    }
 
-    template <typename InputIterator>
-    void insert_unique(InputIterator first, InputIterator last)
-    {
-        for (; first != last; first++)
+        /*
+        iterator
+        _M_insert_equal(const value_type& __x);
+
+        iterator
+        _M_insert_equal_(const_iterator __position, const value_type& __x);
+
+        template<typename _InputIterator>
+        void
+        _M_insert_equal(_InputIterator __first, _InputIterator __last);
+        */
+
+
+        /*
+        void
+        erase(iterator __position)     // 필요(map) 필요(set)
+        { _M_erase_aux(__position); }
+
+        void
+        erase(const_iterator __position)
+        { _M_erase_aux(__position); }
+
+        size_type
+        erase(const key_type& __x);  // 필요(map) 필요(set)
+
+        void
+        erase(iterator __first, iterator __last)  // 필요(map) 필요(set)
+        { _M_erase_aux(__first, __last); }
+
+        void
+        erase(const_iterator __first, const_iterator __last)
+        { _M_erase_aux(__first, __last); }
+
+        void
+        erase(const key_type* __first, const key_type* __last);
+        */
+
+
+        /*
+        void
+        clear()  // 필요(map) 필요(set)
         {
-            insert_unique_(end(), *first);
+        _M_erase(_M_begin());
+        _M_leftmost() = _M_end();
+        _M_root() = 0;
+        _M_rightmost() = _M_end();
+        _M_impl._M_node_count = 0;
         }
-    }
+        */
 
-    /*
-    iterator
-    _M_insert_equal(const value_type& __x);
+        // Set operations.
+        iterator find(const key_type& k)
+        {
+            iterator j = _lower_bound(_begin(), _end(), k);
+            return (j == end() || key_compare(k, _s_key(j.node_ptr))) ? end() : j;
+        }
 
-    iterator
-    _M_insert_equal_(const_iterator __position, const value_type& __x);
+        const_iterator find(const key_type& k) const
+        {
+            const_iterator j = _lower_bound(_begin(), _end(), k);
+            return (j == end() || key_compare(k, _s_key(j.node_ptr))) ? end() : j;
+        }
 
-    template<typename _InputIterator>
-    void
-    _M_insert_equal(_InputIterator __first, _InputIterator __last);
-    */
+        /*
+        size_type
+        count(const key_type& __k) const;  // 필요(multimap)
+        */
 
+        iterator lower_bound(const key_type& k)
+        { return _lower_bound(_begin(), _end(), k); }
 
-    /*
-    void
-    erase(iterator __position)     // 필요(map) 필요(set)
-    { _M_erase_aux(__position); }
+        const_iterator lower_bound(const key_type& k) const
+        { return _lower_bound(_begin(), _end(), k); }
 
-    void
-    erase(const_iterator __position)
-    { _M_erase_aux(__position); }
+        iterator upper_bound(const key_type& k)
+        { return _upper_bound(_begin(), _end(), k); }
 
-    size_type
-    erase(const key_type& __x);  // 필요(map) 필요(set)
+        const_iterator upper_bound(const key_type& k) const
+        { return _upper_bound(_begin(), _end(), k); }
 
-    void
-    erase(iterator __first, iterator __last)  // 필요(map) 필요(set)
-    { _M_erase_aux(__first, __last); }
+        
+        std::pair<iterator, iterator> equal_range(const key_type& k)
+        {
+            _Node* x = _begin();
+            _Node* y = _end();
+            while (x != 0)
+            {
+                if (key_compare(_s_key(x), k))
+                    x = _s_right(x);
+                else if (key_compare(k, _s_key(x)))
+                {
+                    y = x;
+                    x = _s_left(x);
+                }
+                else
+                {
+                    _Node* xu(x);
+                    _Node* yu(y);
+                    
+                    y = x;
+                    x = _s_left(x);
+                    xu = _s_right(xu);
+                    
+                    return std::pair<iterator, iterator>(_lower_bound(x, y, k), _upper_bound(xu, yu, k));
+                }
+            }
+            return std::pair<iterator, iterator>(iterator(y), iterator(y));
+        }
 
-    void
-    erase(const_iterator __first, const_iterator __last)
-    { _M_erase_aux(__first, __last); }
-
-    void
-    erase(const key_type* __first, const key_type* __last);
-    */
-
-
-    /*
-    void
-    clear()  // 필요(map) 필요(set)
-    {
-    _M_erase(_M_begin());
-    _M_leftmost() = _M_end();
-    _M_root() = 0;
-    _M_rightmost() = _M_end();
-    _M_impl._M_node_count = 0;
-    }
-    */
-
-    // Set operations.
-    iterator find(const key_type& k)
-    {
-        iterator j = _lower_bound(_begin(), _end(), k);
-        return (j == end() || key_compare(k, _s_key(j.node_ptr))) ? end() : j;
-    }
-
-    const_iterator find(const key_type& k) const
-    {
-        const_iterator j = _lower_bound(_begin(), _end(), k);
-        return (j == end() || key_compare(k, _s_key(j.node_ptr))) ? end() : j;
-    }
-
-    /*
-    size_type
-    count(const key_type& __k) const;  // 필요(multimap)
-    */
-
-    /*
-    iterator
-    lower_bound(const key_type& __k)  // 필요(map) 필요(set)
-    { return _M_lower_bound(_M_begin(), _M_end(), __k); }
-
-    const_iterator
-    lower_bound(const key_type& __k) const  // 필요(map) 필요(set)
-    { return _M_lower_bound(_M_begin(), _M_end(), __k); }
-    */
-
-    /*
-    iterator
-    upper_bound(const key_type& __k)  // 필요(map) 필요(set)
-    { return _M_upper_bound(_M_begin(), _M_end(), __k); }
-
-    const_iterator
-    upper_bound(const key_type& __k) const  // 필요(map) 필요(set)
-    { return _M_upper_bound(_M_begin(), _M_end(), __k); }
-    */
-
-    /*
-    pair<iterator, iterator>
-    equal_range(const key_type& __k);  // 필요(map) 필요(set)
-
-    pair<const_iterator, const_iterator>
-    equal_range(const key_type& __k) const;  // 필요(map) 필요(set)
-    */
+        std::pair<const_iterator, const_iterator> equal_range(const key_type& k) const
+        {
+            const _Node* x = _begin();
+            const _Node* y = _end();
+            while (x != 0)
+            {
+                if (key_compare(_s_key(x), k))
+                    x = _s_right(x);
+                else if (key_compare(k, _s_key(x)))
+                {
+                    y = x;
+                    x = _s_left(x);
+                }
+                else
+                {
+                    const _Node* xu(x);
+                    const _Node* yu(y);
+                    y = x;
+                    x = _s_left(x);
+                    xu = _s_right(xu);
+                    return std::pair<const_iterator, const_iterator>(_lower_bound(x, y, k), _upper_bound(xu, yu, k));
+                }
+            }
+            return std::pair<const_iterator, const_iterator>(const_iterator(y), const_iterator(y));
+        }
 
     };
 
