@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/30 13:48:29 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/30 15:22:35 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <iterator>
 # include "iterator.hpp"
 
-namespace ft 
+namespace ft
 {
     enum _rb_tree_color
     {
@@ -33,28 +33,28 @@ namespace ft
 		_rb_tree_node_base*		left;
 		_rb_tree_node_base*		right;
 
-        static _rb_tree_node_base* _minimum(_rb_tree_node_base* x)
+        static _rb_tree_node_base* _s_minimum(_rb_tree_node_base* x)
         {
             while (x->left != 0)
                 x = x->left;
             return x;
         }
 
-        static const _rb_tree_node_base* _minimum(const _rb_tree_node_base* x)
+        static const _rb_tree_node_base* _s_minimum(const _rb_tree_node_base* x)
         {
             while (x->left != 0)
                 x = x->left;
             return x;
         }
 
-        static _rb_tree_node_base* _maxinum(_rb_tree_node_base* x)
+        static _rb_tree_node_base* _s_maximum(_rb_tree_node_base* x)
         {
             while (x->right != 0)
                 x = x->right;
             return x;
         }
 
-        static const _rb_tree_node_base* _maxinum(const _rb_tree_node_base* x)
+        static const _rb_tree_node_base* _s_maximum(const _rb_tree_node_base* x)
         {
             while (x->right != 0)
                 x = x->right;
@@ -390,6 +390,164 @@ namespace ft
         root->color = black;
     }
 
+    _rb_tree_node_base* _rb_tree_rebalance_for_erase(_rb_tree_node_base* const z, _rb_tree_node_base& header)
+    {
+        _rb_tree_node_base*& root = header.parent;
+        _rb_tree_node_base*& leftmost = header.left;
+        _rb_tree_node_base*& rightmost = header.right;
+        _rb_tree_node_base* y = z;
+        _rb_tree_node_base* x = 0;
+        _rb_tree_node_base* x_parent = 0;
+
+        if (y->left == 0)       // __z has at most one non-null child. y == z.
+            x = y->right;     // __x might be null.
+        else if (y->right == 0) // __z has exactly one non-null child. y == z.
+            x = y->left;      // __x is not null.
+        else
+        {
+            // __z has two non-null children.  Set __y to
+            y = y->right; //   __z's successor.  __x might be null.
+            while (y->left != 0)
+                y = y->left;
+            x = y->right;
+        }
+        if (y != z)
+        {
+            // relink y in place of z.  y is z's successor
+            z->left->parent = y;
+            y->left = z->left;
+            if (y != z->right)
+            {
+                x_parent = y->parent;
+                if (x)
+                    x->parent = y->parent;
+                y->parent->left = x; // __y must be a child of _M_left
+                y->right = z->right;
+                z->right->parent = y;
+            }
+            else
+                x_parent = y;
+            if (root == z)
+                root = y;
+            else if (z->parent->left == z)
+                z->parent->left = y;
+            else
+                z->parent->right = y;
+            y->parent = z->parent;
+            ft::swap(y->color, z->color);
+            y = z;
+            // __y now points to node to be actually deleted
+        }
+        else
+        { // __y == __z
+            x_parent = y->parent;
+            if (x)
+                x->parent = y->parent;
+            if (root == z)
+                root = x;
+            else if (z->parent->left == z)
+                z->parent->left = x;
+            else
+                z->parent->right = x;
+            if (leftmost == z)
+            {
+                if (z->right == 0) // __z->_M_left must be null also
+                    leftmost = z->parent;
+                // makes __leftmost == _M_header if __z == __root
+                else
+                    leftmost = _rb_tree_node_base::_s_minimum(x);
+            }
+            if (rightmost == z)
+            {
+                if (z->left == 0) // __z->_M_right must be null also
+                    rightmost = z->parent;
+                // makes __rightmost == _M_header if __z == __root
+                else // __x == __z->_M_left
+                    rightmost = _rb_tree_node_base::_s_maximum(x);
+            }
+        }
+        if (y->color != red)
+        {
+            while (x != root && (x == 0 || x->color == black))
+                if (x == x_parent->left)
+                {
+                    _rb_tree_node_base* w = x_parent->right;
+                    if (w->color == red)
+                    {
+                        w->color = black;
+                        x_parent->color = red;
+                        _rb_tree_rotate_left(x_parent, root);
+                        w = x_parent->right;
+                    }
+                    if ((w->left == 0 ||
+                         w->left->color == black) &&
+                        (w->right == 0 ||
+                         w->right->color == black))
+                    {
+                        w->color = red;
+                        x = x_parent;
+                        x_parent = x_parent->parent;
+                    }
+                    else
+                    {
+                        if (w->right == 0 || w->right->color == black)
+                        {
+                            w->left->color = black;
+                            w->color = red;
+                            _rb_tree_rotate_right(w, root);
+                            w = x_parent->right;
+                        }
+                        w->color = x_parent->color;
+                        x_parent->color = black;
+                        if (w->right)
+                            w->right->color = black;
+                        _rb_tree_rotate_left(x_parent, root);
+                        break;
+                    }
+                }
+                else
+                {
+                    // same as above, with _M_right <-> _M_left.
+                    _rb_tree_node_base* w = x_parent->left;
+                    if (w->color == red)
+                    {
+                        w->color = black;
+                        x_parent->color = red;
+                        _rb_tree_rotate_right(x_parent, root);
+                        w = x_parent->left;
+                    }
+                    if ((w->right == 0 ||
+                         w->right->color == black) &&
+                        (w->left == 0 ||
+                         w->left->color == black))
+                    {
+                        w->color = red;
+                        x = x_parent;
+                        x_parent = x_parent->parent;
+                    }
+                    else
+                    {
+                        if (w->left == 0 || w->left->color == black)
+                        {
+                            w->right->color = black;
+                            w->color = red;
+                            _rb_tree_rotate_left(w, root);
+                            w = x_parent->left;
+                        }
+                        w->color = x_parent->color;
+                        x_parent->color = black;
+                        if (w->left)
+                            w->left->color = black;
+                        _rb_tree_rotate_right(x_parent, root);
+                        break;
+                    }
+                }
+            if (x)
+                x->color = black;
+        }
+        return y;
+    }
+
     // ############## rb_tree class #############################################################
     template<typename Key, typename Val, typename KeyOfValue, typename Compare, typename Alloc = std::allocator<Val> >
     class rb_tree
@@ -434,6 +592,12 @@ namespace ft
             _Node* tmp = node_allocator.allocate(1);
             allocator_type(node_allocator).construct(std::addressof(tmp->value),x);
             return tmp;
+        }
+
+        void _destroy_node(_Node* p)
+        {
+            allocator_type(node_allocator).destroy(std::addressof(p->value));
+            node_allocator.deallocate(p, 1);
         }
 
         _rb_tree_node_base*& _root()
@@ -491,16 +655,16 @@ namespace ft
         { return static_cast<const _Node*>(x->right); }
 
         static _rb_tree_node_base* _s_minimum(_rb_tree_node_base* x)
-        { return _rb_tree_node_base::_minimum(x); }
+        { return _rb_tree_node_base::_s_minimum(x); }
 
         static const _rb_tree_node_base* _s_minimum(const _rb_tree_node_base* x)
-        { return _rb_tree_node_base::_minimum(x); }
+        { return _rb_tree_node_base::_s_minimum(x); }
 
         static _rb_tree_node_base* _s_maximum(_rb_tree_node_base* x)
-        { return _rb_tree_node_base::_maxinum(x); }
+        { return _rb_tree_node_base::_s_maximum(x); }
 
         static const _rb_tree_node_base* _s_maximum(const _rb_tree_node_base* x)
-        { return _rb_tree_node_base::_maxinum(x); }
+        { return _rb_tree_node_base::_s_maximum(x); }
 
     private:
         iterator _insert_(const _rb_tree_node_base* x, const _rb_tree_node_base* p, const value_type& v)
@@ -513,6 +677,18 @@ namespace ft
 
             this->node_count++;
             return iterator(z);
+        }
+
+        void _erase(_Node* x)
+        {
+            // Erase without rebalancing.
+            while (x != 0)
+            {
+                _erase(_s_right(x));
+                _Node* y = _s_left(x);
+                _destroy_node(x);
+                x = y;
+            }
         }
 
         iterator _lower_bound(_Node* x, _Node* y, const key_type& k)
@@ -573,6 +749,27 @@ namespace ft
                     x = _s_right(x);
             }
             return const_iterator(y);
+        }
+
+        void _erase_aux(const_iterator position)
+        {
+            _Node* y = static_cast<_Node*>(_rb_tree_rebalance_for_erase(const_cast<_rb_tree_node_base*>(position.node_ptr), this->header));
+            _destroy_node(y);
+            node_count--;
+        }
+
+        void _erase_aux(const_iterator first, const_iterator last)
+        {
+            if (first == begin() && last == end())
+                clear();
+            else
+            {
+                while (first != last)
+                {
+                    erase(first);
+                    first++;
+                }
+            }
         }
 
     public:
@@ -815,44 +1012,45 @@ namespace ft
         void
         _M_insert_equal(_InputIterator __first, _InputIterator __last);
         */
+        
+        void erase(iterator position)     // 필요(map) 필요(set)
+        { _erase_aux(position); }
 
+        void erase(const_iterator position)
+        { _erase_aux(position); }
 
-        /*
-        void
-        erase(iterator __position)     // 필요(map) 필요(set)
-        { _M_erase_aux(__position); }
-
-        void
-        erase(const_iterator __position)
-        { _M_erase_aux(__position); }
-
-        size_type
-        erase(const key_type& __x);  // 필요(map) 필요(set)
-
-        void
-        erase(iterator __first, iterator __last)  // 필요(map) 필요(set)
-        { _M_erase_aux(__first, __last); }
-
-        void
-        erase(const_iterator __first, const_iterator __last)
-        { _M_erase_aux(__first, __last); }
-
-        void
-        erase(const key_type* __first, const key_type* __last);
-        */
-
-
-        /*
-        void
-        clear()  // 필요(map) 필요(set)
+        size_type erase(const key_type& x)
         {
-        _M_erase(_M_begin());
-        _M_leftmost() = _M_end();
-        _M_root() = 0;
-        _M_rightmost() = _M_end();
-        _M_impl._M_node_count = 0;
+            std::pair<iterator, iterator> p = equal_range(x);
+            const size_type old_size = size();
+            erase(p.first, p.second);
+            
+            return old_size - size();
         }
-        */
+        
+        void erase(iterator first, iterator last)
+        { _erase_aux(first, last); }
+
+        void erase(const_iterator first, const_iterator last)
+        { _erase_aux(first, last); }
+
+        // TODO : 확인필요
+        void erase(const key_type* first, const key_type* last)
+        {
+            while (first != last)
+            {
+                erase(*first++);
+            }
+        }
+
+        void clear()  // 필요(map) 필요(set)
+        {
+            _erase(_begin());
+            _leftmost() = _end();
+            _root() = 0;
+            _rightmost() = _end();
+            node_count = 0;
+        }
 
         // Set operations.
         iterator find(const key_type& k)
