@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/28 11:40:21 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/30 13:45:32 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -709,6 +709,7 @@ namespace ft
     {
         _list_node_base::swap(sentry_node, x.sentry_node);
         
+        // TODO : 확인필요
         _node_alloc_type tmp = this->node_allocator;
         this->node_allocator = x.node_allocator;
         x.node_allocator = tmp;

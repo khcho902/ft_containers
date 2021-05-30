@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/30 13:01:21 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/30 13:48:29 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -668,9 +668,54 @@ namespace ft
             return this->node_allocator.max_size();
         }
 
-        /*
-        void swap(_Rb_tree& __t);   // 필요(map) 필요(set)
-        */
+        void swap(rb_tree& t)
+        {
+            if (_root() == 0)
+            {
+                if (t._root() != 0)
+                {
+                    _root() = t._root();
+                    _leftmost() = t._leftmost();
+                    _rightmost() = t._rightmost();
+                    _root()->parent = _end();
+                    
+                    t._root() = 0;
+                    t._leftmost() = t._end();
+                    t._rightmost() = t._end();
+                }
+            }   
+            else if (t._root() == 0)
+            {
+                t._root() = _root();
+                t._leftmost() = _leftmost();
+                t._rightmost() = _rightmost();
+                t._root()->parent = t._end();
+                
+                _root() = 0;
+                _leftmost() = _end();
+                _rightmost() = _end();
+            }
+            else
+            {
+                ft::swap(_root(), t._root());
+                ft::swap(_leftmost(), t._leftmost());
+                ft::swap(_rightmost(), t._rightmost());
+                
+                _root()->parent = _end();
+                t._root()->parent = t._end();
+            }
+
+            // No need to swap header's color as it does not change.
+            ft::swap(this->node_count, t.node_count);
+            ft::swap(this->key_compare, t.key_compare);
+
+            ft::swap(this->node_allocator, t.node_allocator);  // TODO : 확인필요
+            /*
+            _node_alloc_type tmp = this->node_allocator;
+            this->node_allocator = t.node_allocator;
+            t.node_allocator = tmp;
+            */
+        }
 
         std::pair<iterator, bool> insert_unique(const value_type& v)
         {
