@@ -1,22 +1,27 @@
-// accessing mapped values
+// swap maps
 #include <iostream>
 #include "map.hpp"
-#include <string>
 
 int main ()
 {
-  ft::map<char,std::string> mymap;
+  ft::map<char,int> foo,bar;
 
-  mymap['a']="an element";
-  mymap['b']="another element";
-  mymap['c']=mymap['b'];
+  foo['x']=100;
+  foo['y']=200;
 
-  std::cout << "mymap['a'] is " << mymap['a'] << '\n';
-  std::cout << "mymap['b'] is " << mymap['b'] << '\n';
-  std::cout << "mymap['c'] is " << mymap['c'] << '\n';
-  std::cout << "mymap['d'] is " << mymap['d'] << '\n';
+  bar['a']=11;
+  bar['b']=22;
+  bar['c']=33;
 
-  std::cout << "mymap now contains " << mymap.size() << " elements.\n";
+  swap(foo,bar);
+
+  std::cout << "foo contains:\n";
+  for (ft::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
+
+  std::cout << "bar contains:\n";
+  for (ft::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
 
   return 0;
 }
