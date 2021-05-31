@@ -6,12 +6,12 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:20:33 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/10 02:59:17 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 20:48:53 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REVERSE_ITERATOR_HPP
-# define REVERSE_ITERATOR_HPP
+#ifndef ITERATOR_HPP
+# define ITERATOR_HPP
 
 //# include <memory>
 //# include <iterator>

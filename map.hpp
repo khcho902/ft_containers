@@ -6,12 +6,12 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:24:39 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 20:36:13 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 20:47:48 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIST_HPP
-# define LIST_HPP
+#ifndef MAP_HPP
+# define MAP_HPP
 
 # include <memory>
 # include <utility>
