@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:24:39 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 03:00:40 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 15:09:17 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,12 +114,15 @@ namespace ft
 		//single element (1)
 		std::pair<iterator,bool> insert(const value_type& val)
 		{ return tree.insert_unique(val); }
-		/*
 		//with hint (2)
-		iterator insert(iterator position, const value_type& val);
+		iterator insert(iterator position, const value_type& val)
+		{ return tree.insert_unique_(position, val); }
 		//range (3)
 		template <class InputIterator>
-		void insert(InputIterator first, InputIterator last);
+		void insert(InputIterator first, InputIterator last)
+		{ return tree.insert_unique(first, last); }
+
+		/*
 		//(1)
 		void erase(iterator position);
 		//(2)

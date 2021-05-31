@@ -1,55 +1,46 @@
-// constructing maps
+// map::insert (C++98)
 #include <iostream>
-#include <utility>
 #include "map.hpp"
+#include "utils.hpp"
+#include <utility>
 
-bool fncomp(char lhs, char rhs) { return lhs < rhs; }
-
-struct classcomp
-{
-	bool operator()(const char &lhs, const char &rhs) const
-	{
-		return lhs < rhs;
-	}
-};
-
-void print(ft::map<char, int> &map)
-{
-	for (ft::map<char, int>::iterator it = map.begin(); it != map.end(); it++){
-		std::cout << (*it).first << " " << (*it).second << std::endl;
-	}
-	std::cout << "--------------------------" << std::endl;
-}
 
 int main()
 {
-	ft::map<char, int> first;
+	ft::map<char, int> mymap;
 
-	/*
-  	first['a']=10;
-  	first['b']=30;
-  	first['c']=50;
-  	first['d']=70;
-  	*/
-	first.insert(std::pair<char, int>('a', 10));
-	first.insert(std::pair<char, int>('b', 30));
-	first.insert(std::pair<char, int>('c', 50));
-	first.insert(std::pair<char, int>('d', 70));
+	// first insert function version (single parameter):
+	mymap.insert(std::pair<char, int>('a', 100));
+	mymap.insert(std::pair<char, int>('z', 200));
 
-	print(first);
+	std::pair<ft::map<char, int>::iterator, bool> ret;
+	ret = mymap.insert(std::pair<char, int>('z', 500));
+	if (ret.second == false)
+	{
+		std::cout << "element 'z' already existed";
+		std::cout << " with a value of " << ret.first->second << '\n';
+	}
 
-	ft::map<char, int> second(first.begin(), first.end());
+	// second insert function version (with hint position):
+	ft::map<char, int>::iterator it = mymap.begin();
+	mymap.insert(it, std::pair<char, int>('b', 300)); // max efficiency inserting
+	mymap.insert(it, std::pair<char, int>('c', 400)); // no max efficiency inserting
 
-	print(second);
+	// third insert function version (range insertion):
+	ft::map<char, int> anothermap;
+	ft::map<char, int>::iterator iter = mymap.begin();
+	iter++;
+	iter++;
+	anothermap.insert(mymap.begin(), iter);
 
-	ft::map<char, int> third(second);
+	// showing contents:
+	std::cout << "mymap contains:\n";
+	for (it = mymap.begin(); it != mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
 
-	print(third);
-
-	ft::map<char, int, classcomp> fourth; // class as Compare
-
-	bool (*fn_pt)(char, char) = fncomp;
-	ft::map<char, int, bool (*)(char, char)> fifth(fn_pt); // function pointer as Compare
+	std::cout << "anothermap contains:\n";
+	for (it = anothermap.begin(); it != anothermap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
 
 	return 0;
 }
