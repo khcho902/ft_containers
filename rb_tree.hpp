@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 03:09:24 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 15:54:32 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -856,7 +856,7 @@ namespace ft
         // ########## functions: ##########
         Compare key_comp() const
         {
-            return this->keycompare;
+            return this->key_compare;
         }
 
         iterator begin()

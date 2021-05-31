@@ -1,28 +1,23 @@
-// erasing from map
+// map::value_comp
 #include <iostream>
 #include "map.hpp"
 
-int main()
+int main ()
 {
-	ft::map<char, int> mymap;
+  ft::map<char,int> mymap;
 
-	mymap.insert(std::pair<char, int>('x', 100));
-	mymap.insert(std::pair<char, int>('y', 200));
-	mymap.insert(std::pair<char, int>('z', 300));
+  mymap.insert(std::pair<char, int>('x', 1001));
+  mymap.insert(std::pair<char, int>('y', 2002));
+  mymap.insert(std::pair<char, int>('z', 3003));
 
-	std::cout << "mymap contains:\n";
-	for (ft::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
-		std::cout << it->first << " => " << it->second << '\n';
+  std::cout << "mymap contains:\n";
 
-	mymap.clear();
+  std::pair<char,int> highest = *mymap.rbegin();          // last element
 
-	mymap.insert(std::pair<char, int>('a', 11001));
-	mymap.insert(std::pair<char, int>('b', 22002));
+  ft::map<char,int>::iterator it = mymap.begin();
+  do {
+    std::cout << it->first << " => " << it->second << '\n';
+  } while ( mymap.value_comp()(*it++, highest) );
 
-
-	std::cout << "mymap contains:\n";
-	for (ft::map<char, int>::iterator it = mymap.begin(); it != mymap.end(); ++it)
-		std::cout << it->first << " => " << it->second << '\n';
-
-	return 0;
+  return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:24:39 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 15:23:59 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 15:39:54 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,10 +144,10 @@ namespace ft
 		
 
 	// ########## Observers: ##########
-		/*
-		key_compare key_comp() const;
-		value_compare value_comp() const;
-		*/
+		key_compare key_comp() const
+		{ return tree.key_comp(); }
+		value_compare value_comp() const
+		{ return value_compare(tree.key_comp()); }
 
 	// ########## Operations: ##########
 		/*
