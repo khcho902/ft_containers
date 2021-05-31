@@ -1,23 +1,22 @@
-// map::value_comp
+// accessing mapped values
 #include <iostream>
 #include "map.hpp"
+#include <string>
 
 int main ()
 {
-  ft::map<char,int> mymap;
+  ft::map<char,std::string> mymap;
 
-  mymap.insert(std::pair<char, int>('x', 1001));
-  mymap.insert(std::pair<char, int>('y', 2002));
-  mymap.insert(std::pair<char, int>('z', 3003));
+  mymap['a']="an element";
+  mymap['b']="another element";
+  mymap['c']=mymap['b'];
 
-  std::cout << "mymap contains:\n";
+  std::cout << "mymap['a'] is " << mymap['a'] << '\n';
+  std::cout << "mymap['b'] is " << mymap['b'] << '\n';
+  std::cout << "mymap['c'] is " << mymap['c'] << '\n';
+  std::cout << "mymap['d'] is " << mymap['d'] << '\n';
 
-  std::pair<char,int> highest = *mymap.rbegin();          // last element
-
-  ft::map<char,int>::iterator it = mymap.begin();
-  do {
-    std::cout << it->first << " => " << it->second << '\n';
-  } while ( mymap.value_comp()(*it++, highest) );
+  std::cout << "mymap now contains " << mymap.size() << " elements.\n";
 
   return 0;
 }

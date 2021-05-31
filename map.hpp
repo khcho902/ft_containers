@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:24:39 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 15:39:54 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 18:09:22 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,13 @@ namespace ft
 		size_type max_size() const { return tree.max_size(); }
 
 	// ########## Element access: ##########
-	/*
-		mapped_type& operator[](const key_type& k);
-	*/
+		mapped_type& operator[](const key_type& k)
+		{
+			iterator i = lower_bound(k);
+			if (i == end() || key_comp()(k, (*i).first))
+				i = insert(i, value_type(k, mapped_type()));
+			return (*i).second;
+		}
 
 	// ########## Modifiers: ##########
 		//single element (1)
@@ -125,7 +129,6 @@ namespace ft
 		void insert(InputIterator first, InputIterator last)
 		{ return tree.insert_unique(first, last); }
 
-		
 		//(1)
 		void erase(iterator position)
 		{ return tree.erase(position); }
@@ -142,7 +145,6 @@ namespace ft
 		void clear()
 		{ tree.clear(); }
 		
-
 	// ########## Observers: ##########
 		key_compare key_comp() const
 		{ return tree.key_comp(); }
@@ -150,17 +152,28 @@ namespace ft
 		{ return value_compare(tree.key_comp()); }
 
 	// ########## Operations: ##########
-		/*
-		iterator find(const key_type& k);
-		const_iterator find(const key_type& k) const;
-		size_type count(const key_type& k) const;
-		iterator lower_bound(const key_type& k);
-		const_iterator lower_bound(const key_type& k) const;
-		iterator upper_bound(const key_type& k);
-		const_iterator upper_bound(const key_type& k) const;
-		std::pair<const_iterator,const_iterator> equal_range(const key_type& k) const;
-		std::pair<iterator,iterator> equal_range(const key_type& k);
-		*/
+		iterator find(const key_type& k)
+		{ return tree.find(k); }
+		const_iterator find(const key_type& k) const
+		{ return tree.find(k); }
+
+		size_type count(const key_type& k) const
+		{ return tree.find(k) == tree.end() ? 0 : 1; }
+
+		iterator lower_bound(const key_type& k)
+		{ return tree.lower_bound(k); }
+		const_iterator lower_bound(const key_type& k) const
+		{ return tree.lower_bound(k); }
+		
+		iterator upper_bound(const key_type& k)
+		{ return tree.upper_bound(k); }
+		const_iterator upper_bound(const key_type& k) const
+		{ return tree.upper_bound(k); }
+		
+		std::pair<const_iterator,const_iterator> equal_range(const key_type& k) const
+		{ return tree.equal_range(k); }
+		std::pair<iterator,iterator> equal_range(const key_type& k)
+		{ return tree.equal_range(k); }
 
 	// ########## Allocator: ##########
 		/*
@@ -193,45 +206,6 @@ namespace ft
 	template <class Key, class T, class Compare, class Alloc>
   	void swap(map<Key, T, Compare, Alloc>& x, map<Key, T, Compare, Alloc>& y);
 	*/
-
-
-
-
-/*
-// ########## (constructor) ##########
-	//empty (1)
-	template <class Key, class T, class Compare, class Alloc>
-	map<Key, T, Compare, Alloc>::map(const key_compare& comp, const allocator_type& alloc)
-		: tree(comp, alloc)
-	{}
-	//range (2)
-	template <class Key, class T, class Compare, class Alloc>
-	template <class InputIterator>
-	map<Key, T, Compare, Alloc>::map(InputIterator first, InputIterator last, const key_compare& comp, const allocator_type& alloc)
-		: tree(comp, alloc)
-	{ tree.insert_unique(first, last); }
-	//copy (3)
-	template <class Key, class T, class Compare, class Alloc>
-	map<Key, T, Compare, Alloc>::map(const map& x)
-		: tree(x.tree)
-	{}
-
-// ########## (destructor) ##########
-	template <class Key, class T, class Compare, class Alloc>
-	map<Key, T, Compare, Alloc>::~map() {}
-
-// ########## operator= ##########
-	//copy (1)
-	template <class Key, class T, class Compare, class Alloc>
-	map<Key, T, Compare, Alloc>& map<Key, T, Compare, Alloc>::operator=(const map& x)
-	{
-		tree = x.tree;
-		return *this;
-	}
-*/
-
-
-
 
 } // end namespace ft 
 

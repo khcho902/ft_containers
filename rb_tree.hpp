@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 15:54:32 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 17:34:21 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,8 +197,8 @@ namespace ft
         
         typedef T                                   value_type;
         typedef ptrdiff_t                           difference_type;
-        typedef T*                                  pointer;
-        typedef T&                                  reference;
+        typedef const T*                            pointer;
+        typedef const T&                            reference;
         typedef std::bidirectional_iterator_tag     iterator_category;
         
         const _rb_tree_node_base *node_ptr;
@@ -798,8 +798,7 @@ namespace ft
             {
                 while (first != last)
                 {
-                    erase(first);
-                    first++;
+                    erase(first++);
                 }
             }
         }
