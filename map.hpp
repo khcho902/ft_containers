@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:24:39 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 15:09:17 by kycho            ###   ########.fr       */
+/*   Updated: 2021/05/31 15:23:59 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,13 @@ namespace ft
 	// ########## Iterators: ##########
 		iterator begin() { return tree.begin(); }
 		const_iterator begin() const { return tree.begin(); }
+
 		iterator end() { return tree.end(); }
 		const_iterator end() const { return tree.end(); }
+
 		reverse_iterator rbegin() { return tree.rbegin(); }
 		const_reverse_iterator rbegin() const { return tree.rbegin(); }
+		
 		reverse_iterator rend() { return tree.rend(); }
 		const_reverse_iterator rend() const { return tree.rend(); }
 
@@ -122,16 +125,23 @@ namespace ft
 		void insert(InputIterator first, InputIterator last)
 		{ return tree.insert_unique(first, last); }
 
-		/*
+		
 		//(1)
-		void erase(iterator position);
+		void erase(iterator position)
+		{ return tree.erase(position); }
 		//(2)
-		size_type erase(const key_type& k);
+		size_type erase(const key_type& k)
+		{ return tree.erase(k); }
 		//(3)
-		void erase(iterator first, iterator last);
-		void swap(map& x);
-		void clear();
-		*/
+		void erase(iterator first, iterator last)
+		{ return tree.erase(first, last); }
+
+		void swap(map& x)
+		{ tree.swap(x.tree); }
+		
+		void clear()
+		{ tree.clear(); }
+		
 
 	// ########## Observers: ##########
 		/*
