@@ -1,27 +1,21 @@
-// swap maps
-#include <iostream>
-#include "map.hpp"
+// stack::push/pop
+#include <iostream>       // std::cout
+//#include <stack>          // std::stack
+#include "stack.hpp"
 
 int main ()
 {
-  ft::map<char,int> foo,bar;
+  ft::stack<int> mystack;
 
-  foo['x']=100;
-  foo['y']=200;
+  for (int i=0; i<5; ++i) mystack.push(i);
 
-  bar['a']=11;
-  bar['b']=22;
-  bar['c']=33;
+  std::cout << "Popping out elements...";
+  while (!mystack.empty())
+  {
+     std::cout << ' ' << mystack.top();
+     mystack.pop();
+  }
+  std::cout << '\n';
 
-  swap(foo,bar);
-
-  std::cout << "foo contains:\n";
-  for (ft::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
-    std::cout << it->first << " => " << it->second << '\n';
-
-  std::cout << "bar contains:\n";
-  for (ft::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
-    std::cout << it->first << " => " << it->second << '\n';
-
-  return 0;
+return 0;
 }
