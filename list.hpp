@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 01:47:03 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/01 15:37:23 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -444,13 +444,12 @@ namespace ft
         //(2)	
         template <class BinaryPredicate>
         void unique(BinaryPredicate binary_pred);
-/* 주석 시작(8)
         //(1)	
-        void merge (list& x);
+        void merge(list& x);
         //(2)	
         template <class Compare>
-        void merge (list& x, Compare comp);
-
+        void merge(list& x, Compare comp);
+/* 주석 시작(8)
         //(1)
         void sort();
         //(2)
@@ -860,6 +859,60 @@ namespace ft
             
             next = first;
             next++;
+        }
+    }
+
+    //(1)
+    template <class T, class Alloc>
+    void list<T, Alloc>::merge(list& x)
+    {
+        if (this != &x)
+        {
+            iterator first1 = begin();
+            iterator last1 = end();
+            iterator first2 = x.begin();
+            iterator last2 = x.end();
+            while (first1 != last1 && first2 != last2)
+                if (*first2 < *first1)
+                {
+                    iterator next = first2;
+                    next++;
+                    first1.node_ptr->_transfer(first2.node_ptr, next.node_ptr);
+                    first2 = next;
+                }
+                else
+                    ++first1;
+            if (first2 != last2)
+            {
+                last1.node_ptr->_transfer(first2.node_ptr, last2.node_ptr);
+            }
+        }
+    }
+    //(2)
+    template <class T, class Alloc>
+    template <class Compare>
+    void list<T, Alloc>::merge(list& x, Compare comp)
+    {
+        if (this != &x)
+        {
+            iterator first1 = begin();
+            iterator last1 = end();
+            iterator first2 = x.begin();
+            iterator last2 = x.end();
+            while (first1 != last1 && first2 != last2)
+                if (comp(*first2, *first1))
+                {
+                    iterator next = first2;
+                    next++;
+                    first1.node_ptr->_transfer(first2.node_ptr, next.node_ptr);
+                    first2 = next;
+                }
+                else
+                    ++first1;
+            if (first2 != last2)
+            {
+                last1.node_ptr->_transfer(first2.node_ptr, last2.node_ptr);
+            }
         }
     }
 
