@@ -1,21 +1,26 @@
-// stack::push/pop
-#include <iostream>       // std::cout
-//#include <stack>          // std::stack
-#include "stack.hpp"
+// queue::push/pop
+#include <iostream>       // std::cin, std::cout
+#include "queue.hpp"          // std::queue
 
 int main ()
 {
-  ft::stack<int> mystack;
+  ft::queue<int> myqueue;
+  int myint;
 
-  for (int i=0; i<5; ++i) mystack.push(i);
+  std::cout << "Please enter some integers (enter 0 to end):\n";
 
-  std::cout << "Popping out elements...";
-  while (!mystack.empty())
+  do {
+    std::cin >> myint;
+    myqueue.push (myint);
+  } while (myint);
+
+  std::cout << "myqueue contains: ";
+  while (!myqueue.empty())
   {
-     std::cout << ' ' << mystack.top();
-     mystack.pop();
+    std::cout << ' ' << myqueue.front();
+    myqueue.pop();
   }
   std::cout << '\n';
 
-return 0;
+  return 0;
 }
