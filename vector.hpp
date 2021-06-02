@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 00:28:14 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 00:56:07 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -496,9 +496,7 @@ namespace ft
 		*/
 		iterator erase(iterator position);
 		iterator erase(iterator first, iterator last);
-		/*
 		void swap(vector& x);
-		*/
 		void clear();
 		
 
@@ -698,9 +696,21 @@ namespace ft
 		}
 		return first;
 	}
-	/*
-	void swap(vector& x);
-	*/
+
+	template <class T, class Alloc>
+	void vector<T, Alloc>::swap(vector& x)
+	{
+		ft::swap(this->_start, x._start);
+		ft::swap(this->_finish, x._finish);
+		ft::swap(this->_end_of_storage, x._end_of_storage);
+
+		// TODO : 확인필요
+		ft::swap(this->_allocator, x._allocator);
+        //allocator_type tmp = this->_allocator;
+        //this->_allocator = x._allocator;
+        //x._allocator = tmp;
+	}
+	
 	template <class T, class Alloc>
 	void vector<T, Alloc>::clear()
 	{ _erase_at_end(this->_start); }

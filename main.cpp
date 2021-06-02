@@ -1,24 +1,31 @@
-// erasing from vector
+// swap vectors
 #include <iostream>
 #include "vector.hpp"
 
 int main()
 {
-    ft::vector<int> myvector;
+    ft::vector<int> foo;  //(3, 100); // three ints with a value of 100
+    foo.push_back(100);
+    foo.push_back(100);
+    foo.push_back(100);
 
-    // set some values (from 1 to 10)
-    for (int i = 1; i <= 10; i++)
-        myvector.push_back(i);
+    ft::vector<int> bar;  //(5, 200); // five ints with a value of 200
+    bar.push_back(200);
+    bar.push_back(200);
+    bar.push_back(200);
+    bar.push_back(200);
+    bar.push_back(200);
 
-    // erase the 6th element
-    myvector.erase(myvector.begin() + 5);
+    foo.swap(bar);
 
-    // erase the first 3 elements:
-    myvector.erase(myvector.begin(), myvector.begin() + 3);
+    std::cout << "foo contains:";
+    for (unsigned i = 0; i < foo.size(); i++)
+        std::cout << ' ' << foo[i];
+    std::cout << '\n';
 
-    std::cout << "myvector contains:";
-    for (unsigned i = 0; i < myvector.size(); ++i)
-        std::cout << ' ' << myvector[i];
+    std::cout << "bar contains:";
+    for (unsigned i = 0; i < bar.size(); i++)
+        std::cout << ' ' << bar[i];
     std::cout << '\n';
 
     return 0;
