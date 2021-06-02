@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/02 14:07:09 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/02 21:39:57 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 # include <memory>
 # include <iterator>
+# include <stdexcept>
 # include "iterator.hpp"
-//# include "utils.hpp"
+# include "utils.hpp"
 
 namespace ft
 {
@@ -40,12 +41,12 @@ namespace ft
         reference operator*() const
         {
 			return *ptr;
-        }
+		}
         
         pointer operator->() const
         {
 			return ptr;
-        }
+		}
         
         _Self& operator++()
         {
@@ -78,7 +79,7 @@ namespace ft
 			return ptr[n];
 		}
 
-		_Self& operator +=(const difference_type& n)
+		_Self& operator+=(const difference_type& n)
 		{
 			ptr += n;
 			return *this;
@@ -100,24 +101,41 @@ namespace ft
 			return _Self(ptr -n);
 		}
 
+        bool operator==(const _Self& x) const
+        { return ptr == x.ptr; }
+
+        bool operator!=(const _Self& x) const
+        { return ptr != x.ptr; }
+
+		bool operator<(const _Self& x) const
+        { return ptr < x.ptr; }
+
+		bool operator>(const _Self& x) const
+        { return ptr > x.ptr; }
+
+		bool operator<=(const _Self& x) const
+        { return ptr <= x.ptr; }
+
+		bool operator>=(const _Self& x) const
+        { return ptr >= x.ptr; }
+		
+		difference_type operator-(const _Self& x) const
+		{
+			return ptr - x.ptr;
+		}
+
 		const pointer& base() const
 		{
 			return ptr;
 		}
 
-		/*
-        bool operator==(const _Self& _x) const
-        {
-            return node_ptr == _x.node_ptr;
-        }
-        bool operator!=(const _Self& _x) const
-        {
-            return node_ptr != _x.node_ptr;
-        }
-		*/
     };
 
-
+	template <typename T>
+	_vector_iterator<T> operator+(typename _vector_iterator<T>::difference_type n, const _vector_iterator<T>& v)
+	{
+		return _vector_iterator<T>(v.base() + n);
+	}
 
 	// ############## vector const iterator ###########################################################
     template<typename T>
@@ -141,12 +159,12 @@ namespace ft
         reference operator*() const
         {
 			return *ptr;
-        }
+		}
         
         pointer operator->() const
         {
 			return ptr;
-        }
+		}
         
         _Self& operator++()
         {
@@ -201,22 +219,83 @@ namespace ft
 			return _Self(ptr -n);
 		}
 
+		bool operator==(const _Self& x) const
+        { return ptr == x.ptr; }
+
+        bool operator!=(const _Self& x) const
+        { return ptr != x.ptr; }
+
+		bool operator<(const _Self& x) const
+        { return ptr < x.ptr; }
+
+		bool operator>(const _Self& x) const
+        { return ptr > x.ptr; }
+
+		bool operator<=(const _Self& x) const
+        { return ptr <= x.ptr; }
+
+		bool operator>=(const _Self& x) const
+        { return ptr >= x.ptr; }
+		
+		difference_type operator-(const _Self& x) const
+		{
+			return ptr - x.ptr;
+		}
+
 		const pointer& base() const
 		{
 			return ptr;
 		}
-
-		/*
-        bool operator==(const _Self& _x) const
-        {
-            return node_ptr == _x.node_ptr;
-        }
-        bool operator!=(const _Self& _x) const
-        {
-            return node_ptr != _x.node_ptr;
-        }
-		*/
     };
+
+	template <typename T>
+	_vector_const_iterator<T> operator+(typename _vector_const_iterator<T>::difference_type n, const _vector_const_iterator<T>& v)
+	{
+		return _vector_const_iterator<T>(v.base() + n);
+	}
+
+
+
+
+
+
+
+
+
+
+	template <typename T>
+	bool operator==(const _vector_iterator<T>& lhs, const _vector_const_iterator<T>& rhs)
+	{ return lhs.base() == rhs.base(); }
+
+	template <typename T>
+	bool operator!=(const _vector_iterator<T>& lhs, const _vector_const_iterator<T>& rhs)
+	{ return lhs.base() != rhs.base(); }
+	
+	template <typename T>
+	bool operator<(const _vector_iterator<T>& lhs, const _vector_const_iterator<T>& rhs)
+	{ return lhs.base() < rhs.base(); }
+
+	template <typename T>
+	bool operator>(const _vector_iterator<T>& lhs, const _vector_const_iterator<T>& rhs)
+	{ return lhs.base() > rhs.base(); }
+
+	template <typename T>
+	bool operator<=(const _vector_iterator<T>& lhs, const _vector_const_iterator<T>& rhs)
+	{ return lhs.base() <= rhs.base(); }
+
+	template <typename T>
+	bool operator>=(const _vector_iterator<T>& lhs, const _vector_const_iterator<T>& rhs)
+	{ return lhs.base() >= rhs.base(); }
+
+	template <typename T>
+	typename _vector_iterator<T>::difference_type operator-(const _vector_iterator<T>& lhs, const _vector_const_iterator<T>& rhs)
+	{ return lhs.base() - rhs.base(); }
+
+
+
+
+
+
 
 
 
@@ -258,6 +337,85 @@ namespace ft
 				_allocator.deallocate(p, n);
 		}
 
+		size_type _check_len(size_type n, const char* s) const
+		{
+			if (max_size() - size() < n)
+				throw std::length_error(s);
+
+    		const size_type len = size() + ft::max(size(), n);
+    		return (len < size() || len > max_size()) ? max_size() : len;
+		}
+
+		void _insert_aux(iterator position, const T& x)
+		{
+			if (this->_finish != this->_end_of_storage)
+			{
+				this->_allocator.construct(this->_finish, *(this->_finish - 1));
+				++this->_finish;
+
+				T x_copy = x;
+
+				// TODO :  std::copy_backward  바꿔야함 
+				//std::copy_backward(position.base(), this->_finish - 2, this->_finish - 1);
+				iterator first(position.base());
+				iterator last(this->_finish - 2);
+				iterator result(this->_finish - 1);
+				
+				while (last != first)
+					*(--result) = *(--last);
+				// 바꿨는데 아직 제대로 동작하는지 확인필요 
+				
+				*position = x_copy;
+			}
+			else
+			{
+				const size_type len = _check_len(size_type(1), "vector::_M_insert_aux");
+            	const size_type elems_before = position - begin();
+            	pointer new_start(this->_allocate(len));
+            	pointer new_finish(new_start);
+			
+            	try
+            	{   
+					this->_allocator.construct(new_start + elems_before, x);
+					new_finish = 0;
+                	new_finish = std::uninitialized_copy(this->_start, position.base(), new_start);
+                	++new_finish;
+                	new_finish = std::uninitialized_copy(position.base(), this->_finish, new_finish);
+				}
+				catch(...)
+            	{
+					if (!new_finish)
+						this->_allocator.destroy(new_start + elems_before);
+					else
+					{
+						//std::_Destroy(new_start, new_finish, this->_allocator);
+						iterator first(new_start);
+						iterator last(new_finish);
+						for(; first != last; first++)
+							this->_allocator.destroy(first.base());
+					}
+					//_M_deallocate(new_start, len);
+					_deallocate(new_start, len);
+				}
+				
+				/*
+				std::_Destroy(this->_start, this->_finish, this->_allocator);
+				_M_deallocate(this->_start, this->_end_of_storage - this->_start);
+				*/
+				iterator first(this->_start);
+				iterator last(this->_finish);
+				for(; first != last; first++)
+					this->_allocator.destroy(first.base());
+				_deallocate(this->_start, this->_end_of_storage - this->_start);
+
+				this->_start = new_start;
+				this->_finish = new_finish;
+				this->_end_of_storage = new_start + len;
+			}
+		}
+
+
+
 	public:
     // ########## (constructor) ##########
 		//default (1)
@@ -273,9 +431,7 @@ namespace ft
 		*/
 
 	// ########## (destructor) ##########
-		/*
 		~vector();
-		*/
 	
 	// ########## operator= ##########
 		/*
@@ -294,9 +450,9 @@ namespace ft
 		const_reverse_iterator rend() const;
 
 	// ########## Capacity: ##########
-		/*
 		size_type size() const;
 		size_type max_size() const;
+		/*
 		void resize(size_type n, value_type val = value_type());
 		size_type capacity() const;
 		bool empty() const;
@@ -323,7 +479,9 @@ namespace ft
   		void assign(InputIterator first, InputIterator last);
 		//fill (2)
 		void assign(size_type n, const value_type& val);
+		*/
 		void push_back(const value_type& val);
+		/*
 		void pop_back();
 		//single element (1)
 		iterator insert(iterator position, const value_type& val);
@@ -363,9 +521,17 @@ namespace ft
 	*/
 
 	// ########## (destructor) ##########
-	/*
-	~vector();
-	*/
+	template <class T, class Alloc>
+	vector<T, Alloc>::~vector()
+	{
+		//std::_Destroy(this->_M_impl._M_start, this->_M_impl._M_finish, _M_get_Tp_allocator());
+		//_M_deallocate(this->_M_impl._M_start, this->_M_impl._M_end_of_storage - this->_M_impl._M_start);
+		iterator first(this->_start);
+		iterator last(this->_finish);
+		for(; first != last; first++)
+			this->_allocator.destroy(first.base());
+		this->_deallocate(this->_start, this->_end_of_storage - this->_start);
+	}
 	
 	// ########## operator= ##########
 	/*
@@ -407,9 +573,14 @@ namespace ft
 	{ return const_reverse_iterator(begin()); }
 	
 	// ########## Capacity: ##########
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::size_type vector<T, Alloc>::size() const
+	{ return size_type(this->_finish - this->_start); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::size_type vector<T, Alloc>::max_size() const
+	{ return this->_allocator.max_size(); }
 	/*
-	size_type size() const;
-	size_type max_size() const;
 	void resize(size_type n, value_type val = value_type());
 	size_type capacity() const;
 	bool empty() const;
@@ -436,7 +607,21 @@ namespace ft
 	void assign(InputIterator first, InputIterator last);
 	//fill (2)
 	void assign(size_type n, const value_type& val);
-	void push_back(const value_type& val);
+	*/
+	template <class T, class Alloc>
+	void vector<T, Alloc>::push_back(const value_type& val)
+	{
+		if (this->_finish != this->_end_of_storage)
+		{
+			this->_allocator.construct(this->_finish, val);
+			this->_finish++;
+		}
+		else
+		{
+			_insert_aux(end(), val);
+		}
+	}
+	/*
 	void pop_back();
 	//single element (1)
 	iterator insert(iterator position, const value_type& val);

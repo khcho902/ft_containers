@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 02:42:03 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/28 22:50:36 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/02 20:30:13 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,12 @@ namespace ft
 		T tmp = x;
 		x = y;
 		y = tmp;
+	}
+
+	template <typename T>
+	const T& max(const T& a, const T& b)
+	{
+		return (a < b) ? b : a;
 	}
 
 	// TODO : 별로 필요없어보임 지울지 고려해야함.
