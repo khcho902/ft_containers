@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/02 12:57:49 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/02 14:07:09 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,7 +284,6 @@ namespace ft
 		 */
 
 	// ########## Iterators: ##########
-		/*
 		iterator begin();
 		const_iterator begin() const;
 		iterator end();
@@ -293,7 +292,6 @@ namespace ft
 		const_reverse_iterator rbegin() const;
 		reverse_iterator rend();
 		const_reverse_iterator rend() const;
-		*/
 
 	// ########## Capacity: ##########
 		/*
@@ -362,6 +360,100 @@ namespace ft
 	vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 	//copy (4)
 	vector(const vector& x);
+	*/
+
+	// ########## (destructor) ##########
+	/*
+	~vector();
+	*/
+	
+	// ########## operator= ##########
+	/*
+	//copy (1)
+	vector& operator=(const vector& x);
+	*/
+
+	// ########## Iterators: ##########
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::begin()
+	{ return iterator(this->_start); }
+	
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::begin() const
+	{ return const_iterator(this->_start); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::end()
+	{ return iterator(this->_finish); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::const_iterator vector<T, Alloc>::end() const
+	{ return const_iterator(this->_finish); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rbegin()
+	{ return reverse_iterator(end()); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rbegin() const
+	{ return const_reverse_iterator(end()); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::reverse_iterator vector<T, Alloc>::rend()
+	{ return reverse_iterator(begin()); }
+	
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::const_reverse_iterator vector<T, Alloc>::rend() const
+	{ return const_reverse_iterator(begin()); }
+	
+	// ########## Capacity: ##########
+	/*
+	size_type size() const;
+	size_type max_size() const;
+	void resize(size_type n, value_type val = value_type());
+	size_type capacity() const;
+	bool empty() const;
+	void reserve(size_type n);
+	*/
+
+	// ########## Element access: ##########
+	/*
+	reference operator[](size_type n);
+	const_reference operator[](size_type n) const;
+	reference at(size_type n);
+	const_reference at(size_type n) const;
+	reference front();
+	const_reference front() const;
+	reference back();
+	const_reference back() const;
+	*/
+
+
+	// ########## Modifiers: ##########
+	/*
+	//range (1)
+	template <class InputIterator>
+	void assign(InputIterator first, InputIterator last);
+	//fill (2)
+	void assign(size_type n, const value_type& val);
+	void push_back(const value_type& val);
+	void pop_back();
+	//single element (1)
+	iterator insert(iterator position, const value_type& val);
+	//fill (2)
+	void insert(iterator position, size_type n, const value_type& val);
+	//range (3)
+	template <class InputIterator>
+	void insert(iterator position, InputIterator first, InputIterator last);
+	iterator erase(iterator position);
+	iterator erase(iterator first, iterator last);
+	void swap(vector& x);
+	void clear();
+	*/
+
+	// ########## Allocator: ##########
+	/*
+	allocator_type get_allocator() const;
 	*/
 
 // ########## Non-member function overloads ##########
