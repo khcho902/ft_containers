@@ -1,23 +1,22 @@
-// comparing size, capacity and max_size
+// vector::back
 #include <iostream>
 #include "vector.hpp"
 
-int main()
+int main ()
 {
-    ft::vector<int> myvector;
+  ft::vector<int> myvector;
 
-    bool b = myvector.empty();
-    std::cout << "empty: " << b << std::endl;
+  myvector.push_back(10);
 
-    // set some content in the vector:
-    for (int i = 0; i < 100; i++)
-        myvector.push_back(i);
+  while (myvector.back() != 0)
+  {
+    myvector.push_back ( myvector.back() -1 );
+  }
 
-    std::cout << "size: " << (int)myvector.size() << '\n';
-    std::cout << "capacity: " << (int)myvector.capacity() << '\n';
-    std::cout << "max_size: " << myvector.max_size() << '\n';
+  std::cout << "myvector contains:";
+  for (unsigned i=0; i<myvector.size() ; i++)
+    std::cout << ' ' << myvector[i];
+  std::cout << '\n';
 
-    b = myvector.empty();
-    std::cout << "empty: " << b << std::endl;
-    return 0;
+  return 0;
 }

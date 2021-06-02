@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/02 22:03:44 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/02 22:28:20 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,6 +342,12 @@ namespace ft
 			for(; first != last; first++)
 				this->_allocator.destroy(first.base());
 		}
+		
+		void _range_check(size_type n) const
+		{
+			if (n >= this->size())
+				throw std::out_of_range("vector::_range_check");
+		}
 
 		size_type _check_len(size_type n, const char* s) const
 		{
@@ -454,7 +460,6 @@ namespace ft
 		*/
 
 	// ########## Element access: ##########
-		/*
 		reference operator[](size_type n);
 		const_reference operator[](size_type n) const;
 		reference at(size_type n);
@@ -463,8 +468,6 @@ namespace ft
 		const_reference front() const;
 		reference back();
 		const_reference back() const;
-		*/
-
 
 	// ########## Modifiers: ##########
 		/*
@@ -475,8 +478,8 @@ namespace ft
 		void assign(size_type n, const value_type& val);
 		*/
 		void push_back(const value_type& val);
-		/*
 		void pop_back();
+		/*
 		//single element (1)
 		iterator insert(iterator position, const value_type& val);
 		//fill (2)
@@ -584,17 +587,43 @@ namespace ft
 	*/
 
 	// ########## Element access: ##########
-	/*
-	reference operator[](size_type n);
-	const_reference operator[](size_type n) const;
-	reference at(size_type n);
-	const_reference at(size_type n) const;
-	reference front();
-	const_reference front() const;
-	reference back();
-	const_reference back() const;
-	*/
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::operator[](size_type n)
+	{ return *(this->_start + n); }
 
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::const_reference vector<T, Alloc>::operator[](size_type n) const
+	{ return *(this->_start + n); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::at(size_type n)
+	{
+		this->_range_check(n);
+		return (*this)[n];
+	}
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::const_reference vector<T, Alloc>::at(size_type n) const
+	{
+		this->_range_check(n);
+		return (*this)[n];
+	}
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::front()
+	{ return *begin(); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::const_reference vector<T, Alloc>::front() const
+	{ return *begin(); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::reference vector<T, Alloc>::back()
+	{ return *(end() - 1); }
+
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::const_reference vector<T, Alloc>::back() const
+	{ return *(end() - 1); }
 
 	// ########## Modifiers: ##########
 	/*
@@ -617,8 +646,14 @@ namespace ft
 			_insert_aux(end(), val);
 		}
 	}
+
+	template <class T, class Alloc>
+	void vector<T, Alloc>::pop_back()
+	{
+		(this->_finish)--;
+		this->_allocator.destroy(this->_finish);
+	}
 	/*
-	void pop_back();
 	//single element (1)
 	iterator insert(iterator position, const value_type& val);
 	//fill (2)
