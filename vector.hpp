@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/02 11:07:41 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/02 12:57:49 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,11 +243,26 @@ namespace ft
         typedef ptrdiff_t                                   difference_type;
         typedef size_t                                      size_type;
 
+	protected:
+		allocator_type		_allocator;
+		pointer				_start;
+		pointer				_finish;
+		pointer				_end_of_storage;
+
+		pointer _allocate(size_type n)
+		{ return n != 0 ? _allocator.allocate(n) : 0; }
+
+		void _deallocate(pointer p, size_type n)
+		{
+			if (p)
+				_allocator.deallocate(p, n);
+		}
+
 	public:
     // ########## (constructor) ##########
-		/*
 		//default (1)
 		explicit vector(const allocator_type& alloc = allocator_type());
+		/*
 		//fill (2)
 		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 		//range (3)
@@ -330,6 +345,24 @@ namespace ft
 		allocator_type get_allocator() const;
 		*/
 	};
+
+
+
+	// ########## (constructor) ##########
+	//default (1)
+	template <class T, class Alloc>
+	vector<T, Alloc>::vector(const allocator_type& alloc)
+	: _allocator(alloc), _start(0), _finish(0), _end_of_storage(0)
+	{}
+	/*
+	//fill (2)
+	explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+	//range (3)
+	template <class InputIterator>
+	vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+	//copy (4)
+	vector(const vector& x);
+	*/
 
 // ########## Non-member function overloads ##########
 	/*
