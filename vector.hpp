@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/02 21:55:28 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/02 22:03:44 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,8 +446,10 @@ namespace ft
 		size_type max_size() const;
 		/*
 		void resize(size_type n, value_type val = value_type());
+		*/
 		size_type capacity() const;
 		bool empty() const;
+		/*
 		void reserve(size_type n);
 		*/
 
@@ -569,8 +571,15 @@ namespace ft
 	{ return this->_allocator.max_size(); }
 	/*
 	void resize(size_type n, value_type val = value_type());
-	size_type capacity() const;
-	bool empty() const;
+	*/
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::size_type vector<T, Alloc>::capacity() const
+	{ return size_type(this->_end_of_storage - this->_start); }
+
+	template <class T, class Alloc>
+	bool vector<T, Alloc>::empty() const
+	{ return begin() == end(); }
+	/*
 	void reserve(size_type n);
 	*/
 
