@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/02 22:28:20 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 00:28:14 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,6 +358,12 @@ namespace ft
     		return (len < size() || len > max_size()) ? max_size() : len;
 		}
 
+		void _erase_at_end(pointer ptr)
+		{
+			this->_destroy(iterator(ptr), iterator(this->_finish));
+			this->_finish = ptr;
+		}
+
 		void _insert_aux(iterator position, const T& x)
 		{
 			if (this->_finish != this->_end_of_storage)
@@ -487,11 +493,14 @@ namespace ft
 		//range (3)
 		template <class InputIterator>
     	void insert(iterator position, InputIterator first, InputIterator last);
+		*/
 		iterator erase(iterator position);
 		iterator erase(iterator first, iterator last);
+		/*
 		void swap(vector& x);
-		void clear();
 		*/
+		void clear();
+		
 
 	// ########## Allocator: ##########
 		/*
@@ -661,11 +670,40 @@ namespace ft
 	//range (3)
 	template <class InputIterator>
 	void insert(iterator position, InputIterator first, InputIterator last);
-	iterator erase(iterator position);
-	iterator erase(iterator first, iterator last);
-	void swap(vector& x);
-	void clear();
 	*/
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator position)
+	{
+		if (position + 1 != end())
+		{
+			// TODO : 직접 짜야함 
+			std::copy(position + 1, end(), position);
+		}
+		this->_finish--;
+		this->_allocator.destroy(this->_finish);
+		return position;
+	}
+	
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator first, iterator last)
+	{
+		if (first != last)
+		{
+			if (last != end())
+			{
+				// TODO : 직접 짜야함
+				std::copy(last, end(), first);
+			}
+			this->_erase_at_end(first.base() + (end() - last));
+		}
+		return first;
+	}
+	/*
+	void swap(vector& x);
+	*/
+	template <class T, class Alloc>
+	void vector<T, Alloc>::clear()
+	{ _erase_at_end(this->_start); }
 
 	// ########## Allocator: ##########
 	/*
