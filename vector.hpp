@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/02 21:39:57 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/02 21:55:28 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,8 +314,8 @@ namespace ft
         typedef typename allocator_type::pointer            pointer;
         typedef typename allocator_type::const_pointer      const_pointer;
 
-	    typedef _vector_iterator<T>                           iterator;
-        typedef _vector_const_iterator<T>                     const_iterator;
+	    typedef _vector_iterator<T>							iterator;
+        typedef _vector_const_iterator<T>					const_iterator;
         typedef ft::reverse_iterator<iterator>              reverse_iterator;
         typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
 
@@ -335,6 +335,12 @@ namespace ft
 		{
 			if (p)
 				_allocator.deallocate(p, n);
+		}
+
+		void _destroy(iterator first, iterator last)
+		{
+			for(; first != last; first++)
+				this->_allocator.destroy(first.base());
 		}
 
 		size_type _check_len(size_type n, const char* s) const
@@ -387,33 +393,19 @@ namespace ft
 					if (!new_finish)
 						this->_allocator.destroy(new_start + elems_before);
 					else
-					{
-						//std::_Destroy(new_start, new_finish, this->_allocator);
-						iterator first(new_start);
-						iterator last(new_finish);
-						for(; first != last; first++)
-							this->_allocator.destroy(first.base());
-					}
-					//_M_deallocate(new_start, len);
-					_deallocate(new_start, len);
+						this->_destroy(iterator(new_start), iterator(new_finish));
+					this->_deallocate(new_start, len);
+					throw;  // TODO  확인필요
 				}
-				
-				/*
-				std::_Destroy(this->_start, this->_finish, this->_allocator);
-				_M_deallocate(this->_start, this->_end_of_storage - this->_start);
-				*/
-				iterator first(this->_start);
-				iterator last(this->_finish);
-				for(; first != last; first++)
-					this->_allocator.destroy(first.base());
-				_deallocate(this->_start, this->_end_of_storage - this->_start);
+
+				this->_destroy(iterator(this->_start), iterator(this->_finish));
+				this->_deallocate(this->_start, this->_end_of_storage - this->_start);
 
 				this->_start = new_start;
 				this->_finish = new_finish;
 				this->_end_of_storage = new_start + len;
 			}
 		}
-
 
 
 	public:
@@ -524,12 +516,7 @@ namespace ft
 	template <class T, class Alloc>
 	vector<T, Alloc>::~vector()
 	{
-		//std::_Destroy(this->_M_impl._M_start, this->_M_impl._M_finish, _M_get_Tp_allocator());
-		//_M_deallocate(this->_M_impl._M_start, this->_M_impl._M_end_of_storage - this->_M_impl._M_start);
-		iterator first(this->_start);
-		iterator last(this->_finish);
-		for(; first != last; first++)
-			this->_allocator.destroy(first.base());
+		this->_destroy(iterator(this->_start), iterator(this->_finish));
 		this->_deallocate(this->_start, this->_end_of_storage - this->_start);
 	}
 	
