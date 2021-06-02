@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/01 21:17:24 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/02 11:07:41 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,214 @@
 # define VECTOR_HPP
 
 # include <memory>
-//# include <iterator>
-//# include "iterator.hpp"
+# include <iterator>
+# include "iterator.hpp"
 //# include "utils.hpp"
 
 namespace ft
 {
+	// ############## vector iterator ###########################################################
+    template<typename T>
+    struct _vector_iterator
+    {
+        typedef _vector_iterator<T>					_Self;
+        
+        typedef T                                   value_type;
+        typedef ptrdiff_t                           difference_type;
+        typedef T*                                  pointer;
+        typedef T&                                  reference;
+        typedef std::random_access_iterator_tag     iterator_category;
+
+		pointer ptr;
+
+		_vector_iterator() : ptr() {}
+		_vector_iterator(const pointer& x) : ptr(x) {}
+        
+        reference operator*() const
+        {
+			return *ptr;
+        }
+        
+        pointer operator->() const
+        {
+			return ptr;
+        }
+        
+        _Self& operator++()
+        {
+			ptr++;
+            return *this;
+        }
+
+        _Self operator++(int)
+        {
+            _Self _tmp = *this;
+			ptr++;
+            return _tmp;
+        }
+        
+        _Self& operator--()
+        {
+            ptr--;
+            return *this;
+        }
+        
+        _Self operator--(int)
+        {
+            _Self _tmp = *this;
+			ptr--;
+            return _tmp;
+        }
+
+		reference operator[](const difference_type& n) const
+		{
+			return ptr[n];
+		}
+
+		_Self& operator +=(const difference_type& n)
+		{
+			ptr += n;
+			return *this;
+		}
+
+		_Self operator+(const difference_type& n) const
+		{
+			return _Self(ptr + n);
+		}
+
+		_Self& operator-=(const difference_type& n)
+		{
+			ptr -= n;
+			return *this;
+		}
+
+		_Self operator-(const difference_type& n) const
+		{
+			return _Self(ptr -n);
+		}
+
+		const pointer& base() const
+		{
+			return ptr;
+		}
+
+		/*
+        bool operator==(const _Self& _x) const
+        {
+            return node_ptr == _x.node_ptr;
+        }
+        bool operator!=(const _Self& _x) const
+        {
+            return node_ptr != _x.node_ptr;
+        }
+		*/
+    };
+
+
+
+	// ############## vector const iterator ###########################################################
+    template<typename T>
+    struct _vector_const_iterator
+    {
+        typedef _vector_const_iterator<T>			_Self;
+		typedef _vector_iterator<T>					iterator;
+        
+        typedef T                                   value_type;
+        typedef ptrdiff_t                           difference_type;
+        typedef const T*							pointer;
+        typedef const T&							reference;
+        typedef std::random_access_iterator_tag     iterator_category;
+
+		pointer ptr;
+
+		_vector_const_iterator() : ptr() {}
+		_vector_const_iterator(const pointer& x) : ptr(x) {}
+		_vector_const_iterator(const iterator& x) : ptr(x.ptr) {}
+        
+        reference operator*() const
+        {
+			return *ptr;
+        }
+        
+        pointer operator->() const
+        {
+			return ptr;
+        }
+        
+        _Self& operator++()
+        {
+			ptr++;
+            return *this;
+        }
+
+        _Self operator++(int)
+        {
+            _Self _tmp = *this;
+			ptr++;
+            return _tmp;
+        }
+        
+        _Self& operator--()
+        {
+            ptr--;
+            return *this;
+        }
+        
+        _Self operator--(int)
+        {
+            _Self _tmp = *this;
+			ptr--;
+            return _tmp;
+        }
+
+		reference operator[](const difference_type& n) const
+		{
+			return ptr[n];
+		}
+
+		_Self& operator +=(const difference_type& n)
+		{
+			ptr += n;
+			return *this;
+		}
+
+		_Self operator+(const difference_type& n) const
+		{
+			return _Self(ptr + n);
+		}
+
+		_Self& operator-=(const difference_type& n)
+		{
+			ptr -= n;
+			return *this;
+		}
+
+		_Self operator-(const difference_type& n) const
+		{
+			return _Self(ptr -n);
+		}
+
+		const pointer& base() const
+		{
+			return ptr;
+		}
+
+		/*
+        bool operator==(const _Self& _x) const
+        {
+            return node_ptr == _x.node_ptr;
+        }
+        bool operator!=(const _Self& _x) const
+        {
+            return node_ptr != _x.node_ptr;
+        }
+		*/
+    };
+
+
+
+
+
 	// ############## vector class ##############################################################
 	template <class T, class Alloc = std::allocator<T> >
 	class vector
