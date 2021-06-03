@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 11:40:22 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 12:12:25 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,6 +342,27 @@ namespace ft
 			for(; first != last; first++)
 				this->_allocator.destroy(first.base());
 		}
+
+		void _fill_initialize(size_type n, const value_type& value)
+		{
+			std::uninitialized_fill_n(this->_start, n, value);
+			this->_finish = this->_end_of_storage;
+		}
+
+		template <typename Integer>
+		void _initialize_dispatch(Integer n, Integer value, ft::true_type)
+		{
+			this->_start = this->_allocate(static_cast<size_type>(n));
+			this->_end_of_storage = this->_start + static_cast<size_type>(n);
+			_fill_initialize(static_cast<size_type>(n), value);
+		}
+
+		template <typename InputIterator>
+		void _initialize_dispatch(InputIterator first, InputIterator last, ft::false_type)
+		{
+			for (; first != last; first++)
+				push_back(*first);
+		}
 		
 		void _range_check(size_type n) const
 		{
@@ -536,7 +557,6 @@ namespace ft
     // ########## (constructor) ##########
 		//default (1)
 		explicit vector(const allocator_type& alloc = allocator_type());
-		/*
 		//fill (2)
 		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 		//range (3)
@@ -544,7 +564,6 @@ namespace ft
 		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 		//copy (4)
 		vector(const vector& x);
-		*/
 
 	// ########## (destructor) ##########
 		~vector();
@@ -624,15 +643,38 @@ namespace ft
 	vector<T, Alloc>::vector(const allocator_type& alloc)
 	: _allocator(alloc), _start(0), _finish(0), _end_of_storage(0)
 	{}
-	/*
 	//fill (2)
-	explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+	template <class T, class Alloc>
+	vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_type& alloc)
+	: _allocator(alloc), _start(0), _finish(0), _end_of_storage(0)
+	{
+		this->_start = this->_allocate(n);
+		this->_finish = this->_start;
+		this->_end_of_storage = this->_start + n;
+		
+		_fill_initialize(n, val);
+	}
 	//range (3)
+	template <class T, class Alloc>
 	template <class InputIterator>
-	vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+	vector<T, Alloc>::vector(InputIterator first, InputIterator last, const allocator_type& alloc)
+	: _allocator(alloc), _start(0), _finish(0), _end_of_storage(0)
+	{
+		typedef typename ft::is_integer<InputIterator>::type is_integer_type;
+		_initialize_dispatch(first, last, is_integer_type());
+	}
 	//copy (4)
-	vector(const vector& x);
-	*/
+	template <class T, class Alloc>
+	vector<T, Alloc>::vector(const vector& x)
+	: _allocator(x._allocator), _start(0), _finish(0), _end_of_storage(0)
+	{
+		size_type n = x.size();
+		this->_start = this->_allocate(n);
+		//this->_finish = this->_start;
+		this->_end_of_storage = this->_start + n;
+
+		this->_finish = std::uninitialized_copy(x.begin(), x.end(), this->_start);		
+	}
 
 	// ########## (destructor) ##########
 	template <class T, class Alloc>
