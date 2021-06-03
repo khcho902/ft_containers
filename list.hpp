@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 21:06:59 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 21:57:11 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -450,12 +450,14 @@ namespace ft
         //(2)
         template <class Compare>
         void sort (Compare comp);
-
+    주석 끝(8)*/
         void reverse();
 
+    /*
     // ########## Allocator: ##########
         allocator_type get_allocator() const;
-    주석 끝(8)*/
+    */
+    
     };
 
     // ########## (constructor) ##########
@@ -930,6 +932,20 @@ namespace ft
             }
         }
     }
+
+    template <class T, class Alloc>
+    void list<T, Alloc>::reverse()
+    {
+        _list_node_base* tmp = &(this->sentry_node);
+        
+        do
+        {
+            ft::swap(tmp->next, tmp->prev);
+            tmp = tmp->prev;
+        }
+        while (tmp != &(this->sentry_node));
+    }
+
 
 /* 주석시작
 // ########## Non-member function overloads ##########
