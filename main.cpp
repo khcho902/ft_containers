@@ -1,23 +1,16 @@
-// constructing vectors
+// vector assignment
 #include <iostream>
 #include "vector.hpp"
 
 int main()
 {
-    // constructors used in the same order as described above:
-    ft::vector<int> first;                               // empty vector of ints
-    ft::vector<int> second(4, 100);                      // four ints with value 100
-    ft::vector<int> third(second.begin(), second.end()); // iterating through second
-    ft::vector<int> fourth(third);                       // a copy of third
+    ft::vector<int> foo(3, 0);
+    ft::vector<int> bar(5, 0);
 
-    // the iterator constructor can also be used to construct from arrays:
-    int myints[] = {16, 2, 77, 29};
-    ft::vector<int> fifth(myints, myints + sizeof(myints) / sizeof(int));
+    bar = foo;
+    foo = ft::vector<int>();
 
-    std::cout << "The contents of fifth are:";
-    for (ft::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-
+    std::cout << "Size of foo: " << int(foo.size()) << '\n';
+    std::cout << "Size of bar: " << int(bar.size()) << '\n';
     return 0;
 }

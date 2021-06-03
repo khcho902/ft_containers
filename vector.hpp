@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 12:12:25 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 12:58:15 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,6 +331,22 @@ namespace ft
 		pointer _allocate(size_type n)
 		{ return n != 0 ? _allocator.allocate(n) : 0; }
 
+		template<typename Iterator>
+		pointer _allocate_and_copy(size_type n, Iterator first, Iterator last)
+		{
+			pointer result = this->_allocate(n);
+			try
+			{
+				std::uninitialized_copy(first, last, result);
+				return result;
+			}
+			catch(...)
+			{
+				this->_deallocate(result, n);
+				throw;  // TODO : 확인필요 //__throw_exception_again; 이거 대신에 쓴거 
+			}
+		}
+
 		void _deallocate(pointer p, size_type n)
 		{
 			if (p)
@@ -569,10 +585,8 @@ namespace ft
 		~vector();
 	
 	// ########## operator= ##########
-		/*
 		//copy (1)
  		vector& operator=(const vector& x);
-		 */
 
 	// ########## Iterators: ##########
 		iterator begin();
@@ -685,10 +699,36 @@ namespace ft
 	}
 	
 	// ########## operator= ##########
-	/*
 	//copy (1)
-	vector& operator=(const vector& x);
-	*/
+	template <class T, class Alloc>
+	vector<T, Alloc>& vector<T, Alloc>::operator=(const vector& x)
+	{
+		if (this != &x)
+		{
+			const size_type xlen = x.size();
+			if (xlen > capacity())
+			{
+				pointer tmp = _allocate_and_copy(xlen, x.begin(), x.end());
+				this->_destroy(iterator(this->_start), iterator(this->_finish));
+				this->_deallocate(this->_start, this->_end_of_storage - this->_start);
+				this->_start = tmp;
+				this->_end_of_storage = this->_start + xlen;
+			}
+			else if (size() >= xlen)
+			{
+				// TODO : copy 바꿔야함 
+				this->_destroy(std::copy(x.begin(), x.end(), begin()), end());
+			}
+			else
+			{
+				// TODO : copy 바꿔야함 
+				std::copy(x._start, x._start + size(), this->_start);
+				std::uninitialized_copy(x._start + size(), x._finish, this->_finish);
+			}
+			this->_finish = this->_start + xlen;
+		}
+		return  *this;
+	}
 
 	// ########## Iterators: ##########
 	template <class T, class Alloc>
