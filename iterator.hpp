@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:20:33 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 20:48:53 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 16:52:34 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,42 @@ namespace ft
 	{
 		return rhs.base() - lhs.base();
 	}
+
+
+
+
+
+
+	template<typename IteratorL, typename IteratorR>
+    bool operator==(const reverse_iterator<IteratorL>& lhs, const reverse_iterator<IteratorR>& rhs)
+    { return lhs.base() == rhs.base(); }
+
+	template<typename IteratorL, typename IteratorR>
+    bool operator<(const reverse_iterator<IteratorL>& lhs, const reverse_iterator<IteratorR>& rhs)
+    { return rhs.base() < lhs.base(); }
+
+	template<typename IteratorL, typename IteratorR>
+    bool operator!=(const reverse_iterator<IteratorL>& lhs, const reverse_iterator<IteratorR>& rhs)
+    { return !(lhs == rhs); }
+
+	template<typename IteratorL, typename IteratorR>
+    bool operator>(const reverse_iterator<IteratorL>& lhs, const reverse_iterator<IteratorR>& rhs)
+    { return rhs < lhs; }
+
+	template<typename IteratorL, typename IteratorR>
+    bool operator<=(const reverse_iterator<IteratorL>& lhs, const reverse_iterator<IteratorR>& rhs)
+    { return !(rhs < lhs); }
+
+	template<typename IteratorL, typename IteratorR>
+	bool operator>=(const reverse_iterator<IteratorL>& lhs, const reverse_iterator<IteratorR>& rhs)
+    { return !(lhs < rhs); }
+
+
+
+
+	template<typename IteratorL, typename IteratorR>
+	typename reverse_iterator<IteratorL>::difference_type operator-(const reverse_iterator<IteratorL>& lhs, const reverse_iterator<IteratorR>& rhs)
+	{ return rhs.base() - lhs.base(); }
 }
 
 #endif
