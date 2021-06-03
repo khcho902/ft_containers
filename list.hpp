@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 21:57:11 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/04 01:28:22 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ namespace ft
             }
         }
 
+        // [first, last) 를 this앞으로 이동 시킨다. 
         void _transfer(_list_node_base* const first, _list_node_base* const last)
         {
             if (this != last)
@@ -444,13 +445,11 @@ namespace ft
         //(2)	
         template <class Compare>
         void merge(list& x, Compare comp);
-/* 주석 시작(8)
         //(1)
         void sort();
         //(2)
         template <class Compare>
-        void sort (Compare comp);
-    주석 끝(8)*/
+        void sort(Compare comp);
         void reverse();
 
     /*
@@ -930,6 +929,71 @@ namespace ft
             {
                 last1.node_ptr->_transfer(first2.node_ptr, last2.node_ptr);
             }
+        }
+    }
+
+    //(1)
+    template <class T, class Alloc>
+    void list<T, Alloc>::sort()
+    {
+        // Do nothing if the list has length 0 or 1.
+        if (this->sentry_node.next != &this->sentry_node && this->sentry_node.next->next != &this->sentry_node)
+        {
+            list carry;
+            list tmp[64];
+            list *fill = &tmp[0];
+            list *counter;
+
+            do
+            {
+                carry.splice(carry.begin(), *this, begin());
+
+                for (counter = &tmp[0]; counter != fill && !counter->empty(); ++counter)
+                {
+                    counter->merge(carry);
+                    carry.swap(*counter);
+                }
+                carry.swap(*counter);
+                if (counter == fill)
+                    ++fill;
+            } while (!empty());
+
+            for (counter = &tmp[1]; counter != fill; ++counter)
+                counter->merge(*(counter - 1));
+            swap(*(fill - 1));
+        }
+    }
+
+    //(2)
+    template <class T, class Alloc>
+    template <class Compare>
+    void list<T, Alloc>::sort(Compare comp)
+    {
+        // Do nothing if the list has length 0 or 1.
+        if (this->sentry_node.next != &this->sentry_node && this->sentry_node.next->next != &this->sentry_node)
+        {
+            list carry;
+            list tmp[64];
+            list *fill = &tmp[0];
+            list *counter;
+
+            do
+            {
+                carry.splice(carry.begin(), *this, begin());
+
+                for (counter = &tmp[0]; counter != fill && !counter->empty(); ++counter)
+                {
+                    counter->merge(carry, comp);
+                    carry.swap(*counter);
+                }
+                carry.swap(*counter);
+                if (counter == fill)
+                    ++fill;
+            } while (!empty());
+
+            for (counter = &tmp[1]; counter != fill; ++counter)
+                counter->merge(*(counter - 1), comp);
+            swap(*(fill - 1));
         }
     }
 
