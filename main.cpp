@@ -1,43 +1,23 @@
-// list::sort
+// swap (list overload)
 #include <iostream>
 #include "list.hpp"
-#include <string>
-#include <cctype>
 
-// comparison, not case sensitive.
-bool compare_nocase (const std::string& first, const std::string& second)
+int main()
 {
-  unsigned int i=0;
-  while ( (i<first.length()) && (i<second.length()) )
-  {
-    if (tolower(first[i])<tolower(second[i])) return true;
-    else if (tolower(first[i])>tolower(second[i])) return false;
-    ++i;
-  }
-  return ( first.length() < second.length() );
-}
+    ft::list<int> foo(3, 100); // three ints with a value of 100
+    ft::list<int> bar(5, 200); // five ints with a value of 200
 
-int main ()
-{
-  ft::list<std::string> mylist;
-  ft::list<std::string>::iterator it;
-  mylist.push_back ("one");
-  mylist.push_back ("two");
-  mylist.push_back ("Three");
+    ft::swap(foo, bar);
 
-  mylist.sort();
+    std::cout << "foo contains:";
+    for (ft::list<int>::iterator it = foo.begin(); it != foo.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
 
-  std::cout << "mylist contains:";
-  for (it=mylist.begin(); it!=mylist.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+    std::cout << "bar contains:";
+    for (ft::list<int>::iterator it = bar.begin(); it != bar.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
 
-  mylist.sort(compare_nocase);
-
-  std::cout << "mylist contains:";
-  for (it=mylist.begin(); it!=mylist.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
-
-  return 0;
+    return 0;
 }

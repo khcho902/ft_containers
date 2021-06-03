@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/04 01:28:22 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/04 01:43:30 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -632,7 +632,6 @@ namespace ft
         return *tmp;
     }
 
-
     // ########## Modifiers: ##########
     //range (1)
     template <class T, class Alloc>
@@ -1010,31 +1009,55 @@ namespace ft
         while (tmp != &(this->sentry_node));
     }
 
-
-/* 주석시작
 // ########## Non-member function overloads ##########
     //(1)
     template <class T, class Alloc>
-    bool operator== (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+    bool operator==(const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
+    {
+        typedef typename list<T, Alloc>::const_iterator const_iterator;
+        
+        const_iterator i1 = lhs.begin();
+        const_iterator end1 = lhs.end();
+
+        const_iterator i2 = rhs.begin();
+        const_iterator end2 = rhs.end();
+        
+        while (i1 != end1 && i2 != end2 && *i1 == *i2)
+        {
+            ++i1;
+            ++i2;
+        }
+        return i1 == end1 && i2 == end2;
+    }
+    
     //(2)	
     template <class T, class Alloc>
-    bool operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+    bool operator!=(const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
+    { return !(lhs == rhs); }
+    
     //(3)	
     template <class T, class Alloc>
-    bool operator<  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+    bool operator<(const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
+    { return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
+    
     //(4)	
     template <class T, class Alloc>
-    bool operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+    bool operator<=(const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
+    { return !(rhs < lhs); }
+    
     //(5)	
     template <class T, class Alloc>
-    bool operator>  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+    bool operator>(const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
+    { return rhs < lhs; }
+    
     //(6)	
     template <class T, class Alloc>
-    bool operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+    bool operator>=(const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
+    { return !(lhs < rhs); }
 
     template <class T, class Alloc>
-    void swap (list<T,Alloc>& x, list<T,Alloc>& y);
-주석 끝*/ 
+    void swap(list<T, Alloc>& x, list<T, Alloc>& y)
+    { x.swap(y); }
 
 } // end namespace ft 
 
