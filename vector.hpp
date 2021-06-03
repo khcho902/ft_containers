@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 12:58:15 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 13:33:43 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -601,14 +601,10 @@ namespace ft
 	// ########## Capacity: ##########
 		size_type size() const;
 		size_type max_size() const;
-		/*
 		void resize(size_type n, value_type val = value_type());
-		*/
 		size_type capacity() const;
 		bool empty() const;
-		/*
 		void reserve(size_type n);
-		*/
 
 	// ########## Element access: ##########
 		reference operator[](size_type n);
@@ -771,9 +767,16 @@ namespace ft
 	template <class T, class Alloc>
 	typename vector<T, Alloc>::size_type vector<T, Alloc>::max_size() const
 	{ return this->_allocator.max_size(); }
-	/*
-	void resize(size_type n, value_type val = value_type());
-	*/
+
+	template <class T, class Alloc>
+	void vector<T, Alloc>::resize(size_type n, value_type val)
+	{
+		if (n > size())
+			insert(end(), n - size(), val);
+		else if (n < size())
+			_erase_at_end(this->_start + n);
+	}
+	
 	template <class T, class Alloc>
 	typename vector<T, Alloc>::size_type vector<T, Alloc>::capacity() const
 	{ return size_type(this->_end_of_storage - this->_start); }
@@ -781,9 +784,25 @@ namespace ft
 	template <class T, class Alloc>
 	bool vector<T, Alloc>::empty() const
 	{ return begin() == end(); }
-	/*
-	void reserve(size_type n);
-	*/
+
+	template <class T, class Alloc>
+	void vector<T, Alloc>::reserve(size_type n)
+	{
+		if (n > this->max_size())
+			throw std::length_error("");
+		
+		if (this->capacity() < n)
+		{
+			const size_type old_size = size();
+			pointer tmp = _allocate_and_copy(n, this->_start, this->_finish);
+			this->_destroy(iterator(this->_start), iterator(this->_finish));
+			this->_deallocate(this->_start, this->_end_of_storage - this->_start);
+
+			this->_start = tmp;
+			this->_finish = tmp + old_size;
+			this->_end_of_storage = this->_start + n;
+		}
+	}
 
 	// ########## Element access: ##########
 	template <class T, class Alloc>
