@@ -1,25 +1,23 @@
-// vector assign
+// swap (vector overload)
 #include <iostream>
 #include "vector.hpp"
 
-int main ()
+int main()
 {
-  ft::vector<int> first;
-  ft::vector<int> second;
-  ft::vector<int> third;
+    ft::vector<int> foo(3, 100); // three ints with a value of 100
+    ft::vector<int> bar(5, 200); // five ints with a value of 200
 
-  first.assign (7,100);             // 7 ints with a value of 100
+    foo.swap(bar);
 
-  ft::vector<int>::iterator it;
-  it=first.begin()+1;
+    std::cout << "foo contains:";
+    for (ft::vector<int>::iterator it = foo.begin(); it != foo.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
 
-  second.assign (it,first.end()-1); // the 5 central values of first
+    std::cout << "bar contains:";
+    for (ft::vector<int>::iterator it = bar.begin(); it != bar.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
 
-  int myints[] = {1776,7,4};
-  third.assign (myints,myints+3);   // assigning from array.
-
-  std::cout << "Size of first: " << int (first.size()) << '\n';
-  std::cout << "Size of second: " << int (second.size()) << '\n';
-  std::cout << "Size of third: " << int (third.size()) << '\n';
-  return 0;
+    return 0;
 }
