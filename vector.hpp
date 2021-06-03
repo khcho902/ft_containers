@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 14:53:32 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 17:34:36 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,13 +428,13 @@ namespace ft
 			}
 			else if (n > size())
 			{
-					std::fill(begin(), end(), val);
+					ft::fill(begin(), end(), val);
 					std::uninitialized_fill_n(this->_finish, n - size(), val);
 					this->_finish += n - size();
 			}
 			else			
 			{
-				_erase_at_end(std::fill_n(this->_start, n, val));
+				_erase_at_end(ft::fill_n(this->_start, n, val));
 			}
 		}
 
@@ -444,19 +444,8 @@ namespace ft
 			{
 				this->_allocator.construct(this->_finish, *(this->_finish - 1));
 				++this->_finish;
-
 				T x_copy = x;
-
-				// TODO :  std::copy_backward  바꿔야함 
-				//std::copy_backward(position.base(), this->_finish - 2, this->_finish - 1);
-				iterator first(position.base());
-				iterator last(this->_finish - 2);
-				iterator result(this->_finish - 1);
-				
-				while (last != first)
-					*(--result) = *(--last);
-				// 바꿨는데 아직 제대로 동작하는지 확인필요 
-				
+				ft::copy_backward(position.base(), this->_finish - 2, this->_finish - 1);
 				*position = x_copy;
 			}
 			else
@@ -513,18 +502,8 @@ namespace ft
 					
 					std::uninitialized_copy(this->_finish - n, this->_finish, this->_finish);
 					this->_finish += n;
-					// TODO :  std::copy_backward  바꿔야함 
-					//std::copy_backward(position.base(), old_finish - n, old_finish);
-					iterator first(position.base());
-					iterator last(old_finish - n);
-					iterator result(old_finish);
-					
-					while (last != first)
-						*(--result) = *(--last);
-					// 바꿨는데 아직 제대로 동작하는지 확인필요
-
-					// TODO : std::fill 바꿔야함 
-					std::fill(position.base(), position.base() + n, x_copy);
+					ft::copy_backward(position.base(), old_finish - n, old_finish);
+					ft::fill(position.base(), position.base() + n, x_copy);
 				}
 				else
 				{
@@ -539,8 +518,7 @@ namespace ft
 					std::uninitialized_copy(position.base(), old_finish, this->_finish);
 					this->_finish += elems_after;
 
-					// TODO : std::fill 바꿔야함 
-					std::fill(position.base(), old_finish, x_copy);
+					ft::fill(position.base(), old_finish, x_copy);
 				}
 			}
 			else
@@ -747,13 +725,11 @@ namespace ft
 			}
 			else if (size() >= xlen)
 			{
-				// TODO : copy 바꿔야함 
-				this->_destroy(std::copy(x.begin(), x.end(), begin()), end());
+				this->_destroy(ft::copy(x.begin(), x.end(), begin()), end());
 			}
 			else
 			{
-				// TODO : copy 바꿔야함 
-				std::copy(x._start, x._start + size(), this->_start);
+				ft::copy(x._start, x._start + size(), this->_start);
 				std::uninitialized_copy(x._start + size(), x._finish, this->_finish);
 			}
 			this->_finish = this->_start + xlen;
@@ -953,10 +929,7 @@ namespace ft
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator position)
 	{
 		if (position + 1 != end())
-		{
-			// TODO : 직접 짜야함 
-			std::copy(position + 1, end(), position);
-		}
+			ft::copy(position + 1, end(), position);
 		this->_finish--;
 		this->_allocator.destroy(this->_finish);
 		return position;
@@ -968,10 +941,7 @@ namespace ft
 		if (first != last)
 		{
 			if (last != end())
-			{
-				// TODO : 직접 짜야함
-				std::copy(last, end(), first);
-			}
+				ft::copy(last, end(), first);
 			this->_erase_at_end(first.base() + (end() - last));
 		}
 		return first;
@@ -1005,8 +975,7 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 	{
-		// TODO : std::equal 바꿔야함
-		return (lhs.size() == rhs.size() && std::equal(lhs.begin(), lhs.end(), rhs.begin()));
+		return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 	
 	//(2)
@@ -1020,7 +989,7 @@ namespace ft
 	template <class T, class Alloc>
   	bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 	{
-		return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 	}
 	
 	//(4)

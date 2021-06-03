@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 02:42:03 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/02 20:30:13 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 17:32:46 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,74 @@ namespace ft
 		const typename Pair::first_type& operator()(const Pair& x) const
 		{ return x.first; }
 	};
+
+	template <typename ForwardIterator, typename T>
+  	void fill(ForwardIterator first, ForwardIterator last, const T& val)
+	{
+  		while (first != last) {
+    		*first = val;
+    		++first;
+		}
+  	}
+
+	template <typename OutputIterator, typename Size, typename T>
+	OutputIterator fill_n(OutputIterator first, Size n, const T& val)
+	{
+		while (n>0)
+		{
+			*first = val;
+			++first; --n;
+		}
+		return first;
+	}
+
+	template <typename InputIterator1, typename InputIterator2>
+	bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
+	{
+		while (first1!=last1)
+		{
+			if (!(*first1 == *first2))
+      			return false;
+    		++first1; ++first2;
+  		}
+  		return true;
+	}
+
+	template <typename InputIterator1, typename InputIterator2>
+  	bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
+                                InputIterator2 first2, InputIterator2 last2)
+	{
+  		while (first1!=last1)
+  		{
+    		if (first2==last2 || *first2<*first1)
+				return false;
+    		else if (*first1<*first2)
+				return true;
+    		++first1; ++first2;
+  		}
+  		return (first2!=last2);
+	}
+
+	template<typename InputIterator, typename OutputIterator>
+  	OutputIterator copy(InputIterator first, InputIterator last, OutputIterator result)
+	{
+		while (first!=last)
+		{
+			*result = *first;
+			++result; ++first;
+		}
+		return result;
+	}
+
+	template <typename BidirectionalIterator1, typename BidirectionalIterator2>
+	BidirectionalIterator2 copy_backward(BidirectionalIterator1 first,
+										 BidirectionalIterator1 last,
+										 BidirectionalIterator2 result)
+	{
+		while (last != first)
+			*(--result) = *(--last);
+		return result;
+	}
 
 } // end namespace ft 
 
