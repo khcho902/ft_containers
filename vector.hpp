@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 00:56:07 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 11:40:22 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -419,6 +419,118 @@ namespace ft
 			}
 		}
 
+		void _fill_insert(iterator position, size_type n, const value_type& x)
+		{
+			if (n == 0)
+				return ;
+				
+			if (size_type(this->_end_of_storage - this->_finish) >= n)
+			{
+				value_type x_copy = x;
+				const size_type elems_after = end() - position;
+				pointer old_finish(this->_finish);
+
+				if (elems_after > n)
+				{
+					//std::__uninitialized_move_a(this->_M_impl._M_finish - __n, this->_M_impl._M_finish, this->_M_impl._M_finish, _M_get_Tp_allocator());
+                    //this->_M_impl._M_finish += __n;
+                    //_GLIBCXX_MOVE_BACKWARD3(__position.base(), __old_finish - __n, __old_finish);
+                    //std::fill(__position.base(), __position.base() + __n, __x_copy);
+					
+					std::uninitialized_copy(this->_finish - n, this->_finish, this->_finish);
+					this->_finish += n;
+					// TODO :  std::copy_backward  바꿔야함 
+					//std::copy_backward(position.base(), old_finish - n, old_finish);
+					iterator first(position.base());
+					iterator last(old_finish - n);
+					iterator result(old_finish);
+					
+					while (last != first)
+						*(--result) = *(--last);
+					// 바꿨는데 아직 제대로 동작하는지 확인필요
+
+					// TODO : std::fill 바꿔야함 
+					std::fill(position.base(), position.base() + n, x_copy);
+				}
+				else
+				{
+					// std::__uninitialized_fill_n_a(this->_M_impl._M_finish, __n - __elems_after, __x_copy, _M_get_Tp_allocator());
+                    // this->_M_impl._M_finish += __n - __elems_after;
+                    // std::__uninitialized_move_a(__position.base(), __old_finish, this->_M_impl._M_finish, _M_get_Tp_allocator());
+                    // this->_M_impl._M_finish += __elems_after;
+                    // std::fill(__position.base(), __old_finish, __x_copy);
+
+					std::uninitialized_fill_n(this->_finish, n - elems_after, x_copy);
+					this->_finish += n - elems_after;
+					std::uninitialized_copy(position.base(), old_finish, this->_finish);
+					this->_finish += elems_after;
+
+					// TODO : std::fill 바꿔야함 
+					std::fill(position.base(), old_finish, x_copy);
+				}
+			}
+			else
+			{
+				const size_type len = _check_len(n, "vector::_fill_insert");
+				const size_type elems_before = position - begin();
+				pointer new_start(this->_allocate(len));
+				pointer new_finish(new_start);
+				try
+				{
+					// See _M_insert_aux above.
+                    // std::__uninitialized_fill_n_a(__new_start + __elems_before, __n, __x, _M_get_Tp_allocator());
+                    // __new_finish = 0;
+                    // __new_finish = std::__uninitialized_move_a(this->_M_impl._M_start, __position.base(), __new_start, _M_get_Tp_allocator());
+                    // __new_finish += __n;
+                    // __new_finish = std::__uninitialized_move_a(__position.base(), this->_M_impl._M_finish, __new_finish, _M_get_Tp_allocator());
+
+					std::uninitialized_fill_n(new_start + elems_before, n, x);
+					new_finish = 0;
+					new_finish = std::uninitialized_copy(this->_start, position.base(), new_start);
+					new_finish += n;
+					new_finish = std::uninitialized_copy(position.base(), this->_finish, new_finish);
+				}
+				catch(...)
+				{
+					// if (!__new_finish)
+                    //     std::_Destroy(__new_start + __elems_before, __new_start + __elems_before + __n, _M_get_Tp_allocator());
+                    // else
+                    //     std::_Destroy(__new_start, __new_finish, _M_get_Tp_allocator());
+                    // _M_deallocate(__new_start, __len);
+                    // __throw_exception_again;
+
+					if (!new_finish)
+						this->_destroy(iterator(new_start + elems_before), iterator(new_start + elems_before + n));
+					else
+						this->_destroy(iterator(new_start), iterator(new_finish));
+					this->_deallocate(new_start, len);
+					throw;  // TODO : 확인필요
+				}
+
+				this->_destroy(iterator(this->_start), iterator(this->_finish));
+				this->_deallocate(this->_start, this->_end_of_storage - this->_start);
+
+				this->_start = new_start;
+				this->_finish = new_finish;
+				this->_end_of_storage = new_start + len;
+			}
+		}
+
+		template <typename Integer>
+		void _insert_dispatch(iterator position, Integer n, Integer val, ft::true_type)
+		{ _fill_insert(position, n, val); }
+
+		template <typename InputIterator>
+		void _insert_dispatch(iterator position, InputIterator first, InputIterator last, ft::false_type)
+		{
+			// TODO : _M_range_insert 만들어야할수도 있음 
+			
+			for(; first != last; first++)
+			{
+				position = insert(position, *first);
+				position++;
+			}
+		}
 
 	public:
     // ########## (constructor) ##########
@@ -485,7 +597,6 @@ namespace ft
 		*/
 		void push_back(const value_type& val);
 		void pop_back();
-		/*
 		//single element (1)
 		iterator insert(iterator position, const value_type& val);
 		//fill (2)
@@ -493,7 +604,6 @@ namespace ft
 		//range (3)
 		template <class InputIterator>
     	void insert(iterator position, InputIterator first, InputIterator last);
-		*/
 		iterator erase(iterator position);
 		iterator erase(iterator first, iterator last);
 		void swap(vector& x);
@@ -660,15 +770,39 @@ namespace ft
 		(this->_finish)--;
 		this->_allocator.destroy(this->_finish);
 	}
-	/*
+	
 	//single element (1)
-	iterator insert(iterator position, const value_type& val);
+	template <class T, class Alloc>
+	typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(iterator position, const value_type& val)
+	{
+		const size_type n = position - begin();
+		if (this->_finish != this->_end_of_storage && position == end())
+		{
+			this->_allocator.construct(this->_finish, val);
+			this->_finish++;
+		}
+		else
+		{
+			_insert_aux(position, val);
+		}
+		return iterator(this->_start + n);
+	}
+
+	
 	//fill (2)
-	void insert(iterator position, size_type n, const value_type& val);
+	template <class T, class Alloc>
+	void vector<T, Alloc>::insert(iterator position, size_type n, const value_type& val)
+	{ _fill_insert(position, n, val); }
+
 	//range (3)
+	template <class T, class Alloc>
 	template <class InputIterator>
-	void insert(iterator position, InputIterator first, InputIterator last);
-	*/
+	void vector<T, Alloc>::insert(iterator position, InputIterator first, InputIterator last)
+	{
+		typedef typename ft::is_integer<InputIterator>::type is_integer_type;
+		_insert_dispatch(position, first, last, is_integer_type());
+	}
+	
 	template <class T, class Alloc>
 	typename vector<T, Alloc>::iterator vector<T, Alloc>::erase(iterator position)
 	{
