@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 13:33:43 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 14:38:08 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -401,6 +401,43 @@ namespace ft
 			this->_finish = ptr;
 		}
 
+		template <typename Integer>
+		void _assign_dispatch(Integer n, Integer val, ft::true_type)
+		{
+			_fill_assign(n, val);
+		}
+
+		template <typename InputIterator>
+		void _assign_dispatch(InputIterator first, InputIterator last, ft::false_type)
+		{
+			pointer cur(this->_start);
+			for (; first != last && cur != this->_finish; cur++, first++)
+				*cur = *first;
+			if (first == last)
+				_erase_at_end(cur);
+			else
+				insert(end(), first, last);
+		}
+
+		void _fill_assign(size_t n, const value_type& val)
+		{
+			if (n > capacity())
+			{
+				vector tmp(n, val, this->_allocator);
+				tmp.swap(*this);
+			}
+			else if (n > size())
+			{
+					std::fill(begin(), end(), val);
+					std::uninitialized_fill_n(this->_finish, n - size(), val);
+					this->_finish += n - size();
+			}
+			else			
+			{
+				_erase_at_end(std::fill_n(this->_start, n, val));
+			}
+		}
+
 		void _insert_aux(iterator position, const T& x)
 		{
 			if (this->_finish != this->_end_of_storage)
@@ -617,13 +654,11 @@ namespace ft
 		const_reference back() const;
 
 	// ########## Modifiers: ##########
-		/*
 		//range (1)
 		template <class InputIterator>
   		void assign(InputIterator first, InputIterator last);
 		//fill (2)
 		void assign(size_type n, const value_type& val);
-		*/
 		void push_back(const value_type& val);
 		void pop_back();
 		//single element (1)
@@ -844,13 +879,23 @@ namespace ft
 	{ return *(end() - 1); }
 
 	// ########## Modifiers: ##########
-	/*
+	
 	//range (1)
+	template <class T, class Alloc>
 	template <class InputIterator>
-	void assign(InputIterator first, InputIterator last);
+	void vector<T, Alloc>::assign(InputIterator first, InputIterator last)
+	{	
+		typedef typename ft::is_integer<InputIterator>::type is_integer_type;
+		_assign_dispatch(first, last, is_integer_type());
+	}
+	
 	//fill (2)
-	void assign(size_type n, const value_type& val);
-	*/
+	template <class T, class Alloc>
+	void vector<T, Alloc>::assign(size_type n, const value_type& val)
+	{
+		_fill_assign(n, val);
+	}
+	
 	template <class T, class Alloc>
 	void vector<T, Alloc>::push_back(const value_type& val)
 	{
