@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/04 01:43:30 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/04 01:50:48 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,17 @@ namespace ft
         }
     };
 
+    template <typename T>
+    inline bool operator==(const _list_iterator<T> &lhs, const _list_const_iterator<T> &rhs)
+    {
+        return lhs.node_ptr == rhs.node_ptr;
+    }
+
+    template <typename T>
+    inline bool operator!=(const _list_iterator<T> &lhs, const _list_const_iterator<T> &rhs)
+    {
+        return lhs.node_ptr != rhs.node_ptr;
+    }
 
     // ############## list class ###############################################################
     template <class T, class Alloc = std::allocator<T> >
