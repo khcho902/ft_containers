@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/01 15:37:23 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/03 21:06:59 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,16 +374,11 @@ namespace ft
         //copy (4)	
         list(const list& x);
 
-
     // ########## (destructor) ##########
         ~list();
 
-
     // ########## operator= ##########
-    /* 주석 시작(3)
         list& operator=(const list& x);
-    주석 끝(3)*/
-
 
     // ########## Iterators: ##########
         iterator begin();
@@ -507,6 +502,26 @@ namespace ft
     list<T, Alloc>::list::~list()
     {
         _clear();
+    }
+
+    // ########## operator= ##########
+    template <class T, class Alloc>
+    list<T, Alloc>& list<T, Alloc>::operator=(const list& x)
+    {
+        if (this != &x)
+        {
+            iterator first1 = begin();
+            iterator last1 = end();
+            const_iterator first2 = x.begin();
+            const_iterator last2 = x.end();
+            for (; first1 != last1 && first2 != last2; ++first1, ++first2)
+                *first1 = *first2;
+            if (first2 == last2)
+                erase(first1, last1);
+            else
+                insert(last1, first2, last2);
+        }
+        return *this;
     }
 
     // ########## Iterators: ##########

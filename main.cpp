@@ -1,23 +1,16 @@
-// swap (vector overload)
+// assignment operator with lists
 #include <iostream>
-#include "vector.hpp"
+#include "list.hpp"
 
-int main()
+int main ()
 {
-    ft::vector<int> foo(3, 100); // three ints with a value of 100
-    ft::vector<int> bar(5, 200); // five ints with a value of 200
+  ft::list<int> first (3);      // list of 3 zero-initialized ints
+  ft::list<int> second (5);     // list of 5 zero-initialized ints
 
-    foo.swap(bar);
+  second = first;
+  first = ft::list<int>();
 
-    std::cout << "foo contains:";
-    for (ft::vector<int>::iterator it = foo.begin(); it != foo.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-
-    std::cout << "bar contains:";
-    for (ft::vector<int>::iterator it = bar.begin(); it != bar.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-
-    return 0;
+  std::cout << "Size of first: " << int (first.size()) << '\n';
+  std::cout << "Size of second: " << int (second.size()) << '\n';
+  return 0;
 }
