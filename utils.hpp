@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 02:42:03 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 17:32:46 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/04 22:08:07 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,16 @@ namespace ft
 		
 		const typename Pair::first_type& operator()(const Pair& x) const
 		{ return x.first; }
+	};
+
+	template <typename T>
+	struct Identity : public unary_function<T, T>
+	{
+		T& operator()(T& x) const
+		{ return x; }
+
+		const T& operator()(const T& x) const
+		{ return x; }
 	};
 
 	template <typename ForwardIterator, typename T>

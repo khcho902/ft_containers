@@ -1,23 +1,19 @@
-// swap (list overload)
+// set::begin/end
 #include <iostream>
-#include "list.hpp"
+#include "set.hpp"
 
-int main()
+int main ()
 {
-    ft::list<int> foo(3, 100); // three ints with a value of 100
-    ft::list<int> bar(5, 200); // five ints with a value of 200
+  int myints[] = {75,23,65,42,13};
+  ft::set<int> myset (myints,myints+5);
 
-    ft::swap(foo, bar);
+  std::cout << "myset contains:";
+  for (ft::set<int>::iterator it=myset.begin(); it!=myset.end(); ++it)
+  {
+    std::cout << ' ' << *it;
+  }
 
-    std::cout << "foo contains:";
-    for (ft::list<int>::iterator it = foo.begin(); it != foo.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
+  std::cout << '\n';
 
-    std::cout << "bar contains:";
-    for (ft::list<int>::iterator it = bar.begin(); it != bar.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-
-    return 0;
+  return 0;
 }
