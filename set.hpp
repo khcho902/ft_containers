@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/04 21:35:13 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/05 01:06:10 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/05 01:59:45 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,47 +155,45 @@ namespace ft
 		/*
 		allocator_type get_allocator() const;
 		*/
-
-		// template <class _Key, class _T, class _Compare, class _Alloc>
-		// friend bool operator==(const map<_Key, _T, _Compare, _Alloc>& lhs,
-		// 					const map<_Key, _T, _Compare, _Alloc>& rhs);
+	
+		template <class _T, class _Compare, class _Alloc>
+		friend bool operator==(const set<_T, _Compare, _Alloc>& lhs,
+							const set<_T, _Compare, _Alloc>& rhs);
 		
-		// template <class _Key, class _T, class _Compare, class _Alloc>
-		// friend bool operator<(const map<_Key, _T, _Compare, _Alloc>& lhs,
-		// 					const map<_Key, _T, _Compare, _Alloc>& rhs);
+		template <class _T, class _Compare, class _Alloc>
+		friend bool operator<(const set<_T, _Compare, _Alloc>& lhs,
+							const set<_T, _Compare, _Alloc>& rhs);
 	};
 
 // ########## Non-member function overloads ##########
-/*
 	//(1)
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator==(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	template <class T, class Compare, class Alloc>
+	bool operator==(const set<T, Compare, Alloc>& lhs, const set<T, Compare, Alloc>& rhs)
 	{ return lhs.tree == rhs.tree; }
 	//(2)
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator!=(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	template <class T, class Compare, class Alloc>
+	bool operator!=(const set<T, Compare, Alloc>& lhs, const set<T, Compare, Alloc>& rhs)
 	{ return !(lhs == rhs); }
 	//(3)
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator<(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	template <class T, class Compare, class Alloc>
+	bool operator<(const set<T, Compare, Alloc>& lhs, const set<T, Compare, Alloc>& rhs)
 	{ return lhs.tree < rhs.tree; }
 	//(4)
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator<=(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	template <class T, class Compare, class Alloc>
+	bool operator<=(const set<T, Compare, Alloc>& lhs, const set<T, Compare, Alloc>& rhs)
 	{ return !(rhs < lhs); }
 	//(5)
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator>(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	template <class T, class Compare, class Alloc>
+	bool operator>(const set<T, Compare, Alloc>& lhs, const set<T, Compare, Alloc>& rhs)
 	{ return rhs < lhs; }
 	//(6)
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator>=(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+	template <class T, class Compare, class Alloc>
+	bool operator>=(const set<T, Compare, Alloc>& lhs, const set<T, Compare, Alloc>& rhs)
 	{ return !(lhs < rhs); }
 
-	template <class Key, class T, class Compare, class Alloc>
-  	void swap(map<Key, T, Compare, Alloc>& x, map<Key, T, Compare, Alloc>& y)
+	template <class T, class Compare, class Alloc>
+  	void swap(set<T, Compare, Alloc>& x, set<T, Compare, Alloc>& y)
 	{ x.swap(y); }
-*/
 
 } // end namespace ft 
 
