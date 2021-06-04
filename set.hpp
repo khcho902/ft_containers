@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/04 21:35:13 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/04 23:12:56 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/05 01:06:10 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ namespace ft
 		typedef typename _key_alloc_type::pointer				pointer;
 		typedef typename _key_alloc_type::const_pointer			const_pointer;
 
-		typedef typename _rb_tree_type::iterator				iterator;
+		typedef typename _rb_tree_type::const_iterator			iterator;
 		typedef typename _rb_tree_type::const_iterator			const_iterator;
-		typedef typename _rb_tree_type::reverse_iterator		reverse_iterator;
+		typedef typename _rb_tree_type::const_reverse_iterator	reverse_iterator;
 		typedef typename _rb_tree_type::const_reverse_iterator	const_reverse_iterator;
 		typedef typename _rb_tree_type::difference_type			difference_type;
         typedef typename _rb_tree_type::size_type				size_type;
@@ -101,7 +101,10 @@ namespace ft
 	// ########## Modifiers: ##########
 		//single element (1)
 		std::pair<iterator,bool> insert(const value_type& val)
-		{ return tree.insert_unique(val); }
+		{
+			std::pair<typename _rb_tree_type::iterator, bool> p = tree.insert_unique(val);
+			return std::pair<iterator, bool>(p.first, p.second);;
+		}
 		//with hint (2)
 		iterator insert(iterator position, const value_type& val)
 		{ return tree.insert_unique_(position, val); }
