@@ -1,32 +1,17 @@
-#include <iostream>
-#include <cmath>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test_list.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/05 20:09:19 by kycho             #+#    #+#             */
+/*   Updated: 2021/06/06 02:00:53 by kycho            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// #include <list>
-// #include <vector>
-// #include <map>
-// #include <stack>
-// #include <queue>
+#include "test.hpp"
 
-// #define LIST std::list
-// #define VECTOR std::vector
-// #define MAP std::map
-// #define STACK std::stack
-// #define QUEUE std::queue
-
-
-#include "list.hpp"
-#include "vector.hpp"
-#include "map.hpp"
-#include "stack.hpp"
-#include "queue.hpp"
-
-#define LIST ft::list
-#define VECTOR ft::vector
-#define MAP ft::map
-#define STACK ft::stack
-#define QUEUE ft::queue
-
-// ===== for list remove_if start =====
 // a predicate implemented as a function:
 bool single_digit(const int &value) { return (value < 10); }
 
@@ -35,10 +20,7 @@ struct is_odd
 {
     bool operator()(const int &value) { return (value % 2) == 1; }
 };
-// ===== for list remove_if end =====
 
-
-// ===== for list unique start =====
 // a binary predicate implemented as a function:
 bool same_integral_part(double first, double second)
 {
@@ -53,17 +35,13 @@ struct is_near
         return (fabs(first - second) < 5.0);
     }
 };
-// ===== for list unique end =====
 
-// ===== for list merge start =====
 // compare only integral part:
 bool mycomparison(double first, double second)
 {
     return (int(first) < int(second));
 }
-// ===== for list merge end =====
 
-// ===== for list sort start =====
 // comparison, not case sensitive.
 bool compare_nocase(const std::string &first, const std::string &second)
 {
@@ -78,13 +56,10 @@ bool compare_nocase(const std::string &first, const std::string &second)
     }
     return (first.length() < second.length());
 }
-// ===== for list sort end =====
 
-int main ()
+void test_list(void)
 {
-
-// ## List ##
-    std::cout << "     <<< List test start >>>" << std::endl;
+	std::cout << "     <<< List test start >>>" << std::endl;
 
     // (constructor)
     std::cout << "----- constructor test -----" << std::endl;
@@ -349,22 +324,22 @@ int main ()
 
         // set some initial values:
         for (int i = 1; i <= 5; ++i)
-            mylist.push_back(i); // 1 2 3 4 5
+            mylist.push_back(i);                // 1 2 3 4 5
 
         it = mylist.begin();
-        ++it; // it points now to number 2           ^
+        ++it;       // it points now to number 2     ^
 
-        mylist.insert(it, 10); // 1 10 2 3 4 5
+        mylist.insert(it, 10);                  // 1 10 2 3 4 5
 
-        // "it" still points to number 2                      ^
-        mylist.insert(it, 2, 20); // 1 10 20 20 2 3 4 5
+        // "it" still points to number 2                ^
+        mylist.insert(it, 2, 20);               // 1 10 20 20 2 3 4 5
 
-        --it; // it points now to the second 20            ^
+        --it; // it points now to the second 20             ^
 
         VECTOR<int> myvector(2, 30);
         mylist.insert(it, myvector.begin(), myvector.end());
-        // 1 10 20 30 30 20 2 3 4 5
-        //               ^
+                                                // 1 10 20 30 30 20 2 3 4 5
+                                                //               ^
         std::cout << "mylist contains:";
         for (it = mylist.begin(); it != mylist.end(); ++it)
             std::cout << ' ' << *it;
@@ -395,8 +370,8 @@ int main ()
         ++it1;                      //       ^        ^
         --it2;                      //       ^     ^
 
-        mylist.erase(it1, it2); // 10 30 60 80 90
-                                //        ^
+        mylist.erase(it1, it2);     // 10 30 60 80 90
+                                    //        ^
 
         std::cout << "mylist contains:";
         for (it1 = mylist.begin(); it1 != mylist.end(); ++it1)
@@ -686,30 +661,4 @@ int main ()
     }
 
     std::cout << "     <<< List test end >>>" << std::endl;
-
-
-
-
-// ## Vector ##
-    std::cout << "     <<< Vector test start >>>" << std::endl;
-    std::cout << "     <<< Vector test end >>>" << std::endl;
-
-
-// ## Map ##
-    std::cout << "     <<< Map test start >>>" << std::endl;
-    std::cout << "     <<< Map test end >>>" << std::endl;
-
-
-// ## Stack ##
-    std::cout << "     <<< Stack test start >>>" << std::endl;
-    std::cout << "     <<< Stack test end >>>" << std::endl;
-
-
-// ## Queue ##
-    std::cout << "     <<< Queue test start >>>" << std::endl;
-    std::cout << "     <<< Queue test end >>>" << std::endl;
-
-  
-
-  return 0;
 }

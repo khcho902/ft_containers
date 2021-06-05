@@ -1,0 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/06 01:51:52 by kycho             #+#    #+#             */
+/*   Updated: 2021/06/06 01:52:51 by kycho            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef TEST_HPP
+# define TEST_HPP
+
+# include <iostream>
+# include <cmath>
+
+#ifdef STD
+
+# include <list>
+# include <vector>
+# include <map>
+# include <stack>
+# include <queue> 
+
+# define LIST std::list
+# define VECTOR std::vector
+# define MAP std::map
+# define STACK std::stack
+# define QUEUE std::queue
+
+#else
+
+# include "../list.hpp"
+# include "../vector.hpp"
+# include "../map.hpp"
+# include "../stack.hpp"
+# include "../queue.hpp"
+
+# define LIST ft::list
+# define VECTOR ft::vector
+# define MAP ft::map
+# define STACK ft::stack
+# define QUEUE ft::queue
+
+#endif
+
+
+void test_list(void);
+
+#endif
