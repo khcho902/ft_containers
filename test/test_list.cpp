@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 20:09:19 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 02:00:53 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 02:08:37 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -641,7 +641,7 @@ void test_list(void)
             std::cout << "a is greater than or equal to b\n";
     }
 
-    // swap (list)
+    // swap (non-member)
     std::cout << "\n----- swap (list) -----" << std::endl;
     {
         LIST<int> foo(3, 100); // three ints with a value of 100

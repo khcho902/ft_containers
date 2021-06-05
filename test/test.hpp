@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 01:51:52 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 01:52:51 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 14:55:21 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,42 @@
 # include <iostream>
 # include <cmath>
 
-#ifdef STD
+# ifdef STD
 
-# include <list>
-# include <vector>
-# include <map>
-# include <stack>
-# include <queue> 
+#  include <list>
+#  include <vector>
+#  include <map>
+#  include <stack>
+#  include <queue> 
 
-# define LIST std::list
-# define VECTOR std::vector
-# define MAP std::map
-# define STACK std::stack
-# define QUEUE std::queue
+#  define LIST std::list
+#  define VECTOR std::vector
+#  define MAP std::map
+#  define STACK std::stack
+#  define QUEUE std::queue
 
-#else
+#  define MSG " ** std containers result! ** "
 
-# include "../list.hpp"
-# include "../vector.hpp"
-# include "../map.hpp"
-# include "../stack.hpp"
-# include "../queue.hpp"
+# else
 
-# define LIST ft::list
-# define VECTOR ft::vector
-# define MAP ft::map
-# define STACK ft::stack
-# define QUEUE ft::queue
+#  include "../list.hpp"
+#  include "../vector.hpp"
+#  include "../map.hpp"
+#  include "../stack.hpp"
+#  include "../queue.hpp"
 
-#endif
+#  define LIST ft::list
+#  define VECTOR ft::vector
+#  define MAP ft::map
+#  define STACK ft::stack
+#  define QUEUE ft::queue
 
+#  define MSG " ** my containers result! ** "
+
+# endif
 
 void test_list(void);
+void test_vector(void);
+void test_map(void);
 
 #endif
