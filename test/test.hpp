@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 01:51:52 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 21:50:27 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:52:57 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ void test_stack(void);
 void test_queue(void);
 void test_set(void);
 void test_multimap(void);
+void test_multiset(void);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 15:17:25 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 15:40:16 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:56:29 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void test_stack(void)
 	std::cout << "     <<< Stack test start >>>" << std::endl;
 
 	// (constructor)
-	std::cout << "----- constructor test -----" << std::endl;
+	std::cout << "----- constructor -----" << std::endl;
 	{
 		LIST<int> mylist(3, 100);   // list with 3 elements
 		VECTOR<int> myvector(2, 200); // vector with 2 elements

@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:40:38 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 19:06:46 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:56:11 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void test_map(void)
 	std::cout << "     <<< Map test start >>>" << std::endl;
 
 	// (constructor)
-	std::cout << "----- constructor test -----" << std::endl;
+	std::cout << "----- constructor -----" << std::endl;
 	{
 		MAP<char, int> first;
 

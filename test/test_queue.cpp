@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 16:24:27 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 16:33:00 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:56:21 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void test_queue(void)
 	std::cout << "     <<< Queue test start >>>" << std::endl;
 
 	// (constructor)
-	std::cout << "----- constructor test -----" << std::endl;
+	std::cout << "----- constructor -----" << std::endl;
 	{
 		LIST<int> mylist(2, 200);	// list with 2 elements
 

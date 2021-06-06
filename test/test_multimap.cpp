@@ -6,13 +6,13 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 20:06:16 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 20:22:25 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:55:46 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "test.hpp"
 
-bool multi_fncomp(char lhs, char rhs) { return lhs < rhs; }
+bool multimap_fncomp(char lhs, char rhs) { return lhs < rhs; }
 
 struct classcomp
 {
@@ -27,7 +27,7 @@ void test_multimap(void)
 	std::cout << "     <<< Multimap test start >>>" << std::endl;
 
 	// (constructor)
-	std::cout << "----- constructor test -----" << std::endl;
+	std::cout << "----- constructor -----" << std::endl;
 	{
 		MULTIMAP<char, int> first;
 
@@ -42,7 +42,7 @@ void test_multimap(void)
 
 		MULTIMAP<char, int, classcomp> fourth; // class as Compare
 
-		bool (*fn_pt)(char, char) = multi_fncomp;
+		bool (*fn_pt)(char, char) = multimap_fncomp;
 		MULTIMAP<char, int, bool (*)(char, char)> fifth(fn_pt); // function pointer as comp
 	}
 

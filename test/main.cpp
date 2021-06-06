@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 21:43:55 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 20:05:34 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:53:08 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ int main (void)
     // ## Multimap ##
     test_multimap();
     std::cout << "\n\n";
+
+    // ## Multiset ##
+    test_multiset();
+    std::cout << "\n";
 
   return 0;
 }

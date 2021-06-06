@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 20:09:19 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 02:08:37 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:56:01 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void test_list(void)
 	std::cout << "     <<< List test start >>>" << std::endl;
 
     // (constructor)
-    std::cout << "----- constructor test -----" << std::endl;
+    std::cout << "----- constructor -----" << std::endl;
     {
         // constructors used in the same order as described above:
         LIST<int> first;                               // empty list of ints

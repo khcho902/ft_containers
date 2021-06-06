@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 02:03:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 02:29:09 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:56:32 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void test_vector(void)
 	std::cout << "     <<< Vector test start >>>" << std::endl;
 
 	// (constructor)
-	std::cout << "----- constructor test -----" << std::endl;
+	std::cout << "----- constructor -----" << std::endl;
 	{
 		// constructors used in the same order as described above:
 		VECTOR<int> first;									// empty vector of ints

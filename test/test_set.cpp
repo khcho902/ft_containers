@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 17:33:28 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 18:58:47 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:56:25 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void test_set(void)
 	std::cout << "     <<< Set test start >>>" << std::endl;
 
 	// (constructor)
-	std::cout << "----- constructor test -----" << std::endl;
+	std::cout << "----- constructor -----" << std::endl;
 	{
 		SET<int> first; // empty set of ints
 

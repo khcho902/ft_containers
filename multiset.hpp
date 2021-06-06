@@ -6,12 +6,12 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 21:18:12 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 21:49:08 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 22:10:03 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SET_HPP
-# define SET_HPP
+#ifndef MULTISET_HPP
+# define MULTISET_HPP
 
 # include <memory>
 # include <utility>
