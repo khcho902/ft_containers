@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 02:03:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 21:56:32 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/07 00:32:49 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,15 +323,27 @@ void test_vector(void)
 	std::cout << "\n----- push_back -----" << std::endl;
 	{
 		VECTOR<int> myvector;
+
+		/*
 		int myint;
-
 		std::cout << "Please enter some integers (enter 0 to end):\n";
-
 		do
 		{
 			std::cin >> myint;
 			myvector.push_back(myint);
 		} while (myint);
+		*/
+		
+		myvector.push_back(1);
+		myvector.push_back(2);
+		myvector.push_back(3);
+		myvector.push_back(4);
+		myvector.push_back(5);
+		myvector.push_back(6);
+		myvector.push_back(7);
+		myvector.push_back(8);
+		myvector.push_back(9);
+		myvector.push_back(10);
 
 		std::cout << "myvector stores " << int(myvector.size()) << " numbers.\n";
 	}
@@ -340,17 +352,18 @@ void test_vector(void)
 	std::cout << "\n----- pop_back -----" << std::endl;
 	{
 		VECTOR<int> myvector;
-		int myint;
+		int sum(0);
+		myvector.push_back(100);
+		myvector.push_back(200);
+		myvector.push_back(300);
 
-		std::cout << "Please enter some integers (enter 0 to end):\n";
-
-		do
+		while (!myvector.empty())
 		{
-			std::cin >> myint;
-			myvector.push_back(myint);
-		} while (myint);
+			sum += myvector.back();
+			myvector.pop_back();
+		}
 
-		std::cout << "myvector stores " << int(myvector.size()) << " numbers.\n";
+		std::cout << "The elements of myvector add up to " << sum << '\n';
 	}
 
 	// insert

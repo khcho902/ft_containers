@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 16:24:27 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 21:56:21 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/07 00:33:03 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,9 @@ void test_queue(void)
 	std::cout << "\n----- push/pop -----" << std::endl;
 	{
 		QUEUE<int> myqueue;
-		int myint;
 
+		/*
+		int myint;
 		std::cout << "Please enter some integers (enter 0 to end):\n";
 
 		do
@@ -102,6 +103,18 @@ void test_queue(void)
 			std::cin >> myint;
 			myqueue.push(myint);
 		} while (myint);
+		*/
+
+		myqueue.push(1);
+		myqueue.push(2);
+		myqueue.push(3);
+		myqueue.push(4);
+		myqueue.push(5);
+		myqueue.push(6);
+		myqueue.push(7);
+		myqueue.push(8);
+		myqueue.push(9);
+		myqueue.push(10);
 
 		std::cout << "myqueue contains: ";
 		while (!myqueue.empty())

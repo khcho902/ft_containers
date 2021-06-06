@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 20:09:19 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 21:56:01 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/07 00:32:29 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,9 @@ void test_list(void)
         unsigned int i;
         LIST<int> mylist;
 
-        std::cout << "Enter number of elements: ";
-        std::cin >> i;
+        // std::cout << "Enter number of elements: ";
+        // std::cin >> i;
+        i = 100;
 
         if (i < mylist.max_size())
             mylist.resize(i);
@@ -285,15 +286,27 @@ void test_list(void)
     std::cout << "\n----- push_back -----" << std::endl;
     {
         LIST<int> mylist;
+
+        /*
         int myint;
-
         std::cout << "Please enter some integers (enter 0 to end):\n";
-
         do
         {
             std::cin >> myint;
             mylist.push_back(myint);
         } while (myint);
+        */
+
+        mylist.push_back(1);
+        mylist.push_back(2);
+        mylist.push_back(3);
+        mylist.push_back(4);
+        mylist.push_back(5);
+        mylist.push_back(6);
+        mylist.push_back(7);
+        mylist.push_back(8);
+        mylist.push_back(9);
+        mylist.push_back(10);
 
         std::cout << "mylist stores " << mylist.size() << " numbers.\n";
     }
