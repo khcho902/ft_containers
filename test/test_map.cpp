@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:40:38 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 14:55:00 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 15:22:39 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -437,6 +437,30 @@ void test_map(void)
 		std::cout << "upper bound points to: ";
 		std::cout << ret.second->first << " => " << ret.second->second << '\n';
 	}
-	
+
+	// relational operators
+	std::cout << "\n----- relational operators -----" << std::endl;
+	{
+		MAP<char, int> foo, bar;
+		foo['a'] = 100;
+		foo['b'] = 200;
+		bar['a'] = 10;
+		bar['z'] = 1000;
+
+		// foo ({{a,100},{b,200}}) vs bar ({a,10},{z,1000}}):
+		if (foo == bar)
+			std::cout << "foo and bar are equal\n";
+		if (foo != bar)
+			std::cout << "foo and bar are not equal\n";
+		if (foo < bar)
+			std::cout << "foo is less than bar\n";
+		if (foo > bar)
+			std::cout << "foo is greater than bar\n";
+		if (foo <= bar)
+			std::cout << "foo is less than or equal to bar\n";
+		if (foo >= bar)
+			std::cout << "foo is greater than or equal to bar\n";
+	}
+
     std::cout << "     <<< Map test end >>>" << std::endl;
 }

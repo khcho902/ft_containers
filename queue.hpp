@@ -6,19 +6,19 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 09:45:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/01 09:52:48 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 15:30:09 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef QUEUE_HPP
 # define QUEUE_HPP
 
-#include <deque>  // TODO : 교체해야함
+#include "list.hpp"
 
 namespace ft
 {
 	// ############## queue class ##############################################
-	template <class T, class Container = std::deque<T> >
+	template <class T, class Container = ft::list<T> >
 	class queue
 	{
 	public:

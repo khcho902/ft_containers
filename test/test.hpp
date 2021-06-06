@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 01:51:52 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 14:55:21 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 15:16:57 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,6 @@
 void test_list(void);
 void test_vector(void);
 void test_map(void);
+void test_stack(void);
 
 #endif

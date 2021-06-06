@@ -6,19 +6,19 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 20:47:21 by kycho             #+#    #+#             */
-/*   Updated: 2021/05/31 22:39:08 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 15:30:28 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STACK_HPP
 # define STACK_HPP
 
-#include <deque>  // TODO : 교체해야함
+#include "list.hpp"
 
 namespace ft
 {
 	// ############## stack class ##############################################
-	template <class T, class Container = std::deque<T> >
+	template <class T, class Container = ft::list<T> >
 	class stack
 	{
 	public:
