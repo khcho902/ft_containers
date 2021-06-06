@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 20:02:03 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 20:20:16 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1176,7 +1176,7 @@ namespace ft
         void insert_equal(InputIterator first, InputIterator last)
         {
             for (; first != last; first++)
-                insert_equal(end(), *first);
+                insert_equal_(end(), *first);
         }
         
         
