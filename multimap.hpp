@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 19:15:23 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 19:55:21 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:23:18 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ namespace ft
 		//range (3)
 		template <class InputIterator>
 		void insert(InputIterator first, InputIterator last)
-		{ return tree.insert_equal(first, last); }
+		{ tree.insert_equal(first, last); }
 		
 		//(1)
 		void erase(iterator position)

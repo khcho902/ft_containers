@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/04 21:35:13 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/05 01:59:45 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:24:42 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 namespace ft
 {
 	// ############## set class ################################################
-	template < class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
+	template <class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
 	class set
     {
 	public:
@@ -111,17 +111,17 @@ namespace ft
 		//range (3)
 		template <class InputIterator>
   		void insert(InputIterator first, InputIterator last)
-		{ return tree.insert_unique(first, last); }
+		{ tree.insert_unique(first, last); }
 		
   		//(1)
      	void erase(iterator position)
-		{ return tree.erase(position); }
+		{ tree.erase(position); }
 		//(2)
 		size_type erase(const value_type& val)
 		{ return tree.erase(val); }
 		//(3)
      	void erase(iterator first, iterator last)
-		{ return tree.erase(first, last); }
+		{ tree.erase(first, last); }
 		
 		void swap(set& x)
 		{ tree.swap(x.tree); }
