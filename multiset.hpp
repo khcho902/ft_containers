@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 21:18:12 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 21:28:24 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:49:08 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,30 +53,104 @@ namespace ft
         typedef typename _rb_tree_type::size_type				size_type;
 
 	// ########## (constructor) ##########
-
+		//empty (1)
+		explicit multiset(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+			: tree(comp, alloc)
+		{}
+		//range (2)
+		template <class InputIterator>
+		multiset(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+			: tree(comp, alloc)
+		{ tree.insert_equal(first, last); }
+		//copy (3)
+		multiset(const multiset& x)
+			: tree(x.tree)
+		{}
+		
 	// ########## (destructor) ##########
+		~multiset() {}
 
 	// ########## operator= ##########
+		//copy (1)	
+		multiset& operator= (const multiset& x)
+		{
+			tree = x.tree;
+			return *this;
+		}
 
 	// ########## Iterators: ##########
+		iterator begin() { return tree.begin(); }
+		const_iterator begin() const { return tree.begin(); }
+
+		iterator end() { return tree.end(); }
+		const_iterator end() const { return tree.end(); }
+
+		reverse_iterator rbegin() { return tree.rbegin(); }
+		const_reverse_iterator rbegin() const { return tree.rbegin(); }
+		
+		reverse_iterator rend() { return tree.rend(); }
+		const_reverse_iterator rend() const { return tree.rend(); }
 
 	// ########## Capacity: ##########
+		bool empty() const { return tree.empty(); }
+		size_type size() const { return tree.size(); }
+		size_type max_size() const { return tree.max_size(); }
 
 	// ########## Modifiers: ##########
+		//single element (1)
+		iterator insert(const value_type& val)
+		{ return tree.insert_equal(val); }
+		//with hint (2)
+		iterator insert(iterator position, const value_type& val)
+		{ return tree.insert_equal_(position, val); }
+		//range (3)
+		template <class InputIterator>
+		void insert(InputIterator first, InputIterator last)
+		{ tree.insert_equal(first, last); }
 
+		//(1)
+		void erase(iterator position)
+		{ tree.erase(position); }
+		//(2)
+		size_type erase(const value_type& val)
+		{ return tree.erase(val); }
+		//(3)
+		void erase(iterator first, iterator last)
+		{ tree.erase(first, last); }
+
+		void swap(multiset& x)
+		{ tree.swap(x.tree); }
+
+		void clear()
+		{ tree.clear(); }
 
 	// ########## Observers: ##########
-
+		key_compare key_comp() const
+		{ return tree.key_comp(); }
+		value_compare value_comp() const
+		{ return tree.key_comp(); }
 
 	// ########## Operations: ##########
+		iterator find(const value_type& val) const
+		{ return tree.find(val); }
+		
+		size_type count(const value_type& val) const
+		{ return tree.count(val); }
+		
+		iterator lower_bound(const value_type& val) const
+		{ return tree.lower_bound(val); }
+		
+		iterator upper_bound(const value_type& val) const
+		{ return tree.upper_bound(val); }
 
+		std::pair<iterator,iterator> equal_range(const value_type& val) const
+		{ return tree.equal_range(val); }
 
 	// ########## Allocator: ##########
 		/*
 		allocator_type get_allocator() const;
 		*/
 	
-		/*
 		template <class _T, class _Compare, class _Alloc>
 		friend bool operator==(const multiset<_T, _Compare, _Alloc>& lhs,
 							const multiset<_T, _Compare, _Alloc>& rhs);
@@ -84,11 +158,9 @@ namespace ft
 		template <class _T, class _Compare, class _Alloc>
 		friend bool operator<(const multiset<_T, _Compare, _Alloc>& lhs,
 							const multiset<_T, _Compare, _Alloc>& rhs);
-		*/
 	};
 
 // ########## Non-member function overloads ##########
-	/*
 	//(1)
 	template <class T, class Compare, class Alloc>
 	bool operator==(const multiset<T, Compare, Alloc>& lhs, const multiset<T, Compare, Alloc>& rhs)
@@ -117,7 +189,6 @@ namespace ft
 	template <class T, class Compare, class Alloc>
   	void swap(multiset<T, Compare, Alloc>& x, multiset<T, Compare, Alloc>& y)
 	{ x.swap(y); }
-	*/
 
 } // end namespace ft 
 

@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 01:51:52 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 20:24:08 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 21:50:27 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 #  define QUEUE std::queue
 #  define SET std::set
 #  define MULTIMAP std::multimap
+#  define MULTISET std::multiset
 
 #  define MSG " ** std containers result! ** "
 
@@ -44,6 +45,7 @@
 #  include "../queue.hpp"
 #  include "../set.hpp"
 #  include "../multimap.hpp"
+#  include "../multiset.hpp"
 
 #  define LIST ft::list
 #  define VECTOR ft::vector
@@ -52,6 +54,7 @@
 #  define QUEUE ft::queue
 #  define SET ft::set
 #  define MULTIMAP ft::multimap
+#  define MULTISET ft::multiset
 
 #  define MSG " ** my containers result! ** "
 
