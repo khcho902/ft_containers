@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 17:23:17 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 20:02:03 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1117,7 +1117,7 @@ namespace ft
         }
 
         
-        iterator _insert_equal(const value_type& val)
+        iterator insert_equal(const value_type& val)
         {
             _Node* x = this->_begin();
             _Node* y = this->_end();
@@ -1130,14 +1130,14 @@ namespace ft
             return _insert_(x, y, val);
         }
 
-        iterator _insert_equal_(const_iterator position, const value_type& val)
+        iterator insert_equal_(const_iterator position, const value_type& val)
         {
             if (position.node_ptr == _end())
             {
                 if (size() > 0 && !this->key_compare(KeyOfValue()(val), _s_key(_rightmost())))
                     return _insert_(0, _rightmost(), val);
                 else
-                    return _insert_equal(val);
+                    return insert_equal(val);
 
             }
             else if (!this->key_compare(_s_key(position.node_ptr), KeyOfValue()(val)))
@@ -1153,7 +1153,7 @@ namespace ft
                         return _insert_(position.node_ptr, position.node_ptr, val);
                 }
                 else
-                    return _insert_equal(val);
+                    return insert_equal(val);
             }
             else
             {
@@ -1173,10 +1173,10 @@ namespace ft
         }
 
         template<typename InputIterator>
-        void _insert_equal(InputIterator first, InputIterator last)
+        void insert_equal(InputIterator first, InputIterator last)
         {
             for (; first != last; first++)
-                _insert_equal(end(), *first);
+                insert_equal(end(), *first);
         }
         
         
@@ -1232,10 +1232,19 @@ namespace ft
             return (j == end() || key_compare(k, _s_key(j.node_ptr))) ? end() : j;
         }
 
-        /*  TODO : 구현해야함
-        size_type
-        count(const key_type& __k) const;  // 필요(multimap)
-        */
+        size_type count(const key_type& k) const
+        {
+            std::pair<const_iterator, const_iterator> p = equal_range(k);
+        
+            size_type n = 0;
+            while (p.first != p.second)
+            {
+                p.first++;
+                n++;
+            }
+            
+            return n;
+        }
 
         iterator lower_bound(const key_type& k)
         { return _lower_bound(_begin(), _end(), k); }
