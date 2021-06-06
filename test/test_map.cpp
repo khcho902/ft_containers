@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:40:38 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 15:22:39 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 19:06:46 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -460,6 +460,29 @@ void test_map(void)
 			std::cout << "foo is less than or equal to bar\n";
 		if (foo >= bar)
 			std::cout << "foo is greater than or equal to bar\n";
+	}
+
+	// swap (non-member)
+	std::cout << "\n----- swap (non-member) -----" << std::endl;
+	{
+		MAP<char, int> foo, bar;
+
+		foo['x'] = 100;
+		foo['y'] = 200;
+
+		bar['a'] = 11;
+		bar['b'] = 22;
+		bar['c'] = 33;
+
+		swap(foo, bar);
+
+		std::cout << "foo contains:\n";
+		for (MAP<char, int>::iterator it = foo.begin(); it != foo.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
+
+		std::cout << "bar contains:\n";
+		for (MAP<char, int>::iterator it = bar.begin(); it != bar.end(); ++it)
+			std::cout << it->first << " => " << it->second << '\n';
 	}
 
     std::cout << "     <<< Map test end >>>" << std::endl;

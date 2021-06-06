@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 01:51:52 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 16:24:08 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 17:33:13 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,15 @@
 #  include <vector>
 #  include <map>
 #  include <stack>
-#  include <queue> 
+#  include <queue>
+#  include <set> 
 
 #  define LIST std::list
 #  define VECTOR std::vector
 #  define MAP std::map
 #  define STACK std::stack
 #  define QUEUE std::queue
+#  define SET std::set
 
 #  define MSG " ** std containers result! ** "
 
@@ -39,12 +41,14 @@
 #  include "../map.hpp"
 #  include "../stack.hpp"
 #  include "../queue.hpp"
+#  include "../set.hpp"
 
 #  define LIST ft::list
 #  define VECTOR ft::vector
 #  define MAP ft::map
 #  define STACK ft::stack
 #  define QUEUE ft::queue
+#  define SET ft::set
 
 #  define MSG " ** my containers result! ** "
 
@@ -55,5 +59,6 @@ void test_vector(void);
 void test_map(void);
 void test_stack(void);
 void test_queue(void);
+void test_set(void);
 
 #endif
