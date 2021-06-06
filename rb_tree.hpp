@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/06 01:45:54 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/06 17:23:17 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -715,16 +715,42 @@ namespace ft
 		}
 
 
-        iterator _insert_(const _rb_tree_node_base* x, const _rb_tree_node_base* p, const value_type& v)
+        iterator _insert_(const _rb_tree_node_base* x, const _rb_tree_node_base* p, const value_type& val)
         {
-            bool is_insert_left = (x != 0 || p == _end() || key_compare(KeyOfValue()(v), _s_key(p)));
+            bool is_insert_left = (x != 0 || p == _end() || key_compare(KeyOfValue()(val), _s_key(p)));
 
-            _Node* z = _create_node(v);
+            _Node* z = _create_node(val);
 
             _rb_tree_insert_and_rebalance(is_insert_left, z, const_cast<_rb_tree_node_base*>(p), this->header);
 
             this->node_count++;
             return iterator(z);
+        }
+        
+        iterator _insert_lower(_rb_tree_node_base* x, _rb_tree_node_base* p, const value_type& val)
+        {
+            bool is_insert_left = (x != 0 || p == _end() || !this->key_compare(_s_key(p), KeyOfValue()(val)));
+
+            _Node* z = _create_node(val);
+
+            _rb_tree_insert_and_rebalance(is_insert_left, z, p, this->header);
+
+            ++this->node_count;
+            return iterator(z);
+        }
+        
+        iterator _insert_equal_lower(const value_type& val)
+        {
+            _Node* x = _begin();
+            _Node* y = _end();
+
+            while (x != 0)
+            {
+                y = x;
+                x = !this->key_compare(_s_key(x), KeyOfValue()(val)) ? _s_left(x) : _s_right(x);
+            }
+
+            return _insert_lower(x, y, val);
         }
 
         _Node* _copy(const _Node* x, _Node* p)
@@ -1090,14 +1116,69 @@ namespace ft
             }
         }
 
-        /* TODO : 해야함 
-        iterator _M_insert_equal(const value_type& __x);
+        
+        iterator _insert_equal(const value_type& val)
+        {
+            _Node* x = this->_begin();
+            _Node* y = this->_end();
 
-        iterator _M_insert_equal_(const_iterator __position, const value_type& __x);
+            while (x != 0)
+            {
+                y = x;
+                x = this->key_compare(KeyOfValue()(val), _s_key(x)) ? _s_left(x) : _s_right(x);
+            }
+            return _insert_(x, y, val);
+        }
 
-        template<typename _InputIterator>
-        void _M_insert_equal(_InputIterator __first, _InputIterator __last);
-        */
+        iterator _insert_equal_(const_iterator position, const value_type& val)
+        {
+            if (position.node_ptr == _end())
+            {
+                if (size() > 0 && !this->key_compare(KeyOfValue()(val), _s_key(_rightmost())))
+                    return _insert_(0, _rightmost(), val);
+                else
+                    return _insert_equal(val);
+
+            }
+            else if (!this->key_compare(_s_key(position.node_ptr), KeyOfValue()(val)))
+            {
+                const_iterator before = position;
+                if (position.node_ptr == _leftmost())
+                    return _insert_(_leftmost(), _leftmost(), val);
+                else if (!this->key_compare(KeyOfValue()(val), _s_key((--before).node_ptr)))
+                {
+                    if (_s_right(before.node_ptr) == 0)
+                        return _insert_(0, before.node_ptr, val);
+                    else
+                        return _insert_(position.node_ptr, position.node_ptr, val);
+                }
+                else
+                    return _insert_equal(val);
+            }
+            else
+            {
+                const_iterator after = position;
+                if (position.node_ptr == _rightmost())
+                    return _insert_(0, _rightmost(), val);
+                else if (!this->key_compare(_s_key((++after).node_ptr), KeyOfValue()(val)))
+                {
+                    if (_s_right(position.node_ptr) == 0)
+                        return _insert_(0, position.node_ptr, val);
+                    else
+                        return _insert_(after.node_ptr, after.node_ptr, val);
+                }
+                else
+                    return _insert_equal_lower(val);
+            }
+        }
+
+        template<typename InputIterator>
+        void _insert_equal(InputIterator first, InputIterator last)
+        {
+            for (; first != last; first++)
+                _insert_equal(end(), *first);
+        }
+        
         
         void erase(iterator position)     // 필요(map) 필요(set)
         { _erase_aux(position); }
