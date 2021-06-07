@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/03 16:10:24 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/07 10:38:31 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/07 10:46:42 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ namespace ft
                 y.next = y.prev = &y;
             }
         }
-
-        // [first, last) 를 this앞으로 이동 시킨다. 
+        
         void _transfer(_list_node_base* const first, _list_node_base* const last)
         {
             if (this != last)
@@ -123,7 +122,6 @@ namespace ft
             return static_cast<_Node*>(node_ptr)->data;
         }
         
-        // TODO : __addressof 사용하는거 확인해봐야함 
         pointer operator->() const
         {
             return std::addressof(static_cast<_Node*>(node_ptr)->data);
@@ -183,7 +181,7 @@ namespace ft
         const _list_node_base* node_ptr;
 
         _list_const_iterator() : node_ptr() {}
-        explicit _list_const_iterator(const _list_node_base* _x) : node_ptr(_x) {}  // TODO : 왜 explicit 붙이는거지 ??
+        explicit _list_const_iterator(const _list_node_base* _x) : node_ptr(_x) {}
         _list_const_iterator(const iterator& _x) : node_ptr(_x.node_ptr) {}
         
         reference operator*() const
@@ -191,7 +189,6 @@ namespace ft
             return static_cast<_Node*>(node_ptr)->data;
         }
         
-        // TODO : __addressof 사용하는거 확인해봐야함 
         pointer operator->() const
         {
             return std::addressof(static_cast<_Node*>(node_ptr)->data);
@@ -264,9 +261,7 @@ namespace ft
         typedef ft::reverse_iterator<iterator>              reverse_iterator;
         typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
 
-        // iterator_traits<iterator>::difference_type
         typedef ptrdiff_t                                   difference_type;
-        //an unsigned integral type that can represent any non-negative value of difference_type
         typedef size_t                                      size_type;
     
 
@@ -278,7 +273,6 @@ namespace ft
         _node_alloc_type    node_allocator;
         _list_node_base     sentry_node;
 
-        // TODO : 제대로 된건지 테스트필요 
         _Node* _create_node(const value_type& val)
         {
             _Node* _p = node_allocator.allocate(1);
@@ -373,7 +367,6 @@ namespace ft
                 insert(end_i, first, last);
         }
 
-
     public:
     // ########## (constructor) ##########
         //default (1)	
@@ -462,12 +455,6 @@ namespace ft
         template <class Compare>
         void sort(Compare comp);
         void reverse();
-
-    /*
-    // ########## Allocator: ##########
-        allocator_type get_allocator() const;
-    */
-    
     };
 
     // ########## (constructor) ##########
@@ -591,8 +578,7 @@ namespace ft
     {
         return this->sentry_node.next == &(this->sentry_node);
     }
-    
-    // TODO : distance를 사용하는 방법으로 개선
+
     template <class T, class Alloc>
     typename list<T, Alloc>::size_type list<T, Alloc>::size() const
     {
@@ -735,7 +721,6 @@ namespace ft
     {
         _list_node_base::swap(sentry_node, x.sentry_node);
         
-        // TODO : 확인필요
         _node_alloc_type tmp = this->node_allocator;
         this->node_allocator = x.node_allocator;
         x.node_allocator = tmp;
@@ -780,7 +765,7 @@ namespace ft
     template <class T, class Alloc>
     void list<T, Alloc>::splice(iterator position, list& x, iterator i)
     {
-        if ((void *)&x == NULL) // TODO : x 사용안해서 일단 넣음 
+        if ((void *)&x == NULL)
             return ;
         iterator j = i;
         ++j;
@@ -792,7 +777,7 @@ namespace ft
     template <class T, class Alloc>
     void list<T, Alloc>::splice(iterator position, list& x, iterator first, iterator last)
     {
-        if ((void *)&x == NULL) // TODO : x 사용안해서 일단 넣음 
+        if ((void *)&x == NULL)
             return ;
         if (first == last)
             return;
@@ -946,7 +931,6 @@ namespace ft
     template <class T, class Alloc>
     void list<T, Alloc>::sort()
     {
-        // Do nothing if the list has length 0 or 1.
         if (this->sentry_node.next != &this->sentry_node && this->sentry_node.next->next != &this->sentry_node)
         {
             list carry;
@@ -979,7 +963,6 @@ namespace ft
     template <class Compare>
     void list<T, Alloc>::sort(Compare comp)
     {
-        // Do nothing if the list has length 0 or 1.
         if (this->sentry_node.next != &this->sentry_node && this->sentry_node.next->next != &this->sentry_node)
         {
             list carry;

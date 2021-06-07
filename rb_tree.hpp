@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 19:23:30 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/07 10:40:50 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/07 10:53:09 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ namespace ft
             return static_cast<_Node*>(node_ptr)->value;
         }
 
-        // TODO : __addressof 사용하는거 확인해봐야함 
         pointer operator->() const
         {
             return std::addressof(static_cast<_Node*>(node_ptr)->value);
@@ -209,7 +208,6 @@ namespace ft
             return static_cast<_Node*>(node_ptr)->value;
         }
 
-        // TODO : __addressof 사용하는거 확인해봐야함 
         pointer operator->() const
         {
             return std::addressof(static_cast<_Node*>(node_ptr)->value);
@@ -474,18 +472,14 @@ namespace ft
 		{
 			_rb_tree_node_base *& root = header.parent;
 
-			// Initialize fields in new node to insert.
 			x->parent = p;
 			x->left = 0;
 			x->right = 0;
 			x->color = red;
 
-			// Insert.
-			// Make new node child of parent and maintain root, leftmost and rightmost nodes.
-			// N.B. First node is always inserted left.
 			if (is_insert_left)
 			{
-				p->left = x; // also makes leftmost = x when p == &header
+				p->left = x;
 
 				if (p == &header)
 				{
@@ -493,14 +487,14 @@ namespace ft
 					header.right = x;
 				}
 				else if (p == header.left)
-					header.left = x; // maintain leftmost pointing to min node
+					header.left = x;
 			}
 			else
 			{
 				p->right = x;
 				
 				if (p == header.right)
-					header.right = x; // maintain rightmost pointing to max node 
+					header.right = x;
 			}
 
 			// Rebalance.
@@ -565,21 +559,19 @@ namespace ft
 			_rb_tree_node_base* x = 0;
 			_rb_tree_node_base* x_parent = 0;
 
-			if (y->left == 0)       // __z has at most one non-null child. y == z.
-				x = y->right;     // __x might be null.
-			else if (y->right == 0) // __z has exactly one non-null child. y == z.
-				x = y->left;      // __x is not null.
+			if (y->left == 0)
+				x = y->right;
+			else if (y->right == 0)
+				x = y->left;
 			else
 			{
-				// __z has two non-null children.  Set __y to
-				y = y->right; //   __z's successor.  __x might be null.
+				y = y->right;
 				while (y->left != 0)
 					y = y->left;
 				x = y->right;
 			}
 			if (y != z)
 			{
-				// relink y in place of z.  y is z's successor
 				z->left->parent = y;
 				y->left = z->left;
 				if (y != z->right)
@@ -587,7 +579,7 @@ namespace ft
 					x_parent = y->parent;
 					if (x)
 						x->parent = y->parent;
-					y->parent->left = x; // __y must be a child of _M_left
+					y->parent->left = x;
 					y->right = z->right;
 					z->right->parent = y;
 				}
@@ -602,10 +594,9 @@ namespace ft
 				y->parent = z->parent;
 				ft::swap(y->color, z->color);
 				y = z;
-				// __y now points to node to be actually deleted
 			}
 			else
-			{ // __y == __z
+			{
 				x_parent = y->parent;
 				if (x)
 					x->parent = y->parent;
@@ -617,18 +608,16 @@ namespace ft
 					z->parent->right = x;
 				if (leftmost == z)
 				{
-					if (z->right == 0) // __z->_M_left must be null also
+					if (z->right == 0)
 						leftmost = z->parent;
-					// makes __leftmost == _M_header if __z == __root
 					else
 						leftmost = _rb_tree_node_base::_s_minimum(x);
 				}
 				if (rightmost == z)
 				{
-					if (z->left == 0) // __z->_M_right must be null also
+					if (z->left == 0)
 						rightmost = z->parent;
-					// makes __rightmost == _M_header if __z == __root
-					else // __x == __z->_M_left
+					else
 						rightmost = _rb_tree_node_base::_s_maximum(x);
 				}
 			}
@@ -673,7 +662,6 @@ namespace ft
 					}
 					else
 					{
-						// same as above, with _M_right <-> _M_left.
 						_rb_tree_node_base* w = x_parent->left;
 						if (w->color == red)
 						{
@@ -713,7 +701,6 @@ namespace ft
 			}
 			return y;
 		}
-
 
         iterator _insert_(const _rb_tree_node_base* x, const _rb_tree_node_base* p, const value_type& val)
         {
@@ -755,7 +742,6 @@ namespace ft
 
         _Node* _copy(const _Node* x, _Node* p)
         {
-            // Structural copy.  __x and __p must be non-null.
             _Node* top = _clone_node(x);
             top->parent = p;
 
@@ -777,10 +763,8 @@ namespace ft
             return top;
         }
 
-        // TODO : 확인필요
         void _erase(_Node* x)
         {
-            // Erase without rebalancing.
             while (x != 0)
             {
                 _erase(_s_right(x));
@@ -905,7 +889,6 @@ namespace ft
         {
             if (this != &x)
             {
-                // Note that _Key may be a constant type.
                 clear();
                 key_compare = x.key_compare;
                 if (x._root() != 0)
@@ -1017,16 +1000,9 @@ namespace ft
                 t._root()->parent = t._end();
             }
 
-            // No need to swap header's color as it does not change.
             ft::swap(this->node_count, t.node_count);
             ft::swap(this->key_compare, t.key_compare);
-
-            ft::swap(this->node_allocator, t.node_allocator);  // TODO : 확인필요
-            /*
-            _node_alloc_type tmp = this->node_allocator;
-            this->node_allocator = t.node_allocator;
-            t.node_allocator = tmp;
-            */
+            ft::swap(this->node_allocator, t.node_allocator);
         }
 
         std::pair<iterator, bool> insert_unique(const value_type& v)
@@ -1060,7 +1036,6 @@ namespace ft
 
         iterator insert_unique_(const_iterator position, const value_type &v)
         {
-            // end()
             if (position.node_ptr == _end())
             {
                 if (size() > 0 && key_compare(_s_key(_rightmost()), KeyOfValue()(v)))
@@ -1070,10 +1045,9 @@ namespace ft
             }
             else if (key_compare(KeyOfValue()(v), _s_key(position.node_ptr)))
             {
-                // First, try before...
                 const_iterator before = position;
 
-                if (position.node_ptr == _leftmost()) // begin()
+                if (position.node_ptr == _leftmost())
                     return _insert_(_leftmost(), _leftmost(), v);
                 else if (key_compare(_s_key((--before).node_ptr), KeyOfValue()(v)))
                 {
@@ -1087,7 +1061,6 @@ namespace ft
             }
             else if (key_compare(_s_key(position.node_ptr), KeyOfValue()(v)))
             {
-                // ... then try after.
                 const_iterator after = position;
 
                 if (position.node_ptr == _rightmost())
@@ -1103,7 +1076,6 @@ namespace ft
                     return insert_unique(v).first;
             }
             else
-                //Equivalent keys.
                 return position._const_cast();
         }
 
@@ -1179,8 +1151,7 @@ namespace ft
                 insert_equal_(end(), *first);
         }
         
-        
-        void erase(iterator position)     // 필요(map) 필요(set)
+        void erase(iterator position)
         { _erase_aux(position); }
 
         void erase(const_iterator position)
@@ -1201,7 +1172,6 @@ namespace ft
         void erase(const_iterator first, const_iterator last)
         { _erase_aux(first, last); }
 
-        // TODO : 확인필요
         void erase(const key_type* first, const key_type* last)
         {
             while (first != last)
@@ -1210,7 +1180,7 @@ namespace ft
             }
         }
 
-        void clear()  // 필요(map) 필요(set)
+        void clear()
         {
             _erase(_begin());
             _leftmost() = _end();
@@ -1219,7 +1189,6 @@ namespace ft
             node_count = 0;
         }
 
-        // Set operations.
         iterator find(const key_type& k)
         {
             iterator j = _lower_bound(_begin(), _end(), k);

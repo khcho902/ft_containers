@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/01 18:37:57 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/07 10:40:11 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/07 11:03:15 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,14 +255,6 @@ namespace ft
 	}
 
 
-
-
-
-
-
-
-
-
 	template <typename T>
 	bool operator==(const _vector_iterator<T>& lhs, const _vector_const_iterator<T>& rhs)
 	{ return lhs.base() == rhs.base(); }
@@ -290,15 +282,6 @@ namespace ft
 	template <typename T>
 	typename _vector_iterator<T>::difference_type operator-(const _vector_iterator<T>& lhs, const _vector_const_iterator<T>& rhs)
 	{ return lhs.base() - rhs.base(); }
-
-
-
-
-
-
-
-
-
 
 
 	// ############## vector class ##############################################################
@@ -343,7 +326,7 @@ namespace ft
 			catch(...)
 			{
 				this->_deallocate(result, n);
-				throw;  // TODO : 확인필요 //__throw_exception_again; 이거 대신에 쓴거 
+				throw;
 			}
 		}
 
@@ -470,7 +453,7 @@ namespace ft
 					else
 						this->_destroy(iterator(new_start), iterator(new_finish));
 					this->_deallocate(new_start, len);
-					throw;  // TODO  확인필요
+					throw;
 				}
 
 				this->_destroy(iterator(this->_start), iterator(this->_finish));
@@ -494,12 +477,7 @@ namespace ft
 				pointer old_finish(this->_finish);
 
 				if (elems_after > n)
-				{
-					//std::__uninitialized_move_a(this->_M_impl._M_finish - __n, this->_M_impl._M_finish, this->_M_impl._M_finish, _M_get_Tp_allocator());
-                    //this->_M_impl._M_finish += __n;
-                    //_GLIBCXX_MOVE_BACKWARD3(__position.base(), __old_finish - __n, __old_finish);
-                    //std::fill(__position.base(), __position.base() + __n, __x_copy);
-					
+				{	
 					std::uninitialized_copy(this->_finish - n, this->_finish, this->_finish);
 					this->_finish += n;
 					ft::copy_backward(position.base(), old_finish - n, old_finish);
@@ -507,12 +485,6 @@ namespace ft
 				}
 				else
 				{
-					// std::__uninitialized_fill_n_a(this->_M_impl._M_finish, __n - __elems_after, __x_copy, _M_get_Tp_allocator());
-                    // this->_M_impl._M_finish += __n - __elems_after;
-                    // std::__uninitialized_move_a(__position.base(), __old_finish, this->_M_impl._M_finish, _M_get_Tp_allocator());
-                    // this->_M_impl._M_finish += __elems_after;
-                    // std::fill(__position.base(), __old_finish, __x_copy);
-
 					std::uninitialized_fill_n(this->_finish, n - elems_after, x_copy);
 					this->_finish += n - elems_after;
 					std::uninitialized_copy(position.base(), old_finish, this->_finish);
@@ -529,13 +501,6 @@ namespace ft
 				pointer new_finish(new_start);
 				try
 				{
-					// See _M_insert_aux above.
-                    // std::__uninitialized_fill_n_a(__new_start + __elems_before, __n, __x, _M_get_Tp_allocator());
-                    // __new_finish = 0;
-                    // __new_finish = std::__uninitialized_move_a(this->_M_impl._M_start, __position.base(), __new_start, _M_get_Tp_allocator());
-                    // __new_finish += __n;
-                    // __new_finish = std::__uninitialized_move_a(__position.base(), this->_M_impl._M_finish, __new_finish, _M_get_Tp_allocator());
-
 					std::uninitialized_fill_n(new_start + elems_before, n, x);
 					new_finish = 0;
 					new_finish = std::uninitialized_copy(this->_start, position.base(), new_start);
@@ -544,19 +509,12 @@ namespace ft
 				}
 				catch(...)
 				{
-					// if (!__new_finish)
-                    //     std::_Destroy(__new_start + __elems_before, __new_start + __elems_before + __n, _M_get_Tp_allocator());
-                    // else
-                    //     std::_Destroy(__new_start, __new_finish, _M_get_Tp_allocator());
-                    // _M_deallocate(__new_start, __len);
-                    // __throw_exception_again;
-
 					if (!new_finish)
 						this->_destroy(iterator(new_start + elems_before), iterator(new_start + elems_before + n));
 					else
 						this->_destroy(iterator(new_start), iterator(new_finish));
 					this->_deallocate(new_start, len);
-					throw;  // TODO : 확인필요
+					throw;
 				}
 
 				this->_destroy(iterator(this->_start), iterator(this->_finish));
@@ -575,8 +533,6 @@ namespace ft
 		template <typename InputIterator>
 		void _insert_dispatch(iterator position, InputIterator first, InputIterator last, ft::false_type)
 		{
-			// TODO : _M_range_insert 만들어야할수도 있음 
-			
 			for(; first != last; first++)
 			{
 				position = insert(position, *first);
@@ -650,12 +606,6 @@ namespace ft
 		iterator erase(iterator first, iterator last);
 		void swap(vector& x);
 		void clear();
-		
-
-	// ########## Allocator: ##########
-		/*
-		allocator_type get_allocator() const;
-		*/
 	};
 
 
@@ -953,22 +903,12 @@ namespace ft
 		ft::swap(this->_start, x._start);
 		ft::swap(this->_finish, x._finish);
 		ft::swap(this->_end_of_storage, x._end_of_storage);
-
-		// TODO : 확인필요
 		ft::swap(this->_allocator, x._allocator);
-        //allocator_type tmp = this->_allocator;
-        //this->_allocator = x._allocator;
-        //x._allocator = tmp;
 	}
 	
 	template <class T, class Alloc>
 	void vector<T, Alloc>::clear()
 	{ _erase_at_end(this->_start); }
-
-	// ########## Allocator: ##########
-	/*
-	allocator_type get_allocator() const;
-	*/
 
 // ########## Non-member function overloads ##########
 	//(1)

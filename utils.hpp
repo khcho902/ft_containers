@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 02:42:03 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/04 22:08:07 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/07 10:54:16 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ namespace ft
 		return (a < b) ? b : a;
 	}
 
-	// TODO : 별로 필요없어보임 지울지 고려해야함.
 	template <typename Arg, typename Result>
 	struct unary_function
 	{

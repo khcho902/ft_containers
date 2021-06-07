@@ -6,7 +6,7 @@
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:24:39 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/07 10:39:44 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/07 10:47:28 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,11 +174,7 @@ namespace ft
 		{ return tree.equal_range(k); }
 		std::pair<iterator,iterator> equal_range(const key_type& k)
 		{ return tree.equal_range(k); }
-
-	// ########## Allocator: ##########
-		/*
-		allocator_type get_allocator() const;
-		*/
+		
 
 		template <class _Key, class _T, class _Compare, class _Alloc>
 		friend bool operator==(const map<_Key, _T, _Compare, _Alloc>& lhs,
