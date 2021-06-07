@@ -34,3 +34,6 @@ rm my_containers
 rm std_containers
 
 diff my_result std_result
+
+rm my_result
+rm std_result

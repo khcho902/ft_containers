@@ -1,37 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   iterator.hpp                                       :+:      :+:    :+:   */
+/*   reverse_iterator.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kycho <kycho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:20:33 by kycho             #+#    #+#             */
-/*   Updated: 2021/06/03 16:52:34 by kycho            ###   ########.fr       */
+/*   Updated: 2021/06/07 10:39:05 by kycho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ITERATOR_HPP
-# define ITERATOR_HPP
-
-//# include <memory>
-//# include <iterator>
+#ifndef REVERSE_ITERATOR_HPP
+# define REVERSE_ITERATOR_HPP
 
 namespace ft
 {
-	// TODO : iterator 별도로 만들지 결정해야함 
-	/*
-	template <class Category, class T, class Distance = ptrdiff_t,
-				class Pointer = T*, class Reference = T&>
-	class iterator
-	{
-		typedef T         value_type;
-		typedef Distance  difference_type;
-		typedef Pointer   pointer;
-		typedef Reference reference;
-		typedef Category  iterator_category;
-  	};
-	*/
-
 	template <class Iterator>
 	class reverse_iterator
 	{
@@ -61,13 +44,13 @@ namespace ft
 
 		reference operator*() const
 		{
-			Iterator __tmp = base_iterator;
-			return *--__tmp;
+			Iterator tmp = base_iterator;
+			return *--tmp;
 		}
 
-		reverse_iterator operator+(difference_type __n) const
+		reverse_iterator operator+(difference_type n) const
 		{
-			return reverse_iterator(base_iterator - __n);
+			return reverse_iterator(base_iterator - n);
 		}
 
 		reverse_iterator& operator++()
@@ -78,20 +61,20 @@ namespace ft
 
 		reverse_iterator operator++(int)
 		{
-			reverse_iterator __tmp = *this;
+			reverse_iterator tmp = *this;
 			--base_iterator;
-			return __tmp;
+			return tmp;
 		}
 
-		reverse_iterator& operator+=(difference_type __n)
+		reverse_iterator& operator+=(difference_type n)
 		{
-			base_iterator -= __n;
+			base_iterator -= n;
 			return *this;
 		}
 
-		reverse_iterator operator-(difference_type __n) const
+		reverse_iterator operator-(difference_type n) const
 		{
-			return reverse_iterator(base_iterator + __n);
+			return reverse_iterator(base_iterator + n);
 		}
 
 		reverse_iterator& operator--()
@@ -102,14 +85,14 @@ namespace ft
 
 		reverse_iterator operator--(int)
 		{
-			reverse_iterator __tmp = *this;
+			reverse_iterator tmp = *this;
 			++base_iterator;
-			return __tmp;
+			return tmp;
 		}
 
-		reverse_iterator& operator-=(difference_type __n)
+		reverse_iterator& operator-=(difference_type n)
 		{
-			base_iterator += __n;
+			base_iterator += n;
 			return *this;
 		}
 
@@ -118,9 +101,9 @@ namespace ft
 			return &(operator*());
 		}
 
-		reference operator[](difference_type __n) const
+		reference operator[](difference_type n) const
 		{
-			return *(*this + __n);
+			return *(*this + n);
 		}
 	};
 
@@ -184,10 +167,6 @@ namespace ft
 	}
 
 
-
-
-
-
 	template<typename IteratorL, typename IteratorR>
     bool operator==(const reverse_iterator<IteratorL>& lhs, const reverse_iterator<IteratorR>& rhs)
     { return lhs.base() == rhs.base(); }
@@ -211,8 +190,6 @@ namespace ft
 	template<typename IteratorL, typename IteratorR>
 	bool operator>=(const reverse_iterator<IteratorL>& lhs, const reverse_iterator<IteratorR>& rhs)
     { return !(lhs < rhs); }
-
-
 
 
 	template<typename IteratorL, typename IteratorR>
